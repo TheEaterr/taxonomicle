@@ -1,39 +1,50 @@
 <script lang="ts">
-    import { Link } from 'svelte-routing';
-    import pb, { type Taxon } from '../utils/pocketBase'
-  import type { ListResult } from 'pocketbase';
+  import { Link } from "svelte-routing";
+  import pb, { type Taxon } from "../utils/pocketBase";
+  import type { ListResult } from "pocketbase";
   
-    export let id: string
-    console.log(id)
-    let taxonId: string;
-    let taxonPromise: Promise<Taxon>;
-    let childrenPromise: Promise<ListResult<Taxon>>;
-    $: taxonId = id;
-    $: taxonPromise = pb.collection<Taxon>('taxon').getOne(taxonId)
-    $: childrenPromise = pb.collection<Taxon>('taxon').getList(1, 50, {
+  export let id: string;
+  
+  let taxonId: string;
+  let taxonPromise: Promise<Taxon>;
+  let childrenPromise: Promise<ListResult<Taxon>>;
+
+  $: {
+    taxonId = id;
+    taxonPromise = pb.collection<Taxon>("taxon").getOne(taxonId);
+    childrenPromise = pb.collection<Taxon>("taxon").getList(1, 50, {
       filter: `parent = "${taxonId}"`,
-  });
+    });
+  }
+
 </script>
 
 {#await taxonPromise}
-    <p>...waiting</p>
+  <p>...waiting</p>
 {:then taxon}
-    <p>The record is {taxon.scientific}</p>
+  <p>The record is {taxon.scientific}, {taxon.vernacular}</p>
+    <p>Rank: {taxon.rank}</p>
+    <p>Parent: <Link target="_self" to={"taxon/" + taxon.parent}>{taxon.parent}</Link></p>
+    <img height={200} src={taxon.image_link} alt={taxon.image} />
 {:catch error}
-    <p style="color: red">{error.message}</p>
+  <p style="color: red">{error.message}</p>
 {/await}
 {#await childrenPromise}
-    <p>...waiting</p>
+  <p>...waiting</p>
 {:then children}
-    <ul>
-    {#each children.items as child}      
-        <li>{child.scientific}, {child.vernacular}, {child.rank}, <Link target="_self" to={"taxon/" + child.id}>{child.id}</Link></li>
+  <ul>
+    {#each children.items as child}
+      <li>
+        {child.scientific}, {child.vernacular}, {child.rank}, <Link
+          target="_self"
+          to={"taxon/" + child.id}>{child.id}</Link
+        >
+      </li>
     {/each}
-    </ul>
+  </ul>
 {:catch error}
-    <p style="color: red">{error.message}</p>
+  <p style="color: red">{error.message}</p>
 {/await}
 
 <style>
 </style>
-  

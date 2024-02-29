@@ -186,7 +186,7 @@
       {
         "system": false,
         "id": "j5vglzvn",
-        "name": "field",
+        "name": "parent",
         "type": "relation",
         "required": false,
         "presentable": false,
@@ -198,6 +198,16 @@
           "maxSelect": 1,
           "displayFields": null
         }
+      },
+      {
+        "system": false,
+        "id": "rk286xgd",
+        "name": "image_path",
+        "type": "bool",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {}
       }
     ],
     "indexes": [

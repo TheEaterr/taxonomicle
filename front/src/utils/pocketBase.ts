@@ -7,6 +7,7 @@ export interface Taxon extends RecordModel {
     vernacular: string | undefined;
     rank: string;
     site_link: string;
+    image_link: string;
     parent: string | undefined;
 }
 
