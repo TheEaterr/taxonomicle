@@ -9,6 +9,15 @@
   let taxonPromise: Promise<Taxon>;
   let childrenPromise: Promise<ListResult<Taxon>>;
 
+    var apiEndpoint = "https://en.wikipedia.org/w/api.php";
+var params = "format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=Taylor_Swift";
+
+/**
+ * Send the request to get the images
+ */
+fetch(apiEndpoint + "?" + params + "&origin=*")
+    .then(async function(response){console.log(await response.json()); return response.json();})
+
   $: {
     taxonId = id;
     taxonPromise = pb.collection<Taxon>("taxon").getOne(taxonId);
@@ -16,7 +25,6 @@
       filter: `parent = "${taxonId}"`,
     });
   }
-
 </script>
 
 {#await taxonPromise}
