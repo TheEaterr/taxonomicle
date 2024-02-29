@@ -1,31 +1,20 @@
 <script lang="ts">
-  import pb, { type Taxon } from './utils/pocketBase'
-
-  const taxonPromise = pb.collection<Taxon>('taxon').getOne('Q729___________')
-  const childrenPromise = pb.collection<Taxon>('taxon').getList(1, 50, {
-    filter: 'parent = "Q729___________"',
-});
+  import Taxon from './lib/Taxon.svelte'
+  import {Route, Router, Link} from "svelte-routing";
 </script>
 
 <main>
-  {#await taxonPromise}
-	  <p>...waiting</p>
-  {:then taxon}
-    <p>The record is {taxon.scientific}</p>
-  {:catch error}
-    <p style="color: red">{error.message}</p>
-  {/await}
-  {#await childrenPromise}
-	  <p>...waiting</p>
-  {:then children}
-    <ul>
-      {#each children.items as child}
-        <li>{child.scientific}, {child.vernacular}, {child.rank}</li>
-      {/each}
-    </ul>
-  {:catch error}
-    <p style="color: red">{error.message}</p>
-  {/await}
+  <Router>
+    <main>
+      <Route path="/taxon/:id" let:params>
+        <Taxon id={params.id} />
+      </Route>
+      <Route path="/">
+        <h1>Home</h1>
+        <Link to="/taxon/Q729___________">Go to animalia</Link>
+      </Route>
+    </main>
+  </Router>
 </main>
 
 <style>
