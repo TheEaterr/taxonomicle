@@ -11,7 +11,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 
-	_ "back/migrations"
+	_ "taxonomicle/migrations"
 )
 
 // This middleware allows only GET requests to /api/collections to be accessed from outside the local network.

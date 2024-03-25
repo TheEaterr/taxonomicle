@@ -1,4 +1,4 @@
-module back
+module taxonomicle
 
 go 1.22.0
 
