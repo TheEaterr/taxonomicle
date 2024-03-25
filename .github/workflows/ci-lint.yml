@@ -25,3 +25,5 @@ jobs:
         with:
           eslint-args: '--quiet'
           annotations: true
+          all-files: true
+          working-directory: front
