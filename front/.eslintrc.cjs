@@ -5,10 +5,11 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:svelte/recommended',
+		'plugin:prettier/recommended',
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint'],
+	plugins: ['@typescript-eslint', 'prefer-arrow', 'prettier'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
@@ -27,5 +28,15 @@ module.exports = {
 				parser: '@typescript-eslint/parser'
 			}
 		}
-	]
+	],
+	rules: {
+		'prefer-arrow/prefer-arrow-functions': [
+			'warn',
+			{
+				disallowPrototype: true,
+				singleReturnOnly: false,
+				classPropertiesAllowed: false
+			}
+		]
+	}
 };

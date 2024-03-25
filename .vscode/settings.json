@@ -1,0 +1,4 @@
+{
+  "eslint.workingDirectories": ["front/"],
+  "editor.formatOnSave": true
+}
