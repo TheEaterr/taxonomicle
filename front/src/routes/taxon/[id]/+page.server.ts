@@ -18,8 +18,11 @@ export const load: PageServerLoad = async ({ params }: { params: { id: string } 
 		.collection<TaxonResponse>('taxon')
 		.getOne(taxonId)
 	const children = await pb.collection<TaxonResponse>('taxon').getList(1, 50, {
-		filter: `parent = "${taxonId}"`
+		filter: `parent = "${taxonId}"`,
+    	sort: '@random',
 	});
+	// TODO sort according to rank then scientific name
+	children.items = children.items.sort((a, b) => a.scientific.localeCompare(b.scientific));
 	const description = await getDescription(taxon.site_link);
 
 	return {
