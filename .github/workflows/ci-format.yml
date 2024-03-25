@@ -17,10 +17,13 @@ jobs:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
 
+      - name: Open folder
+        run: |
+          cd front
+
       - name: Prettify code
         uses: creyD/prettier_action@v4.3
         with:
           # This part is also where you can pass other options, for example:
           prettier_options: --write .
           prettier_plugins: prettier-plugin-svelte
-          working_directory: "front"

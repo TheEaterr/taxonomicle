@@ -11,16 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: Test ci
+
+      - name: Open folder and install dependenciess
         run: |
-          ls -la
-          pwd
-      - run: npm ci
+          cd front
+          npm ci
+
       - uses: sibiraj-s/action-eslint@v3
         with:
-          working-dir: front
           eslint-args: '--quiet'
           annotations: true
