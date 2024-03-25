@@ -1,5 +1,5 @@
-import pb from "$lib/pocketBase";
-import { type TaxonResponse} from "$lib/generated/pocketBaseTypes";
+import pb from '$lib/pocketBase';
+import { type TaxonResponse } from '$lib/generated/pocketBaseTypes';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }: { params: { id: string } }) => {
@@ -14,12 +14,10 @@ export const load: PageServerLoad = async ({ params }: { params: { id: string } 
 	};
 
 	const taxonId = params.id;
-	const taxon = await pb
-		.collection<TaxonResponse>('taxon')
-		.getOne(taxonId)
+	const taxon = await pb.collection<TaxonResponse>('taxon').getOne(taxonId);
 	const children = await pb.collection<TaxonResponse>('taxon').getList(1, 50, {
 		filter: `parent = "${taxonId}"`,
-    	sort: '@random',
+		sort: '@random'
 	});
 	// TODO sort according to rank then scientific name
 	children.items = children.items.sort((a, b) => a.scientific.localeCompare(b.scientific));
@@ -31,4 +29,4 @@ export const load: PageServerLoad = async ({ params }: { params: { id: string } 
 		children,
 		description
 	};
-}
+};
