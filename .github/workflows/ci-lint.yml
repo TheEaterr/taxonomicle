@@ -16,14 +16,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Open folder and install dependenciess
+      - name: Run ESLint
         run: |
           cd front
           npm ci
-
-      - uses: sibiraj-s/action-eslint@v3
-        with:
-          eslint-args: '--quiet'
-          annotations: true
-          all-files: true
-          working-directory: front
+          npm run lint
