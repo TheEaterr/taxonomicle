@@ -1,4 +1,5 @@
 {
   "eslint.workingDirectories": ["front/"],
+  "eslint.validate": ["javascript", "svelte", "typescript"],
   "editor.formatOnSave": true
 }
