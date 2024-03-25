@@ -8,7 +8,7 @@
     <p>{description}</p>
     <p>Rank: {taxon.rank}</p>
     <p>Parent: <a href={"/taxon/" + taxon.parent}>{taxon.parent}</a></p>
-    <img height={200} src={taxon.image_link} alt={taxon.image} />
+    <img height={200} src={taxon.image_link} alt={taxon.scientific} />
     <ul>
       {#each children.items as child}
         <li>

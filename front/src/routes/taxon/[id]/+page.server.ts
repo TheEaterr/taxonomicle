@@ -1,4 +1,5 @@
-import pb, { type Taxon } from "$lib/pocketBase";
+import pb from "$lib/pocketBase";
+import { type TaxonResponse} from "$lib/generated/pocketBaseTypes";
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }: { params: { id: string } }) => {
@@ -14,9 +15,9 @@ export const load: PageServerLoad = async ({ params }: { params: { id: string } 
 
 	const taxonId = params.id;
 	const taxon = await pb
-		.collection<Taxon>('taxon')
+		.collection<TaxonResponse>('taxon')
 		.getOne(taxonId)
-	const children = await pb.collection<Taxon>('taxon').getList(1, 50, {
+	const children = await pb.collection<TaxonResponse>('taxon').getList(1, 50, {
 		filter: `parent = "${taxonId}"`
 	});
 	const description = await getDescription(taxon.site_link);
