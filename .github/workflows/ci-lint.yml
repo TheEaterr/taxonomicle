@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   eslint:
@@ -17,6 +17,6 @@ jobs:
       - run: npm ci
       - uses: sibiraj-s/action-eslint@v3
         with:
-          working-dir: front/
+          working-dir: front
           eslint-args: '--quiet'
           annotations: true
