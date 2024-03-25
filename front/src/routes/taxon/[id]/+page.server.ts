@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ params }: { params: { id: string } 
 	const wikiParams =
 		'format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=';
 
-	const getDescription = async (title: string) => {
+	const getDescription = async (title: string): Promise<string> => {
 		const response = await fetch(wikiAPIEndpoint + '?' + wikiParams + title + '&origin=*');
 		const responseJson = await response.json();
 		return responseJson.query.pages[Object.keys(responseJson.query.pages)[0]].extract;
