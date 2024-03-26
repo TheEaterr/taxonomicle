@@ -27,7 +27,6 @@ export const getTaxonData = async (id: string, path: string[]) => {
 			if (children.items.findIndex((child) => child.id === nextTaxon) === -1) {
 				children.items.pop();
 				children.items.push(await pb.collection<TaxonResponse>('taxon').getOne(nextTaxon));
-				console.log('added manually to children: ', nextTaxon);
 			}
 			overflown = true;
 		}
