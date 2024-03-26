@@ -10,4 +10,5 @@
 	setContext('goalTaxon', goalTaxon);
 </script>
 
+<a href="/">Go back home</a>
 <slot />

@@ -8,6 +8,18 @@
 	export let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>>;
 
 	const numberSteps = getContext<Writable<number>>('numberSteps');
+	const currentTaxon = getContext<Writable<string>>('currentTaxon');
+
+	const updateCurrentTaxon = async (newId: string) => {
+		currentTaxon.set(newId);
+		numberSteps.update((n) => n + 1);
+		currentTaxonData = await getTaxonData(newId);
+	};
+
+	let isGoalReached = false;
+	$: isGoalReached = currentTaxonData.children.items.some(
+		(child) => child.id === goalTaxonData.taxon.id
+	);
 </script>
 
 <h1>Goal Taxon</h1>
@@ -17,4 +29,8 @@
 <img height={200} src={goalTaxonData.taxon.image_link} alt={goalTaxonData.taxon.scientific} />
 <h1>Current Taxon</h1>
 <p>Number of current steps : {$numberSteps}</p>
-<Taxon data={currentTaxonData} />
+{#if !isGoalReached}
+	<Taxon data={currentTaxonData} update={updateCurrentTaxon} />
+{:else}
+	<p>Goal reached!</p>
+{/if}

@@ -28,21 +28,18 @@
 			return { currentTaxon: $currentTaxon, steps: $numberSteps, goalTaxon: $goalTaxonId };
 		},
 		restore: async (value) => {
-			if (!value.currentTaxon)
+			console.log('restoring...');
+			if (!value.currentTaxon || !value.goalTaxon)
 				value = {
 					currentTaxon: 'Q729___________',
 					steps: 0,
 					goalTaxon: ''
 				};
 			currentTaxon.set(value.currentTaxon);
+			goalTaxonId.set(value.goalTaxon);
 			numberSteps.set(value.steps);
 			currentTaxonData = await getTaxonData($currentTaxon);
-			if (!value.goalTaxon) {
-				goalTaxonData = await getRandomGoalTaxon();
-				goalTaxonId.set(goalTaxonData.taxon.id);
-			} else {
-				goalTaxonData = await getGoalTaxonData(value.goalTaxon);
-			}
+			goalTaxonData = await getGoalTaxonData(value.goalTaxon);
 		}
 	};
 
