@@ -12,6 +12,7 @@
 	Parent: <button on:click={() => update(data.taxon.parent)}>{data.taxon.parent}</button>
 </p>
 <img height={200} src={data.taxon.image_link} alt={data.taxon.scientific} />
+<p>Overflow: {data.overflown}</p>
 <ul>
 	{#each data.children.items as child}
 		<li>

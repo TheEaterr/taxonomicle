@@ -11,14 +11,27 @@ const getDescription = async (title: string): Promise<string> => {
 	return responseJson.query.pages[Object.keys(responseJson.query.pages)[0]].extract;
 };
 
-export const getTaxonData = async (id: string) => {
+export const getTaxonData = async (id: string, path: string[]) => {
 	const taxonId = id;
 	const taxon = await pb.collection<TaxonResponse>('taxon').getOne(taxonId);
 	// We have to make a seperate query for the random sort
-	const children = await pb.collection<TaxonResponse>('taxon').getList(1, 50, {
+	const children = await pb.collection<TaxonResponse>('taxon').getList(1, 20, {
 		filter: `parent = "${taxonId}"`,
 		sort: '@random'
 	});
+	let overflown = false;
+	if (children.items.length == 20) {
+		const indexOnPath = path.indexOf(taxonId);
+		if (indexOnPath !== -1 && indexOnPath !== 0) {
+			const nextTaxon = path[indexOnPath - 1];
+			if (children.items.findIndex((child) => child.id === nextTaxon) === -1) {
+				children.items.pop();
+				children.items.push(await pb.collection<TaxonResponse>('taxon').getOne(nextTaxon));
+				console.log('added manually to children: ', nextTaxon);
+			}
+			overflown = true;
+		}
+	}
 	// TODO sort according to rank then scientific name
 	children.items = children.items.sort((a, b) => a.scientific.localeCompare(b.scientific));
 	const description = await getDescription(taxon.site_link);
@@ -27,7 +40,8 @@ export const getTaxonData = async (id: string) => {
 		id,
 		taxon,
 		children,
-		description
+		description,
+		overflown
 	};
 };
 
@@ -53,6 +67,16 @@ export const cyrb128 = (str: string) => {
 	return [h1 >>> 0, h2 >>> 0, h3 >>> 0, h4 >>> 0];
 };
 
+const getCorrectPath = async (taxon: TaxonResponse) => {
+	const path = [taxon.id];
+	let current = taxon;
+	while (current.parent) {
+		path.push(current.parent);
+		current = await pb.collection<TaxonResponse>('taxon').getOne(current.parent);
+	}
+	return path;
+};
+
 export const getGoalTaxon = async () => {
 	const availableTaxons = await pb.collection<TaxonResponse>('taxon').getList(1, 1, {
 		filter: 'rank = "species" && image_path=true'
@@ -71,10 +95,12 @@ export const getGoalTaxon = async () => {
 		})
 	).items[0];
 	const description = await getDescription(taxon.site_link);
+	const path = await getCorrectPath(taxon);
 
 	return {
 		taxon,
-		description
+		description,
+		path
 	};
 };
 
@@ -84,20 +110,24 @@ export const getRandomGoalTaxon = async () => {
 		sort: '@random'
 	});
 	const description = await getDescription(taxon.site_link);
+	const path = await getCorrectPath(taxon);
 
 	return {
 		taxon,
-		description
+		description,
+		path
 	};
 };
 
 export const getGoalTaxonData = async (id: string) => {
 	const taxon = await pb.collection<TaxonResponse>('taxon').getOne(id);
 	const description = await getDescription(taxon.site_link);
+	const path = await getCorrectPath(taxon);
 
 	return {
 		taxon,
-		description
+		description,
+		path
 	};
 };
 

@@ -38,16 +38,16 @@
 			currentTaxon.set(value.currentTaxon);
 			goalTaxonId.set(value.goalTaxon);
 			numberSteps.set(value.steps);
-			currentTaxonData = await getTaxonData($currentTaxon);
 			goalTaxonData = await getGoalTaxonData(value.goalTaxon);
+			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.path);
 		}
 	};
 
 	const reset = async () => {
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
-		currentTaxonData = await getTaxonData($currentTaxon);
 		goalTaxonData = await getRandomGoalTaxon();
+		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.path);
 		goalTaxonId.set(goalTaxonData.taxon.id);
 	};
 </script>

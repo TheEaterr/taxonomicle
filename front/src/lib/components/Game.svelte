@@ -13,7 +13,7 @@
 	const updateCurrentTaxon = async (newId: string) => {
 		currentTaxon.set(newId);
 		numberSteps.update((n) => n + 1);
-		currentTaxonData = await getTaxonData(newId);
+		currentTaxonData = await getTaxonData(newId, goalTaxonData.path);
 	};
 
 	let isGoalReached = false;
