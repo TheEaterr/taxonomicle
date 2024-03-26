@@ -32,5 +32,10 @@
 {#if !isGoalReached}
 	<Taxon data={currentTaxonData} update={updateCurrentTaxon} />
 {:else}
+	<p>
+		Parent: <button on:click={() => updateCurrentTaxon(currentTaxonData.taxon.parent)}
+			>{currentTaxonData.taxon.parent}</button
+		>
+	</p>
 	<p>Goal reached!</p>
 {/if}
