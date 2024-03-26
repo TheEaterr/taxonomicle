@@ -4,7 +4,6 @@
 	import type { Snapshot } from './$types';
 	import { type Writable } from 'svelte/store';
 	import type { GameContext } from '$lib/gameContext';
-	import { goto } from '$app/navigation';
 	import Game from '$lib/components/Game.svelte';
 
 	export let data;
@@ -42,6 +41,5 @@
 </script>
 
 <button on:click={() => reset()}>Reset</button>
-<button on:click={() => goto('/game/endless')}>Go to endless mode</button>
 
 <Game {goalTaxonData} {currentTaxonData} />

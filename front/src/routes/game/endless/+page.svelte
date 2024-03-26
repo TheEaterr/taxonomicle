@@ -9,7 +9,6 @@
 	import type { Snapshot } from './$types';
 	import { type Writable } from 'svelte/store';
 	import type { GameContext } from '$lib/gameContext';
-	import { afterNavigate, goto } from '$app/navigation';
 	import Game from '$lib/components/Game.svelte';
 
 	export let data;
@@ -57,7 +56,6 @@
 </script>
 
 <button on:click={() => reset()}>Reset</button>
-<button on:click={() => goto('/game/daily')}>Go to daily mode</button>
 
 {#if goalTaxonData && currentTaxonData}
 	<Game {goalTaxonData} {currentTaxonData} />
