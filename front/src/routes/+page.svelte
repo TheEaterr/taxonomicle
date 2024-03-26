@@ -2,7 +2,7 @@
 </script>
 
 <main>
-	<a href="/taxon/Q729___________">Go to animalia</a>
+	<a href="/game">Go to game</a>
 </main>
 
 <style>
