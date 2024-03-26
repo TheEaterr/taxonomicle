@@ -15,7 +15,6 @@
 	};
 </script>
 
-<p>Number of current steps : {$numberSteps}</p>
 <p>The record is {data.taxon.scientific}, {data.taxon.vernacular}</p>
 <p>{data.description}</p>
 <p>Rank: {data.taxon.rank}</p>

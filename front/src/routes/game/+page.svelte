@@ -6,12 +6,14 @@
 	import { writable } from 'svelte/store';
 	import type { GameContext } from '$lib/gameContext';
 
-	const currentTaxon = writable<string>();
-	const numberSteps = writable<number>();
+	export let data;
+
+	const currentTaxon = writable<string>('');
+	const numberSteps = writable<number>(0);
 	setContext('currentTaxon', currentTaxon);
 	setContext('numberSteps', numberSteps);
 
-	let data: Awaited<ReturnType<typeof getTaxonData>> | null = null;
+	let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>> | null = null;
 	export const snapshot: Snapshot<GameContext> = {
 		capture: () => {
 			return { currentTaxon: $currentTaxon, steps: $numberSteps };
@@ -20,18 +22,25 @@
 			if (!value.currentTaxon) value = { currentTaxon: 'Q729___________', steps: 0 };
 			currentTaxon.set(value.currentTaxon);
 			numberSteps.set(value.steps);
-			data = await getTaxonData($currentTaxon);
+			currentTaxonData = await getTaxonData($currentTaxon);
 		}
 	};
 
 	const reset = async () => {
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
-		data = await getTaxonData($currentTaxon);
+		currentTaxonData = await getTaxonData($currentTaxon);
 	};
 </script>
 
+<h1>Goal Taxon</h1>
+<p>The record is {data.taxon.scientific}, {data.taxon.vernacular}</p>
+<p>{data.description}</p>
+<p>Rank: {data.taxon.rank}</p>
+<img height={200} src={data.taxon.image_link} alt={data.taxon.scientific} />
+<h1>Current Taxon</h1>
 <button on:click={() => reset()}>Reset</button>
-{#if data !== null}
-	<Taxon {data} />
+<p>Number of current steps : {$numberSteps}</p>
+{#if currentTaxonData !== null}
+	<Taxon data={currentTaxonData} />
 {/if}
