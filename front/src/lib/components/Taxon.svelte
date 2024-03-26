@@ -1,13 +1,21 @@
 <script lang="ts">
 	import { getTaxonData } from '$lib/pocketBase';
+	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
 
 	export let data: Awaited<ReturnType<typeof getTaxonData>>;
 
+	const currentTaxon = getContext<Writable<string>>('currentTaxon');
+	const numberSteps = getContext<Writable<number>>('numberSteps');
+
 	const changeTaxon = async (newId: string) => {
+		currentTaxon.set(newId);
+		numberSteps.update((n) => n + 1);
 		data = await getTaxonData(newId);
 	};
 </script>
 
+<p>Number of current steps : {$numberSteps}</p>
 <p>The record is {data.taxon.scientific}, {data.taxon.vernacular}</p>
 <p>{data.description}</p>
 <p>Rank: {data.taxon.rank}</p>
