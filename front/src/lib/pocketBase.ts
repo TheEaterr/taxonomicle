@@ -1,9 +1,13 @@
 import PocketBase, { RecordService } from 'pocketbase';
-import type { TaxonResponse, UsersResponse } from './generated/pocketBaseTypes';
+import type { RankResponse, TaxonResponse, UsersResponse } from './generated/pocketBaseTypes';
 
 // Override TaxonResponse directly to forbid null path
-type TaxonResponseFull = TaxonResponse & {
+type TaxonResponseFull<Texpand = unknown> = TaxonResponse<unknown, Texpand> & {
 	path: string[];
+};
+
+type TexpandRank = {
+	rank: RankResponse;
 };
 
 // Overriden TypedPocketBase to include json type definitions
@@ -24,11 +28,14 @@ const getDescription = async (title: string): Promise<string> => {
 
 export const getTaxonData = async (id: string, path: string[]) => {
 	const taxonId = id;
-	const taxon = await pb.collection('taxon').getOne(taxonId);
+	const taxon = await pb
+		.collection('taxon')
+		.getOne<TaxonResponseFull<TexpandRank>>(taxonId, { expand: 'rank' });
 	// We have to make a seperate query for the random sort
-	const children = await pb.collection('taxon').getList(1, 20, {
+	const children = await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(1, 20, {
 		filter: `parent = "${taxonId}"`,
-		sort: '@random'
+		expand: 'rank',
+		sort: 'rank.order,@random'
 	});
 	const overflown = children.totalItems > 20;
 	if (children.items.length == 20) {
@@ -41,8 +48,14 @@ export const getTaxonData = async (id: string, path: string[]) => {
 			}
 		}
 	}
-	// TODO sort according to rank then scientific name
-	children.items = children.items.sort((a, b) => a.scientific.localeCompare(b.scientific));
+	children.items = children.items.sort((a, b) => {
+		const a_order = a.expand?.rank.order;
+		const b_order = b.expand?.rank.order;
+		if (a_order && b_order && a_order !== b_order) {
+			return a_order - b_order;
+		}
+		return a.scientific.localeCompare(b.scientific);
+	});
 	const description = await getDescription(taxon.site_link);
 
 	return {
@@ -77,9 +90,12 @@ export const cyrb128 = (str: string) => {
 };
 
 export const getGoalTaxon = async () => {
-	const availableTaxons = await pb.collection('taxon').getList(1, 1, {
-		filter: 'rank = "species" && image_path=true'
-	});
+	const availableTaxons = await pb
+		.collection('taxon')
+		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
+			expand: 'rank',
+			filter: 'rank.name = "species" && image_path=true'
+		});
 	const totalAvailable = availableTaxons.totalItems;
 	const currentDate = new Date();
 	// Hash the date
@@ -88,7 +104,7 @@ export const getGoalTaxon = async () => {
 	);
 	const randomIndex = Math.floor((hash[0] % totalAvailable) + 1);
 	const taxon = (
-		await pb.collection('taxon').getList(randomIndex, 1, {
+		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomIndex, 1, {
 			filter: 'rank = "species" && image_path=true',
 			skipTotal: true
 		})
@@ -102,8 +118,9 @@ export const getGoalTaxon = async () => {
 };
 
 export const getRandomGoalTaxon = async () => {
-	const taxon = await pb.collection('taxon').getFirstListItem('', {
-		filter: 'rank = "species" && image_path=true',
+	const taxon = await pb.collection('taxon').getFirstListItem<TaxonResponseFull<TexpandRank>>('', {
+		expand: 'rank',
+		filter: 'rank.name = "species" && image_path=true',
 		sort: '@random'
 	});
 	const description = await getDescription(taxon.site_link);

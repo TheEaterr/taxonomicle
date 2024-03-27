@@ -7,7 +7,7 @@
 
 <p>The record is {data.taxon.scientific}, {data.taxon.vernacular}</p>
 <p>{data.description}</p>
-<p>Rank: {data.taxon.rank}</p>
+<p>Rank: {data.taxon.expand?.rank.name}</p>
 <p>
 	Parent: <button on:click={() => update(data.taxon.parent)}>{data.taxon.parent}</button>
 </p>
@@ -16,7 +16,7 @@
 <ul>
 	{#each data.children.items as child}
 		<li>
-			{child.scientific}, {child.vernacular}, {child.rank},
+			{child.scientific}, {child.vernacular}, {child.expand?.rank.name},
 			<button on:click={() => update(child.id)}>{child.id}</button>
 		</li>
 	{/each}
