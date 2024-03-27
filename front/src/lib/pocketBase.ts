@@ -132,7 +132,9 @@ export const getRandomGoalTaxon = async () => {
 };
 
 export const getGoalTaxonData = async (id: string) => {
-	const taxon = await pb.collection('taxon').getOne(id);
+	const taxon = await pb.collection('taxon').getOne<TaxonResponseFull<TexpandRank>>(id, {
+		expand: 'rank'
+	});
 	const description = await getDescription(taxon.site_link);
 
 	return {
