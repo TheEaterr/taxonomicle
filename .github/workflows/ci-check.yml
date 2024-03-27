@@ -22,7 +22,9 @@ jobs:
           npm ci
 
       - name: Run eslint
+        run: |
           npm run lint
 
       - name: Run typescript check
+        run: |
           npm run check
