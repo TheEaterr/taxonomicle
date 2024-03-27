@@ -16,7 +16,9 @@ type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'users'): RecordService<UsersResponse>;
 };
 
-const pb = new PocketBase('http://127.0.0.1:8090') as TypedPocketBase;
+const API_URL =
+	process.env.NODE_ENV === 'production' ? 'https://taxonomicle.maoune.fr' : 'http://127.0.0.1:8090';
+const pb = new PocketBase(API_URL) as TypedPocketBase;
 
 const wikiAPIEndpoint = 'https://en.wikipedia.org/w/api.php';
 const wikiParams = 'format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=';
@@ -105,7 +107,8 @@ export const getGoalTaxon = async () => {
 	const randomIndex = Math.floor((hash[0] % totalAvailable) + 1);
 	const taxon = (
 		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomIndex, 1, {
-			filter: 'rank = "species" && image_path=true',
+			expand: 'rank',
+			filter: 'rank.name = "species" && image_path=true',
 			skipTotal: true
 		})
 	).items[0];
