@@ -230,7 +230,7 @@ func init() {
 						"id": "glfjt5zx",
 						"name": "path",
 						"type": "json",
-						"required": false,
+						"required": true,
 						"presentable": false,
 						"unique": false,
 						"options": {
