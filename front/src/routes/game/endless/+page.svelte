@@ -52,7 +52,7 @@
 	};
 </script>
 
-<button on:click={() => reset()}>Reset</button>
+<button on:click={() => reset()} class="btn">Reset</button>
 
 {#if goalTaxonData && currentTaxonData}
 	<Game {goalTaxonData} {currentTaxonData} />

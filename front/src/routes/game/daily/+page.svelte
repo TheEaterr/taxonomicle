@@ -40,6 +40,6 @@
 	};
 </script>
 
-<button on:click={() => reset()}>Reset</button>
+<button on:click={() => reset()} class="btn">Reset</button>
 
 <Game {goalTaxonData} {currentTaxonData} />
