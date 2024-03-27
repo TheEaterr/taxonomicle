@@ -16,15 +16,9 @@ jobs:
         with:
           node-version: 20
 
-      - name: npm install
+      - name: Run checks
         run: |
           cd front
           npm ci
-
-      - name: Run eslint
-        run: |
           npm run lint
-
-      - name: Run typescript check
-        run: |
           npm run check
