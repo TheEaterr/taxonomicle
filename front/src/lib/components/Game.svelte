@@ -17,9 +17,8 @@
 	};
 
 	let isGoalReached = false;
-	$: isGoalReached = currentTaxonData.children.items.some(
-		(child) => child.id === goalTaxonData.taxon.id
-	);
+	$: isGoalReached =
+		currentTaxonData.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
 </script>
 
 <h1>Goal Taxon</h1>
