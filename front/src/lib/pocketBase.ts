@@ -1,7 +1,18 @@
-import PocketBase from 'pocketbase';
-import type { TaxonResponse } from './generated/pocketBaseTypes';
+import PocketBase, { RecordService } from 'pocketbase';
+import type { TaxonResponse, UsersResponse } from './generated/pocketBaseTypes';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+// Override TaxonResponse directly to forbid null path
+type TaxonResponseFull = TaxonResponse & {
+	path: string[];
+};
+
+// Overriden TypedPocketBase to include json type definitions
+type TypedPocketBase = PocketBase & {
+	collection(idOrName: 'taxon'): RecordService<TaxonResponseFull>;
+	collection(idOrName: 'users'): RecordService<UsersResponse>;
+};
+
+const pb = new PocketBase('http://127.0.0.1:8090') as TypedPocketBase;
 
 const wikiAPIEndpoint = 'https://en.wikipedia.org/w/api.php';
 const wikiParams = 'format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=';
@@ -13,22 +24,21 @@ const getDescription = async (title: string): Promise<string> => {
 
 export const getTaxonData = async (id: string, path: string[]) => {
 	const taxonId = id;
-	const taxon = await pb.collection<TaxonResponse>('taxon').getOne(taxonId);
+	const taxon = await pb.collection('taxon').getOne(taxonId);
 	// We have to make a seperate query for the random sort
-	const children = await pb.collection<TaxonResponse>('taxon').getList(1, 20, {
+	const children = await pb.collection('taxon').getList(1, 20, {
 		filter: `parent = "${taxonId}"`,
 		sort: '@random'
 	});
-	let overflown = false;
+	const overflown = children.totalItems > 20;
 	if (children.items.length == 20) {
 		const indexOnPath = path.indexOf(taxonId);
 		if (indexOnPath !== -1 && indexOnPath !== 0) {
 			const nextTaxon = path[indexOnPath - 1];
 			if (children.items.findIndex((child) => child.id === nextTaxon) === -1) {
 				children.items.pop();
-				children.items.push(await pb.collection<TaxonResponse>('taxon').getOne(nextTaxon));
+				children.items.push(await pb.collection('taxon').getOne(nextTaxon));
 			}
-			overflown = true;
 		}
 	}
 	// TODO sort according to rank then scientific name
@@ -66,18 +76,8 @@ export const cyrb128 = (str: string) => {
 	return [h1 >>> 0, h2 >>> 0, h3 >>> 0, h4 >>> 0];
 };
 
-const getCorrectPath = async (taxon: TaxonResponse) => {
-	const path = [taxon.id];
-	let current = taxon;
-	while (current.parent) {
-		path.push(current.parent);
-		current = await pb.collection<TaxonResponse>('taxon').getOne(current.parent);
-	}
-	return path;
-};
-
 export const getGoalTaxon = async () => {
-	const availableTaxons = await pb.collection<TaxonResponse>('taxon').getList(1, 1, {
+	const availableTaxons = await pb.collection('taxon').getList(1, 1, {
 		filter: 'rank = "species" && image_path=true'
 	});
 	const totalAvailable = availableTaxons.totalItems;
@@ -88,45 +88,39 @@ export const getGoalTaxon = async () => {
 	);
 	const randomIndex = Math.floor((hash[0] % totalAvailable) + 1);
 	const taxon = (
-		await pb.collection<TaxonResponse>('taxon').getList(randomIndex, 1, {
+		await pb.collection('taxon').getList(randomIndex, 1, {
 			filter: 'rank = "species" && image_path=true',
 			skipTotal: true
 		})
 	).items[0];
 	const description = await getDescription(taxon.site_link);
-	const path = await getCorrectPath(taxon);
 
 	return {
 		taxon,
-		description,
-		path
+		description
 	};
 };
 
 export const getRandomGoalTaxon = async () => {
-	const taxon = await pb.collection<TaxonResponse>('taxon').getFirstListItem('', {
+	const taxon = await pb.collection('taxon').getFirstListItem('', {
 		filter: 'rank = "species" && image_path=true',
 		sort: '@random'
 	});
 	const description = await getDescription(taxon.site_link);
-	const path = await getCorrectPath(taxon);
 
 	return {
 		taxon,
-		description,
-		path
+		description
 	};
 };
 
 export const getGoalTaxonData = async (id: string) => {
-	const taxon = await pb.collection<TaxonResponse>('taxon').getOne(id);
+	const taxon = await pb.collection('taxon').getOne(id);
 	const description = await getDescription(taxon.site_link);
-	const path = await getCorrectPath(taxon);
 
 	return {
 		taxon,
-		description,
-		path
+		description
 	};
 };
 

@@ -29,14 +29,14 @@
 				};
 			currentTaxon.set(value.currentTaxon);
 			numberSteps.set(value.steps);
-			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.path);
+			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		}
 	};
 
 	const reset = async () => {
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
-		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.path);
+		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 	};
 </script>
 

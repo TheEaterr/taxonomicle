@@ -1,4 +1,4 @@
-name: Lint
+name: Check code
 
 on:
   pull_request:
@@ -16,8 +16,13 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run ESLint
+      - name: npm install
         run: |
           cd front
           npm ci
+
+      - name: Run eslint
           npm run lint
+
+      - name: Run typescript check
+          npm run check

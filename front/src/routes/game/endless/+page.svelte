@@ -39,7 +39,7 @@
 			goalTaxonId.set(value.goalTaxon);
 			numberSteps.set(value.steps);
 			goalTaxonData = await getGoalTaxonData(value.goalTaxon);
-			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.path);
+			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		}
 	};
 
@@ -47,7 +47,7 @@
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
 		goalTaxonData = await getRandomGoalTaxon();
-		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.path);
+		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		goalTaxonId.set(goalTaxonData.taxon.id);
 	};
 </script>
