@@ -42,11 +42,15 @@ export const getTaxonData = async (id: string, path: string[]) => {
 	const overflown = children.totalItems > 20;
 	if (children.items.length == 20) {
 		const indexOnPath = path.indexOf(taxonId);
-		if (indexOnPath !== -1 && indexOnPath !== 0) {
-			const nextTaxon = path[indexOnPath - 1];
+		if (indexOnPath !== -1 && indexOnPath < path.length - 1) {
+			const nextTaxon = path[indexOnPath + 1];
 			if (children.items.findIndex((child) => child.id === nextTaxon) === -1) {
 				children.items.pop();
-				children.items.push(await pb.collection('taxon').getOne(nextTaxon));
+				children.items.push(
+					await pb.collection('taxon').getOne<TaxonResponseFull<TexpandRank>>(nextTaxon, {
+						expand: 'rank'
+					})
+				);
 			}
 		}
 	}
