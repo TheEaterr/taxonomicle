@@ -65,7 +65,7 @@
 
 <style>
 	.cross-background {
-		background-color: oklch(var(--bc));
+		background-color: oklch(var(--nc));
 		-webkit-mask-image: url('/src/lib/assets/background.svg');
 		mask-image: url('/src/lib/assets/background.svg');
 		mask-repeat: space;
