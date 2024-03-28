@@ -5,11 +5,11 @@
 		getRandomDecoration
 	} from '$lib/components/decorations/decorationPossibilities';
 
-	let decorations: ({ x: number; y: number; icon: DecorationPossibilities } | undefined)[][] = [];
+	let decorations: ({ x: number; y: number; icon: DecorationPossibilities }[] | undefined)[][] = [];
 
 	const wrapValue = (value: number) => {
 		const animationDuration = 10000;
-		const initialValue = ((value % 500) / 500) * animationDuration;
+		const initialValue = ((value % 10) / 10) * animationDuration;
 		return (
 			(initialValue * (animationDuration - initialValue)) / (animationDuration / 4) -
 			animationDuration / 2
@@ -33,15 +33,25 @@
 				}
 				// we add an offset for 10 to place the center of the decoration
 				const centerOffset = 10;
-				decorations[i].push({
-					x: ((i + 0.25 + 0.5 * Math.random()) / numberColumns) * w - centerOffset,
-					y: ((j + 0.25 + 0.5 * Math.random()) / numberRows) * h - centerOffset,
-					icon: getRandomDecoration()
-				});
+				const xOffset = Math.random() * 0.5;
+				const yOffset = Math.random() * 0.5;
+				const decorationsInCell = [
+					{
+						x: ((i + 0.25 + xOffset) / numberColumns) * w - centerOffset,
+						y: ((j + 0.25 + yOffset) / numberRows) * h - centerOffset,
+						icon: getRandomDecoration()
+					},
+					{
+						x: ((i + 0.75 - xOffset) / numberColumns) * w - centerOffset,
+						y: ((j + 0.75 - yOffset) / numberRows) * h - centerOffset,
+						icon: getRandomDecoration()
+					}
+				];
+				decorations[i].push(decorationsInCell);
 			}
-			decorations[i] = decorations[i].slice(0, numberRows);
+			decorations[i] = decorations[i].slice(0, 2 * numberRows);
 		}
-		decorations = decorations.slice(0, numberColumns);
+		decorations = decorations.slice(0, 2 * numberColumns);
 	}
 </script>
 
@@ -51,12 +61,19 @@
 		{#each row as cell}
 			{#if cell}
 				<div
-					class="absolute size-[20px] animate-pulse bg-cover"
-					style="left: {cell.x}px; top: {cell.y}px; animation-delay: {wrapValue(
-						cell.x + cell.y
+					class="animate-appear absolute size-[20px] bg-cover"
+					style="left: {cell[0].x}px; top: {cell[0].y}px; animation-delay: {wrapValue(
+						cell[0].x + cell[0].y
 					)}ms; animation-duration: 10s;"
 				>
-					<DecorationIcon decoration={cell.icon} />
+					<DecorationIcon decoration={cell[0].icon} />
+				</div>
+				<div
+					class="animate-appear-reverse absolute size-[20px] bg-cover opacity-0"
+					style="left: {cell[1].x}px; top: {cell[1].y}px; animation-delay: {5000 +
+						wrapValue(cell[0].x + cell[0].y)}ms; animation-duration: 10s;"
+				>
+					<DecorationIcon decoration={cell[1].icon} />
 				</div>
 			{/if}
 		{/each}
@@ -69,5 +86,30 @@
 		-webkit-mask-image: url('/src/lib/assets/background.svg');
 		mask-image: url('/src/lib/assets/background.svg');
 		mask-repeat: space;
+	}
+
+	@keyframes appear {
+		25% {
+			opacity: 0;
+		}
+		75% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes appear-reverse {
+		25% {
+			opacity: 1;
+		}
+		75% {
+			opacity: 1;
+		}
+	}
+
+	.animate-appear {
+		animation: appear 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	}
+	.animate-appear-reverse {
+		animation: appear-reverse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 	}
 </style>
