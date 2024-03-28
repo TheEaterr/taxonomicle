@@ -6,3 +6,10 @@
 .btn {
 	@apply rounded-full;
 }
+
+/* override the default tailwind pulse animation (has to be a global style) */
+@keyframes pulse {
+	50% {
+		opacity: 0;
+	}
+}
