@@ -6,7 +6,8 @@
 		IconFish,
 		IconSpider,
 		IconDog,
-		IconBat
+		IconBat,
+		IconBug
 	} from '@tabler/icons-svelte';
 	import { DecorationPossibilities } from '$lib/components/decorations/decorationPossibilities';
 
@@ -29,6 +30,8 @@
 	<IconDog {color} />
 {:else if decoration === DecorationPossibilities.BAT}
 	<IconBat {color} />
+{:else if decoration === DecorationPossibilities.BUG}
+	<IconBug {color} />
 {:else}
 	<p>Unknown decoration</p>
 {/if}

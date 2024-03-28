@@ -5,7 +5,8 @@ export enum DecorationPossibilities {
 	FEATHER,
 	DOG,
 	SPIDER,
-	BAT
+	BAT,
+	BUG
 }
 
 // taken from
