@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { IconDna, IconDna2, IconCell, IconMicroscope, IconFlask } from '@tabler/icons-svelte';
+	import { IconDna, IconDna2, IconCell, IconFlask } from '@tabler/icons-svelte';
 	import { DecorationPossibilities } from '$lib/components/decorations/decorationPossibilities';
 
 	export let decoration: DecorationPossibilities;
 
-	const color = '#aaaaaa';
+	const color = '#cccccc';
 </script>
 
 {#if decoration === DecorationPossibilities.DNA}
@@ -13,8 +13,6 @@
 	<IconDna2 {color} />
 {:else if decoration === DecorationPossibilities.CELL}
 	<IconCell {color} />
-{:else if decoration === DecorationPossibilities.MICROSCOPE}
-	<IconMicroscope {color} />
 {:else if decoration === DecorationPossibilities.FLASK}
 	<IconFlask {color} />
 {:else}

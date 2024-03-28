@@ -2,8 +2,7 @@ export enum DecorationPossibilities {
 	DNA,
 	DNA2,
 	CELL,
-	FLASK,
-	MICROSCOPE
+	FLASK
 }
 
 // taken from

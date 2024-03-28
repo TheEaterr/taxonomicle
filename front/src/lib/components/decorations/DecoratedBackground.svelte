@@ -8,14 +8,18 @@
 	let decorations: ({ x: number; y: number; icon: DecorationPossibilities } | undefined)[][] = [];
 
 	const wrapValue = (value: number) => {
-		const initialValue = value % 5000;
-		return (initialValue * (5000 - initialValue)) / 1250 - 2500;
+		const animationDuration = 10000;
+		const initialValue = ((value % 500) / 500) * animationDuration;
+		return (
+			(initialValue * (animationDuration - initialValue)) / (animationDuration / 4) -
+			animationDuration / 2
+		);
 	};
 
 	let w: number;
 	let h: number;
 	$: {
-		const pxPerCell = 170;
+		const pxPerCell = 150;
 		const numberColumns = Math.floor(w / pxPerCell);
 		const numberRows = Math.floor(h / pxPerCell);
 		for (let i = decorations.length; i < numberColumns; i++) {
@@ -48,8 +52,8 @@
 				<div
 					class="absolute size-[20px] animate-pulse bg-cover"
 					style="left: {cell.x}px; top: {cell.y}px; animation-delay: {wrapValue(
-						cell.x * cell.y
-					)}ms; animation-duration: 5s;"
+						cell.x + cell.y
+					)}ms; animation-duration: 10s;"
 				>
 					<DecorationIcon decoration={cell.icon} />
 				</div>
