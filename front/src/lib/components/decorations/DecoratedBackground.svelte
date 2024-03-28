@@ -46,6 +46,7 @@
 </script>
 
 <div bind:clientWidth={w} bind:clientHeight={h} class="fixed -z-10 h-screen w-screen">
+	<div class="cross-background h-screen w-screen"></div>
 	{#each decorations as row}
 		{#each row as cell}
 			{#if cell}
@@ -63,4 +64,10 @@
 </div>
 
 <style>
+	.cross-background {
+		background-color: oklch(var(--bc));
+		-webkit-mask-image: url('/src/lib/assets/background.svg');
+		mask-image: url('/src/lib/assets/background.svg');
+		mask-repeat: space;
+	}
 </style>

@@ -4,7 +4,7 @@
 
 	export let decoration: DecorationPossibilities;
 
-	const color = '#cccccc';
+	const color = 'oklch(var(--nc))';
 </script>
 
 {#if decoration === DecorationPossibilities.DNA}
