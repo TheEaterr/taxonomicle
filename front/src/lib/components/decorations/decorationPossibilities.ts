@@ -1,8 +1,11 @@
 export enum DecorationPossibilities {
-	DNA,
-	DNA2,
-	CELL,
-	FLASK
+	BUTTERFLY,
+	CAT,
+	FISH,
+	FEATHER,
+	DOG,
+	SPIDER,
+	BAT
 }
 
 // taken from

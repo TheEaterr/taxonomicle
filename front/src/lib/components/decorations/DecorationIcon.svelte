@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { IconDna, IconDna2, IconCell, IconFlask } from '@tabler/icons-svelte';
+	import {
+		IconButterfly,
+		IconCat,
+		IconFeather,
+		IconFish,
+		IconSpider,
+		IconDog,
+		IconBat
+	} from '@tabler/icons-svelte';
 	import { DecorationPossibilities } from '$lib/components/decorations/decorationPossibilities';
 
 	export let decoration: DecorationPossibilities;
@@ -7,14 +15,20 @@
 	const color = 'oklch(var(--nc))';
 </script>
 
-{#if decoration === DecorationPossibilities.DNA}
-	<IconDna {color} />
-{:else if decoration === DecorationPossibilities.DNA2}
-	<IconDna2 {color} />
-{:else if decoration === DecorationPossibilities.CELL}
-	<IconCell {color} />
-{:else if decoration === DecorationPossibilities.FLASK}
-	<IconFlask {color} />
+{#if decoration === DecorationPossibilities.BUTTERFLY}
+	<IconButterfly {color} />
+{:else if decoration === DecorationPossibilities.CAT}
+	<IconCat {color} />
+{:else if decoration === DecorationPossibilities.FISH}
+	<IconFish {color} />
+{:else if decoration === DecorationPossibilities.FEATHER}
+	<IconFeather {color} />
+{:else if decoration === DecorationPossibilities.SPIDER}
+	<IconSpider {color} />
+{:else if decoration === DecorationPossibilities.DOG}
+	<IconDog {color} />
+{:else if decoration === DecorationPossibilities.BAT}
+	<IconBat {color} />
 {:else}
 	<p>Unknown decoration</p>
 {/if}
