@@ -11,4 +11,7 @@
 </script>
 
 <a href="/" class="link">Go back home</a>
-<slot />
+
+<article class="prose max-w-none text-center">
+	<slot />
+</article>
