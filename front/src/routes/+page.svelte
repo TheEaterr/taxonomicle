@@ -11,12 +11,12 @@
 				<div class="m-3 mt-5">
 					<button
 						on:click={() => goto('/game/daily')}
-						class="btn btn-primary btn-lg bg-primary-content text-lg font-bold text-neutral hover:text-primary-content"
+						class="btn btn-primary bg-primary-content text-lg font-bold text-neutral sm:btn-lg hover:text-primary-content"
 						>Daily</button
 					>
 					<button
 						on:click={() => goto('/game/endless')}
-						class="btn btn-secondary btn-lg ml-5 bg-secondary-content text-lg font-bold text-neutral hover:text-secondary-content"
+						class="btn btn-secondary ml-5 bg-secondary-content text-lg font-bold text-neutral sm:btn-lg hover:text-secondary-content"
 						>Endless</button
 					>
 				</div>
