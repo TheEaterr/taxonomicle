@@ -5,18 +5,18 @@
 	import { type Writable } from 'svelte/store';
 	import type { GameContext } from '$lib/gameContext';
 	import Game from '$lib/components/Game.svelte';
-	import ResetButton from '$lib/components/ResetButton.svelte';
+	import Header from '$lib/components/header/Header.svelte';
 
 	export let data;
 
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
 	const numberSteps = getContext<Writable<number>>('numberSteps');
-	const gameStarted = getContext<Writable<boolean>>('gameStarted');
 
 	let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>> = data.animaliaTaxon;
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
+	let gameStarted = false;
 
 	export const snapshot: Snapshot<GameContext> = {
 		capture: () => {
@@ -32,9 +32,7 @@
 			}
 			currentTaxon.set(value.currentTaxon);
 			numberSteps.set(value.steps);
-			if ($numberSteps > 0) {
-				gameStarted.set(true);
-			}
+			gameStarted = value.steps > 0;
 			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		}
 	};
@@ -43,9 +41,9 @@
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
 		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
-		gameStarted.set(false);
+		gameStarted = false;
 	};
 </script>
 
-<ResetButton {reset} />
-<Game {goalTaxonData} {currentTaxonData} />
+<Header {reset} />
+<Game {goalTaxonData} {currentTaxonData} bind:gameStarted />

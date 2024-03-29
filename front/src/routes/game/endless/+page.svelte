@@ -10,20 +10,19 @@
 	import { type Writable } from 'svelte/store';
 	import type { GameContext } from '$lib/gameContext';
 	import Game from '$lib/components/Game.svelte';
-	import ResetButton from '$lib/components/ResetButton.svelte';
+	import Header from '$lib/components/header/Header.svelte';
 
 	export let data;
 
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const goalTaxonId = getContext<Writable<string>>('goalTaxon');
-	const gameStarted = getContext<Writable<boolean>>('gameStarted');
 
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
 	let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>> = data.animaliaTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
-	goalTaxonId.set(goalTaxonData.taxon.id);
+	let gameStarted = false;
 
 	export const snapshot: Snapshot<GameContext> = {
 		capture: () => {
@@ -41,9 +40,7 @@
 			currentTaxon.set(value.currentTaxon);
 			goalTaxonId.set(value.goalTaxon);
 			numberSteps.set(value.steps);
-			if ($numberSteps > 0) {
-				$gameStarted = true;
-			}
+			gameStarted = value.steps > 0;
 			goalTaxonData = await getGoalTaxonData(value.goalTaxon);
 			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		}
@@ -55,11 +52,11 @@
 		goalTaxonData = await getRandomGoalTaxon();
 		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		goalTaxonId.set(goalTaxonData.taxon.id);
-		$gameStarted = false;
+		gameStarted = false;
 	};
 </script>
 
-<ResetButton {reset} />
+<Header {reset} />
 {#if goalTaxonData && currentTaxonData}
-	<Game {goalTaxonData} {currentTaxonData} />
+	<Game {goalTaxonData} {currentTaxonData} bind:gameStarted />
 {/if}

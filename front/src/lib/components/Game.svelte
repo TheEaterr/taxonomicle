@@ -4,13 +4,14 @@
 	import { getContext } from 'svelte';
 	import { type Writable } from 'svelte/store';
 	import GoalTaxon from '$lib/components/GoalTaxon.svelte';
+	import { goto } from '$app/navigation';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>>;
+	export let gameStarted: boolean;
 
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
-	const gameStarted = getContext<Writable<boolean>>('gameStarted');
 
 	const updateCurrentTaxon = async (newId: string) => {
 		currentTaxon.set(newId);
@@ -25,9 +26,12 @@
 
 <h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
 <GoalTaxon data={goalTaxonData} />
-{#if !$gameStarted}
+{#if !gameStarted}
 	<div class="m-3">
-		<button on:click={() => gameStarted.set(true)} class="btn-primary-special btn text-lg"
+		<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm"
+			>How to play</button
+		>
+		<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
 			>Start</button
 		>
 	</div>

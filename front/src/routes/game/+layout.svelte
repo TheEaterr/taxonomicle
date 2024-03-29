@@ -12,8 +12,6 @@
 	setContext('gameStarted', gameStarted);
 </script>
 
-<a href="/" class="link">Go back home</a>
-
 <div class="flex flex-col content-center items-center">
 	<slot />
 </div>

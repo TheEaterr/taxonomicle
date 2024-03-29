@@ -1,6 +1,7 @@
 <script lang="ts">
+	import Header from '$lib/components/header/Header.svelte';
 </script>
 
-<a href="/" class="link">Go back home</a>
+<Header reset={undefined} />
 
 TODO

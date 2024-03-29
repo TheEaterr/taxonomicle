@@ -1,0 +1,25 @@
+<script lang="ts">
+	import { IconRotate } from '@tabler/icons-svelte';
+
+	export let reset: () => void;
+
+	let button: HTMLButtonElement;
+	const animate = () => {
+		button.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(-360deg)' }], {
+			duration: 500,
+			iterations: 1,
+			easing: 'ease-in-out'
+		});
+	};
+</script>
+
+<button
+	bind:this={button}
+	on:click={() => {
+		animate();
+		reset();
+	}}
+>
+	<!-- this hidden checkbox controls the state -->
+	<IconRotate class="swap-on h-10 w-10" stroke={2} />
+</button>
