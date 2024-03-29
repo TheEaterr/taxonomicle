@@ -20,6 +20,18 @@
 						>Endless</button
 					>
 				</div>
+				<div class="m-5">
+					<button
+						on:click={() => goto('/game/tutorial')}
+						class="btn btn-neutral bg-neutral-content font-bold text-neutral hover:text-neutral-content"
+						>How to play</button
+					>
+					<button
+						on:click={() => goto('/game/endless')}
+						class="btn btn-neutral ml-5 bg-neutral-content font-bold text-neutral hover:text-neutral-content"
+						>Endless</button
+					>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -8,7 +8,7 @@
 	let decorations: ({ x: number; y: number; icon: DecorationPossibilities }[] | undefined)[][] = [];
 
 	const wrapValue = (value: number) => {
-		const animationDuration = 10000;
+		const animationDuration = 5000;
 		const initialValue = ((value % 10) / 10) * animationDuration;
 		return (
 			(initialValue * (animationDuration - initialValue)) / (animationDuration / 4) -
@@ -64,14 +64,15 @@
 					class="animate-appear absolute size-[20px] bg-cover"
 					style="left: {cell[0].x}px; top: {cell[0].y}px; animation-delay: {wrapValue(
 						cell[0].x + cell[0].y
-					)}ms; animation-duration: 10s;"
+					)}ms; animation-duration: 5s;"
 				>
 					<DecorationIcon decoration={cell[0].icon} />
 				</div>
 				<div
 					class="animate-appear-reverse absolute size-[20px] bg-cover opacity-0"
-					style="left: {cell[1].x}px; top: {cell[1].y}px; animation-delay: {5000 +
-						wrapValue(cell[0].x + cell[0].y)}ms; animation-duration: 10s;"
+					style="left: {cell[1].x}px; top: {cell[1].y}px; animation-delay: {wrapValue(
+						cell[0].x + cell[0].y
+					)}ms; animation-duration: 5s;"
 				>
 					<DecorationIcon decoration={cell[1].icon} />
 				</div>
@@ -98,11 +99,20 @@
 	}
 
 	@keyframes appear-reverse {
+		0% {
+			opacity: 0;
+		}
 		25% {
+			opacity: 0;
+		}
+		50% {
 			opacity: 1;
 		}
 		75% {
-			opacity: 1;
+			opacity: 0;
+		}
+		100% {
+			opacity: 0;
 		}
 	}
 
