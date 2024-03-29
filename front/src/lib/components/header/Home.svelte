@@ -19,7 +19,7 @@
 	bind:this={button}
 	on:click={() => {
 		animate();
-		goto('/game/endless');
+		goto('/');
 	}}
 >
 	<IconHome class="swap-on h-10 w-10" />

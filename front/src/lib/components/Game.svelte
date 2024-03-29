@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Taxon from '$lib/components/Taxon.svelte';
+	import Taxon from '$lib/components/Taxon/CurrentTaxon.svelte';
 	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { type Writable } from 'svelte/store';
-	import GoalTaxon from '$lib/components/GoalTaxon.svelte';
+	import GoalTaxon from '$lib/components/Taxon/GoalTaxon.svelte';
 	import { goto } from '$app/navigation';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;

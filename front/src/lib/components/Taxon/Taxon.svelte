@@ -2,6 +2,7 @@
 	import type { getGoalTaxon } from '$lib/pocketBase';
 
 	export let data: Awaited<ReturnType<typeof getGoalTaxon>>;
+	export let isGoal;
 </script>
 
 <div
@@ -26,6 +27,12 @@
 					<div class="badge badge-secondary font-bold">Vernacular</div>
 					<span class="font-semibold">
 						{data.taxon.vernacular}
+					</span>
+				{/if}
+				{#if !isGoal}
+					<div class="badge badge-accent font-bold">Rank</div>
+					<span class="font-semibold">
+						{data.taxon.expand?.rank.name}
 					</span>
 				{/if}
 				<div>
