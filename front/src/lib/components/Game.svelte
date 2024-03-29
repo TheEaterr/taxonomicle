@@ -3,6 +3,7 @@
 	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { type Writable } from 'svelte/store';
+	import GoalTaxon from '$lib/components/GoalTaxon.svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>>;
@@ -21,15 +22,7 @@
 		currentTaxonData.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
 </script>
 
-<h1>Goal Taxon</h1>
-<p>The record is {goalTaxonData.taxon.scientific}, {goalTaxonData.taxon.vernacular}</p>
-<p>{goalTaxonData.description}</p>
-<img
-	height={200}
-	src={goalTaxonData.taxon.image_link}
-	alt={goalTaxonData.taxon.scientific}
-	class="ml-auto mr-auto w-96"
-/>
+<GoalTaxon data={goalTaxonData} />
 <h1>Current Taxon</h1>
 <p>Number of current steps : {$numberSteps}</p>
 {#if !isGoalReached}
