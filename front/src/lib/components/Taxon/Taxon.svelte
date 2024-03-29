@@ -2,7 +2,7 @@
 	import type { getGoalTaxon } from '$lib/pocketBase';
 
 	export let data: Awaited<ReturnType<typeof getGoalTaxon>>;
-	export let isGoal;
+	export let isGoal: boolean;
 </script>
 
 <div
