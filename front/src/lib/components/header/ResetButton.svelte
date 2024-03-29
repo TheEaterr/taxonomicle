@@ -20,6 +20,5 @@
 		reset();
 	}}
 >
-	<!-- this hidden checkbox controls the state -->
-	<IconRotate class="swap-on h-10 w-10" stroke={2} />
+	<IconRotate class="swap-on h-10 w-10" />
 </button>
