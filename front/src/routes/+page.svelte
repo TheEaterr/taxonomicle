@@ -11,23 +11,19 @@
 				<div class="m-3 mt-5">
 					<button
 						on:click={() => goto('/game/daily')}
-						class="btn btn-primary bg-primary-content text-lg font-bold text-neutral sm:btn-lg hover:text-primary-content"
-						>Daily</button
+						class="btn-primary-special btn text-lg sm:btn-lg">Daily</button
 					>
 					<button
 						on:click={() => goto('/game/endless')}
-						class="btn btn-secondary ml-5 bg-secondary-content text-lg font-bold text-neutral sm:btn-lg hover:text-secondary-content"
-						>Endless</button
+						class="btn-secondary-special btn ml-5 text-lg sm:btn-lg">Endless</button
 					>
 				</div>
 				<div>
-					<button
-						on:click={() => goto('/tutorial')}
-						class="btn btn-outline btn-neutral btn-sm font-bold text-neutral">How to play</button
+					<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm"
+						>How to play</button
 					>
-					<button
-						on:click={() => goto('/about')}
-						class="btn btn-outline btn-neutral btn-sm ml-1 font-bold text-neutral">About</button
+					<button on:click={() => goto('/about')} class="btn-neutral-special btn btn-sm ml-1"
+						>About</button
 					>
 				</div>
 			</div>

@@ -17,8 +17,8 @@
 		<div class="w-0 grow">
 			<div>
 				<h2 class="card-title">
-					<div class="badge badge-primary badge-lg font-bold">Goal</div>
-					<div class="italic">
+					<div class="badge badge-primary badge-lg font-bold">Scientific</div>
+					<div class="mb-1 italic">
 						{data.taxon.scientific}
 					</div>
 				</h2>

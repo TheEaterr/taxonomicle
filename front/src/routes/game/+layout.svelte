@@ -5,9 +5,11 @@
 	const currentTaxon = writable<string>('');
 	const numberSteps = writable<number>(0);
 	const goalTaxon = writable<string>('');
+	const gameStarted = writable<boolean>(false);
 	setContext('currentTaxon', currentTaxon);
 	setContext('numberSteps', numberSteps);
 	setContext('goalTaxon', goalTaxon);
+	setContext('gameStarted', gameStarted);
 </script>
 
 <a href="/" class="link">Go back home</a>

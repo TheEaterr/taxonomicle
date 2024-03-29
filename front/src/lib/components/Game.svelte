@@ -10,6 +10,7 @@
 
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
+	const gameStarted = getContext<Writable<boolean>>('gameStarted');
 
 	const updateCurrentTaxon = async (newId: string) => {
 		currentTaxon.set(newId);
@@ -22,10 +23,15 @@
 		currentTaxonData.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
 </script>
 
+<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
 <GoalTaxon data={goalTaxonData} />
-<h1>Current Taxon</h1>
-<p>Number of current steps : {$numberSteps}</p>
-{#if !isGoalReached}
+{#if !$gameStarted}
+	<div class="m-3">
+		<button on:click={() => gameStarted.set(true)} class="btn-primary-special btn text-lg"
+			>Start</button
+		>
+	</div>
+{:else if !isGoalReached}
 	<Taxon data={currentTaxonData} update={updateCurrentTaxon} />
 {:else}
 	<p>
@@ -35,3 +41,9 @@
 	</p>
 	<p>Goal reached!</p>
 {/if}
+
+<style>
+	.small-title {
+		-webkit-text-stroke: 1px oklch(var(--nc));
+	}
+</style>
