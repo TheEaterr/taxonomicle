@@ -9,8 +9,9 @@
 <div class="flex">
 	<Taxon {data} isGoal={false} />
 	<p>
-		Parent: <button on:click={() => update(data.taxon.parent)} class="btn"
-			>{data.taxon.parent}</button
+		Parent: <button
+			on:click={() => update(data.taxon.parent)}
+			class="btn bg-kingdom text-kingdom-content">{data.taxon.parent}</button
 		>
 	</p>
 	<p>Overflow: {data.overflown}</p>

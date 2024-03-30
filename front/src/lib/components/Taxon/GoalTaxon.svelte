@@ -6,6 +6,3 @@
 </script>
 
 <Taxon {data} isGoal={true} />
-
-<style>
-</style>

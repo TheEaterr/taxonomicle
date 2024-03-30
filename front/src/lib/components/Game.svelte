@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Taxon from '$lib/components/Taxon/CurrentTaxon.svelte';
+	import Taxon from '$lib/components/taxon/CurrentTaxon.svelte';
 	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { type Writable } from 'svelte/store';
-	import GoalTaxon from '$lib/components/Taxon/GoalTaxon.svelte';
+	import GoalTaxon from '$lib/components/taxon/GoalTaxon.svelte';
 	import { goto } from '$app/navigation';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
@@ -26,6 +26,7 @@
 
 <h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
 <GoalTaxon data={goalTaxonData} />
+
 {#if !gameStarted}
 	<div class="m-3">
 		<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm"
