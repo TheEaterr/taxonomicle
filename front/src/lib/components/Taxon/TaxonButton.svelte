@@ -1,18 +1,28 @@
 <script lang="ts">
-	import taxons from '../../taxons.js';
+	export let scientific: string;
+	export let vernacular: string | undefined;
+	export let rank: string;
+	export let id: string;
+	export let update: (newId: string) => Promise<void>;
 </script>
 
 <div>
-	{#each taxons as taxon}
-		<button
-			class="bg-{taxon} border-{taxon}-content btn text-{taxon}-content hover:bg-{taxon}-content hover:text-{taxon} hover:border-{taxon} relative"
+	<button
+		on:click={() => update(id)}
+		class="group bg-{rank} border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative text-lg text-absolute hover:text-absolute-content"
+	>
+		<div class="z-10">
+			<span class="italic">{scientific}</span>
+			{#if vernacular}
+				<span class="text-base opacity-80">({vernacular})</span>
+			{/if}
+		</div>
+		<div
+			class="absolute bottom-[-3px] right-2 z-0 text-sm text-{rank}-content group-hover:text-{rank} group-hover:bg-{rank}-content bg-{rank} rounded"
 		>
-			This is a test
-			<div class="absolute bottom-0 right-0 bg-{taxon}">
-				{taxon}
-			</div>
-		</button>
-	{/each}
+			{rank}
+		</div>
+	</button>
 </div>
 
 <style>

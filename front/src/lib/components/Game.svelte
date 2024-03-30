@@ -37,6 +37,7 @@
 		>
 	</div>
 {:else if !isGoalReached}
+	<p>Number steps: {$numberSteps}</p>
 	<Taxon data={currentTaxonData} update={updateCurrentTaxon} />
 {:else}
 	<p>

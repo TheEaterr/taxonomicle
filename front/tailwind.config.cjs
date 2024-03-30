@@ -1,5 +1,30 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const taxons = require('./src/lib/taxons.js');
+const taxons = [
+	'kingdom',
+	'subkingdom',
+	'infrakingdom',
+	'superphylum',
+	'phylum',
+	'subphylum',
+	'infraphylum',
+	'superclass',
+	'class',
+	'subclass',
+	'infraclass',
+	'superorder',
+	'order',
+	'suborder',
+	'infraorder',
+	'pavorder',
+	'superfamily',
+	'family',
+	'subfamily',
+	'tribe',
+	'subtribe',
+	'genus',
+	'subgenus',
+	'species'
+];
 
 const colors = taxons.reduce((acc, taxon) => {
 	acc[taxon] = `hsl(var(--${taxon}) / <alpha-value>)`;
@@ -20,18 +45,16 @@ const daisyColorsDark = taxons.reduce((acc, taxon) => {
 }, {});
 
 const safelist = taxons.reduce((acc, taxon) => {
-	acc.push(`bg-${taxon}`);
-	acc.push(`text-${taxon}`);
-	acc.push(`border-${taxon}`);
-	acc.push(`bg-${taxon}-content`);
-	acc.push(`text-${taxon}-content`);
-	acc.push(`border-${taxon}-content`);
-	acc.push(`hover:bg-${taxon}`);
-	acc.push(`hover:text-${taxon}`);
-	acc.push(`hover:border-${taxon}`);
-	acc.push(`hover:bg-${taxon}-content`);
-	acc.push(`hover:text-${taxon}-content`);
-	acc.push(`hover:border-${taxon}-content`);
+	const bases = ['bg', 'text', 'border'];
+	const prefixes = ['', 'hover:', 'group-hover:'];
+	const suffixes = ['', '-content'];
+	bases.forEach((base) => {
+		prefixes.forEach((prefix) => {
+			suffixes.forEach((suffix) => {
+				acc.push(`${prefix}${base}-${taxon}${suffix}`);
+			});
+		});
+	});
 	return acc;
 }, []);
 
@@ -42,6 +65,8 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
+				absolute: 'hsl(var(--absolute) / <alpha-value>)',
+				'absolute-content': 'hsl(var(--absolute-content) / <alpha-value>)',
 				...colors
 			}
 		}
@@ -63,6 +88,8 @@ module.exports = {
 					success: '#84cc16',
 					warning: '#facc15',
 					error: '#ef4444',
+					'--absolute': '0 0 10',
+					'--absolute-content': '0 0 90',
 					...daisyColorsLight
 				},
 				dark: {
@@ -78,6 +105,8 @@ module.exports = {
 					success: '#84cc16',
 					warning: '#facc15',
 					error: '#ef4444',
+					'--absolute': '0 0 90',
+					'--absolute-content': '0 0 10',
 					...daisyColorsDark
 				}
 			}
