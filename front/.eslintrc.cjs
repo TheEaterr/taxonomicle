@@ -8,7 +8,7 @@ module.exports = {
 		'plugin:prettier/recommended'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint', 'prefer-arrow', 'prettier'],
+	plugins: ['@typescript-eslint', 'prefer-arrow'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
