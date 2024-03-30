@@ -15,14 +15,14 @@
 	export let reset: (() => void) | undefined;
 </script>
 
-<div class="fixed left-0 top-0 z-10 m-2 rounded-xl bg-base-200 bg-opacity-80 p-2">
+<div class="fixed left-0 top-0 z-10 m-2 h-[56px] rounded-xl bg-base-200 bg-opacity-80 p-2">
 	<Return />
 	<Home />
 	{#if reset}
 		<ResetButton {reset} />
 	{/if}
 </div>
-<div class="fixed right-0 top-0 z-10 m-2 rounded-xl bg-base-200 bg-opacity-80 p-2">
+<div class="fixed right-0 top-0 z-10 m-2 h-[56px] rounded-xl bg-base-200 bg-opacity-80 p-2">
 	<label class="swap swap-rotate">
 		<!-- this hidden checkbox controls the state -->
 		<input type="checkbox" data-toggle-theme="dark,light" data-act-class="ACTIVECLASS" />
