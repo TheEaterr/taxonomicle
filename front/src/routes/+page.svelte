@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Header from '$lib/components/header/Header.svelte';
 </script>
 
-<main class="flex min-h-screen content-center items-center justify-center">
+<Header onlyTheme={true} />
+
+<main class="fixed top-0 flex min-h-screen w-screen content-center items-center justify-center">
 	<div class="hero h-fit w-fit">
 		<div class="hero-overlay bg-base-100"></div>
 		<div class="hero-content p-10 text-center sm:p-14 lg:p-20">

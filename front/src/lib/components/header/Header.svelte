@@ -12,16 +12,19 @@
 		// 👆 false parameter is required for svelte
 	});
 
-	export let reset: (() => void) | undefined;
+	export let reset: (() => void) | undefined = undefined;
+	export let onlyTheme: boolean = false;
 </script>
 
-<div class="fixed left-0 top-0 z-10 m-2 h-[56px] rounded-xl bg-base-200 bg-opacity-80 p-2">
-	<Return />
-	<Home />
-	{#if reset}
-		<ResetButton {reset} />
-	{/if}
-</div>
+{#if !onlyTheme}
+	<div class="fixed left-0 top-0 z-10 m-2 h-[56px] rounded-xl bg-base-200 bg-opacity-80 p-2">
+		<Return />
+		<Home />
+		{#if reset}
+			<ResetButton {reset} />
+		{/if}
+	</div>
+{/if}
 <div class="fixed right-0 top-0 z-10 m-2 h-[56px] rounded-xl bg-base-200 bg-opacity-80 p-2">
 	<label class="swap swap-rotate">
 		<!-- this hidden checkbox controls the state -->

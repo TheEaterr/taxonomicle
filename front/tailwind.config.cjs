@@ -102,6 +102,7 @@ module.exports = {
 					accent: '#f7e1d9',
 					'accent-content': '#ac2c00',
 					neutral: '#9ca3af',
+					'neutral-content': '#4b5563',
 					'base-100': '#374151',
 					info: '#3b82f6',
 					success: '#84cc16',

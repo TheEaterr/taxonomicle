@@ -55,7 +55,7 @@
 	}
 </script>
 
-<div bind:clientWidth={w} bind:clientHeight={h} class="fixed -z-10 h-screen w-screen">
+<div bind:clientWidth={w} bind:clientHeight={h} class="fixed top-0 -z-10 h-screen w-screen">
 	<div class="cross-background h-screen w-screen"></div>
 	{#each decorations as row}
 		{#each row as cell}
