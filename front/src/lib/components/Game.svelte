@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Taxon from '$lib/components/taxon/CurrentTaxon.svelte';
+	import CurrentTaxon from '$lib/components/taxon/CurrentTaxon.svelte';
 	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { type Writable } from 'svelte/store';
@@ -24,29 +24,33 @@
 		currentTaxonData.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
 </script>
 
-<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
-<GoalTaxon data={goalTaxonData} />
-
-{#if !gameStarted}
-	<div class="m-3">
-		<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm"
-			>How to play</button
-		>
-		<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
-			>Start</button
-		>
+<div class="flex flex-wrap justify-center gap-5 text-center">
+	<div>
+		<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
+		<GoalTaxon data={goalTaxonData} />
+		{#if !gameStarted}
+			<div class="m-3">
+				<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm"
+					>How to play</button
+				>
+				<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
+					>Start</button
+				>
+			</div>
+		{/if}
 	</div>
-{:else if !isGoalReached}
-	<p>Number steps: {$numberSteps}</p>
-	<Taxon data={currentTaxonData} update={updateCurrentTaxon} />
-{:else}
-	<p>
-		Parent: <button on:click={() => updateCurrentTaxon(currentTaxonData.taxon.parent)} class="btn"
-			>{currentTaxonData.taxon.parent}</button
-		>
-	</p>
-	<p>Goal reached!</p>
-{/if}
+
+	{#if gameStarted && !isGoalReached}
+		<CurrentTaxon data={currentTaxonData} update={updateCurrentTaxon} />
+	{:else if isGoalReached}
+		<p>
+			Parent: <button on:click={() => updateCurrentTaxon(currentTaxonData.taxon.parent)} class="btn"
+				>{currentTaxonData.taxon.parent}</button
+			>
+		</p>
+		<p>Goal reached!</p>
+	{/if}
+</div>
 
 <style>
 	.small-title {
