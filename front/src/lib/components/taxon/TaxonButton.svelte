@@ -9,7 +9,6 @@
 
 	const toggleTooltip = (value: boolean) => {
 		const tooltip = document.getElementById('description-tooltip-' + id);
-		console.log('here');
 		if (!tooltip) return;
 		if (value) {
 			tooltip.classList.add('tooltip-open');
@@ -37,8 +36,8 @@
 		</div>
 	</button>
 	<div
-		class="tooltip before:text-wrap before:text-absolute-content"
-		data-tip="hello"
+		class="tooltip tooltip-open before:z-10 before:text-absolute-content"
+		data-tip="hellohellohellohelloh"
 		id="description-tooltip-{id}"
 	>
 		<button
