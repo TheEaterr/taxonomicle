@@ -36,7 +36,7 @@
 		</div>
 	</button>
 	<div
-		class="tooltip tooltip-open before:z-10 before:text-absolute-content"
+		class="tooltip before:z-10 before:text-absolute-content"
 		data-tip="hellohellohellohelloh"
 		id="description-tooltip-{id}"
 	>
