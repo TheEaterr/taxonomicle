@@ -6,6 +6,17 @@
 	export let rank: string;
 	export let id: string;
 	export let update: (newId: string) => Promise<void>;
+
+	const toggleTooltip = (value: boolean) => {
+		const tooltip = document.getElementById('description-tooltip-' + id);
+		console.log('here');
+		if (!tooltip) return;
+		if (value) {
+			tooltip.classList.add('tooltip-open');
+		} else {
+			tooltip.classList.remove('tooltip-open');
+		}
+	};
 </script>
 
 <div class="join">
@@ -25,9 +36,21 @@
 			{rank}
 		</div>
 	</button>
-	<button class="btn-neutral-special btn btn-circle join-item rounded-full !border-l-0">
-		<IconQuestionMark size={24} />
-	</button>
+	<div
+		class="tooltip before:text-wrap before:text-absolute-content"
+		data-tip="hello"
+		id="description-tooltip-{id}"
+	>
+		<button
+			class="btn-neutral-special btn btn-circle join-item relative right-[-1px] rounded-full !border-l-0"
+			on:mouseover={() => toggleTooltip(true)}
+			on:focus={() => toggleTooltip(true)}
+			on:focusout={() => toggleTooltip(false)}
+			on:mouseleave={() => toggleTooltip(false)}
+		>
+			<IconQuestionMark stroke={3} size={30} />
+		</button>
+	</div>
 </div>
 
 <style>
