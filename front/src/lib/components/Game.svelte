@@ -26,7 +26,7 @@
 </script>
 
 <div class="flex flex-wrap justify-center gap-5 text-center">
-	<div class="w-full">
+	<div>
 		<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
 		<GoalTaxon data={goalTaxonData} />
 		{#if !gameStarted}

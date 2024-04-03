@@ -83,7 +83,7 @@ module.exports = {
 					accent: '#ac2c00',
 					'accent-content': '#f7e1d9',
 					neutral: '#4b5563',
-					'neutral-content': '#9ca3af',
+					'neutral-content': '#bbbbcc',
 					'base-100': '#ffffff',
 					info: '#3b82f6',
 					success: '#84cc16',
