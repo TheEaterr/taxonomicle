@@ -26,10 +26,17 @@ const getDescriptions = async (titles: string[]): Promise<Record<string, string>
 	const response = await fetch(wikiAPIEndpoint + '?' + wikiParams + titles.join('|') + '&origin=*');
 	const responseJson = await response.json();
 	const pages = responseJson.query.pages;
+	const redirects: Record<string, string> = {};
+	if (responseJson.query.redirects) {
+		responseJson.query.redirects.forEach((element: { to: string; from: string }) => {
+			redirects[element.to] = element.from;
+		});
+	}
 	const descriptions: Record<string, string> = {}; // Add type annotation for descriptions
 	Object.keys(pages).forEach((key) => {
 		const page = pages[key];
-		descriptions[page.title] = page.extract;
+		const title = redirects[page.title] || page.title;
+		descriptions[title] = page.extract;
 	});
 	return descriptions;
 };
