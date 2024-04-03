@@ -22,12 +22,12 @@
 <div class="join">
 	<button
 		on:click={() => update(id)}
-		class="group join-item bg-{rank} border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative text-lg text-absolute hover:text-absolute-content"
+		class="group join-item bg-{rank} border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit text-lg text-absolute hover:text-absolute-content"
 	>
-		<div class="z-10">
+		<div class="z-10 mb-3 leading-5">
 			<span class="italic">{scientific}</span>
 			{#if vernacular}
-				<span class="text-base opacity-80">({vernacular})</span>
+				<span class="mb-1 text-base opacity-80">({vernacular})</span>
 			{/if}
 		</div>
 		<div
