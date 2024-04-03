@@ -37,8 +37,8 @@
 		</div>
 	</button>
 	<div
-		class="tooltip before:z-10 before:text-absolute-content"
-		data-tip={description.split('.')[0]}
+		class="tooltip tooltip-top before:z-20 before:max-w-52 before:translate-x-[-80%] before:text-absolute-content"
+		data-tip={description.split('. ')[0]}
 		id="description-tooltip-{id}"
 	>
 		<button
