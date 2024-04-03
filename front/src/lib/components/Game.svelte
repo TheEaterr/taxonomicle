@@ -66,6 +66,7 @@
 					rank={child.expand?.rank.name ?? ''}
 					id={child.id}
 					update={updateCurrentTaxon}
+					description={currentTaxonData.descriptions[child.site_link]}
 				/>
 			{/each}
 		</div>

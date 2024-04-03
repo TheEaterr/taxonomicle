@@ -6,6 +6,7 @@
 	export let rank: string;
 	export let id: string;
 	export let update: (newId: string) => Promise<void>;
+	export let description: string;
 
 	const toggleTooltip = (value: boolean) => {
 		const tooltip = document.getElementById('description-tooltip-' + id);
@@ -37,7 +38,7 @@
 	</button>
 	<div
 		class="tooltip before:z-10 before:text-absolute-content"
-		data-tip="hellohellohellohelloh"
+		data-tip={description.split('.')[0]}
 		id="description-tooltip-{id}"
 	>
 		<button

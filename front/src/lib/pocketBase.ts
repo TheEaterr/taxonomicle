@@ -22,10 +22,16 @@ const pb = new PocketBase(API_URL) as TypedPocketBase;
 
 const wikiAPIEndpoint = 'https://en.wikipedia.org/w/api.php';
 const wikiParams = 'format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=';
-const getDescription = async (title: string): Promise<string> => {
-	const response = await fetch(wikiAPIEndpoint + '?' + wikiParams + title + '&origin=*');
+const getDescriptions = async (titles: string[]): Promise<Record<string, string>> => {
+	const response = await fetch(wikiAPIEndpoint + '?' + wikiParams + titles.join('|') + '&origin=*');
 	const responseJson = await response.json();
-	return responseJson.query.pages[Object.keys(responseJson.query.pages)[0]].extract;
+	const pages = responseJson.query.pages;
+	const descriptions: Record<string, string> = {}; // Add type annotation for descriptions
+	Object.keys(pages).forEach((key) => {
+		const page = pages[key];
+		descriptions[page.title] = page.extract;
+	});
+	return descriptions;
 };
 
 export const getTaxonData = async (id: string, path: string[]) => {
@@ -62,13 +68,17 @@ export const getTaxonData = async (id: string, path: string[]) => {
 		}
 		return a.scientific.localeCompare(b.scientific);
 	});
-	const description = await getDescription(taxon.site_link);
+	const site_links = [taxon.site_link];
+	children.items.forEach((child) => {
+		site_links.push(child.site_link);
+	});
+	const descriptions = await getDescriptions(site_links);
 
 	return {
 		id,
 		taxon,
 		children,
-		description,
+		descriptions,
 		overflown
 	};
 };
@@ -116,11 +126,11 @@ export const getGoalTaxon = async () => {
 			skipTotal: true
 		})
 	).items[0];
-	const description = await getDescription(taxon.site_link);
+	const descriptions = await getDescriptions([taxon.site_link]);
 
 	return {
 		taxon,
-		description
+		descriptions
 	};
 };
 
@@ -130,11 +140,11 @@ export const getRandomGoalTaxon = async () => {
 		filter: 'rank.name = "species" && image_path=true',
 		sort: '@random'
 	});
-	const description = await getDescription(taxon.site_link);
+	const descriptions = await getDescriptions([taxon.site_link]);
 
 	return {
 		taxon,
-		description
+		descriptions
 	};
 };
 
@@ -142,11 +152,11 @@ export const getGoalTaxonData = async (id: string) => {
 	const taxon = await pb.collection('taxon').getOne<TaxonResponseFull<TexpandRank>>(id, {
 		expand: 'rank'
 	});
-	const description = await getDescription(taxon.site_link);
+	const descriptions = await getDescriptions([taxon.site_link]);
 
 	return {
 		taxon,
-		description
+		descriptions
 	};
 };
 
