@@ -77,6 +77,7 @@
 			>{currentTaxonData.taxon.parent}</button
 		>
 	</p>
+	<p>Number steps: {$numberSteps}</p>
 	<p>Goal reached!</p>
 {/if}
 
