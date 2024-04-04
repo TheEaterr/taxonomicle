@@ -34,7 +34,7 @@
 					</span>
 				{/if}
 				<div>
-					{data.descriptions[data.taxon.site_link]}
+					{data.descriptions[data.taxon.site_link].long}
 				</div>
 			</div>
 		</div>

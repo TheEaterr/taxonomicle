@@ -20,9 +20,26 @@ const API_URL =
 	process.env.NODE_ENV === 'production' ? 'https://taxonomicle.maoune.fr' : 'http://127.0.0.1:8090';
 const pb = new PocketBase(API_URL) as TypedPocketBase;
 
+const reduceDescription = (description: string) => {
+	const shortThreshold = 200;
+	const longThreshold = 700;
+	const longDescription =
+		description.length > longThreshold ? description.slice(0, longThreshold) + '...' : description;
+	const shortDescription =
+		description.length > shortThreshold
+			? description.slice(0, shortThreshold) + '...'
+			: description;
+	return {
+		short: shortDescription,
+		long: longDescription
+	};
+};
+
 const wikiAPIEndpoint = 'https://en.wikipedia.org/w/api.php';
 const wikiParams = 'format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=';
-const getDescriptions = async (titles: string[]): Promise<Record<string, string>> => {
+const getDescriptions = async (
+	titles: string[]
+): Promise<Record<string, { short: string; long: string }>> => {
 	const response = await fetch(wikiAPIEndpoint + '?' + wikiParams + titles.join('|') + '&origin=*');
 	const responseJson = await response.json();
 	const pages = responseJson.query.pages;
@@ -32,11 +49,11 @@ const getDescriptions = async (titles: string[]): Promise<Record<string, string>
 			redirects[element.to] = element.from;
 		});
 	}
-	const descriptions: Record<string, string> = {}; // Add type annotation for descriptions
+	const descriptions: Record<string, { short: string; long: string }> = {}; // Add type annotation for descriptions
 	Object.keys(pages).forEach((key) => {
 		const page = pages[key];
 		const title = redirects[page.title] || page.title;
-		descriptions[title] = page.extract;
+		descriptions[title] = reduceDescription(page.extract);
 	});
 	return descriptions;
 };
@@ -112,24 +129,45 @@ export const cyrb128 = (str: string) => {
 	return [h1 >>> 0, h2 >>> 0, h3 >>> 0, h4 >>> 0];
 };
 
+const rankThreshold = 30;
+const parentFilter = `rank.order > ${rankThreshold}  && parent.rank.order <= ${rankThreshold} && image_path=true`;
+const getTaxonFilter = (parent: string) =>
+	`rank.name = "species" && image_path=true && path ~ "${parent}"`;
+
 export const getGoalTaxon = async () => {
-	const availableTaxons = await pb
-		.collection('taxon')
-		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
-			expand: 'rank',
-			filter: 'rank.name = "species" && image_path=true'
-		});
-	const totalAvailable = availableTaxons.totalItems;
 	const currentDate = new Date();
 	// Hash the date
 	const hash = cyrb128(
 		(currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear()).toString()
 	);
-	const randomIndex = Math.floor((hash[0] % totalAvailable) + 1);
-	const taxon = (
-		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomIndex, 1, {
+
+	const availableParents = await pb
+		.collection('taxon')
+		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
 			expand: 'rank',
-			filter: 'rank.name = "species" && image_path=true',
+			filter: parentFilter
+		});
+	const totalAvailableParents = availableParents.totalItems;
+	const randomParentIndex = Math.floor(hash[0] % totalAvailableParents);
+	const parent = (
+		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomParentIndex, 1, {
+			expand: 'rank',
+			filter: parentFilter,
+			skipTotal: true
+		})
+	).items[0];
+	const availableTaxons = await pb
+		.collection('taxon')
+		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
+			expand: 'rank',
+			filter: getTaxonFilter(parent.id)
+		});
+	const totalAvailableTaxon = availableTaxons.totalItems;
+	const randomTaxonIndex = Math.floor(hash[1] % totalAvailableTaxon);
+	const taxon = (
+		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomTaxonIndex, 1, {
+			expand: 'rank',
+			filter: getTaxonFilter(parent.id),
 			skipTotal: true
 		})
 	).items[0];
@@ -142,9 +180,15 @@ export const getGoalTaxon = async () => {
 };
 
 export const getRandomGoalTaxon = async () => {
+	// we first randomly select a random taxon roughly equivalent to a class for more variety
+	const parent = await pb.collection('taxon').getFirstListItem('', {
+		expand: 'rank,parent,parent.rank',
+		filter: parentFilter,
+		sort: '@random'
+	});
 	const taxon = await pb.collection('taxon').getFirstListItem<TaxonResponseFull<TexpandRank>>('', {
 		expand: 'rank',
-		filter: 'rank.name = "species" && image_path=true',
+		filter: getTaxonFilter(parent.id),
 		sort: '@random'
 	});
 	const descriptions = await getDescriptions([taxon.site_link]);
