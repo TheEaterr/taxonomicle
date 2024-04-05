@@ -46,14 +46,18 @@ const getDescriptions = async (
 	const redirects: Record<string, string> = {};
 	if (responseJson.query.redirects) {
 		responseJson.query.redirects.forEach((element: { to: string; from: string }) => {
-			redirects[element.to] = element.from;
+			redirects[element.from] = element.to;
 		});
 	}
-	const descriptions: Record<string, { short: string; long: string }> = {}; // Add type annotation for descriptions
+	const descriptions: Record<string, { short: string; long: string }> = {};
 	Object.keys(pages).forEach((key) => {
 		const page = pages[key];
-		const title = redirects[page.title] || page.title;
-		descriptions[title] = reduceDescription(page.extract);
+		descriptions[page.title] = reduceDescription(page.extract);
+	});
+	titles.forEach((title) => {
+		if (!descriptions[title] && redirects[title]) {
+			descriptions[title] = descriptions[redirects[title]];
+		}
 	});
 	return descriptions;
 };
