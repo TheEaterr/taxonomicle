@@ -4,6 +4,7 @@
 	import { browser } from '$app/environment';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
+	import { navigating } from '$app/stores';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -17,7 +18,11 @@
 <DecoratedBackground />
 
 <QueryClientProvider client={queryClient}>
-	<slot />
+	{#if $navigating}
+		Loading...
+	{:else}
+		<slot />
+	{/if}
 	{#if import.meta.env.MODE === 'development'}
 		<SvelteQueryDevtools />
 	{/if}
