@@ -5,7 +5,8 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:svelte/recommended',
-		'plugin:prettier/recommended'
+		'plugin:prettier/recommended',
+		'plugin:@tanstack/eslint-plugin-query/recommended'
 	],
 	parser: '@typescript-eslint/parser',
 	plugins: ['@typescript-eslint', 'prefer-arrow'],
@@ -36,6 +37,9 @@ module.exports = {
 				singleReturnOnly: false,
 				classPropertiesAllowed: false
 			}
-		]
+		],
+		'@tanstack/query/exhaustive-deps': 'error',
+		'@tanstack/query/no-rest-destructuring': 'warn',
+		'@tanstack/query/stable-query-client': 'error'
 	}
 };

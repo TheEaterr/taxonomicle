@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
+	import { getGoalTaxon } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import type { Snapshot } from './$types';
 	import { type Writable } from 'svelte/store';
@@ -12,7 +12,6 @@
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 
-	let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>> = data.animaliaTaxon;
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
@@ -33,17 +32,15 @@
 			currentTaxon.set(value.currentTaxon);
 			numberSteps.set(value.steps);
 			gameStarted = value.steps > 0;
-			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		}
 	};
 
 	const reset = async () => {
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
-		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		gameStarted = false;
 	};
 </script>
 
 <Header {reset} />
-<Game {goalTaxonData} {currentTaxonData} bind:gameStarted />
+<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted />

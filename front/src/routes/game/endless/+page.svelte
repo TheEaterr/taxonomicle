@@ -1,10 +1,5 @@
 <script lang="ts">
-	import {
-		getGoalTaxon,
-		getGoalTaxonData,
-		getRandomGoalTaxon,
-		getTaxonData
-	} from '$lib/pocketBase';
+	import { getGoalTaxon, getGoalTaxonData, getRandomGoalTaxon } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import type { Snapshot } from './$types';
 	import { type Writable } from 'svelte/store';
@@ -19,7 +14,6 @@
 	const goalTaxonId = getContext<Writable<string>>('goalTaxon');
 
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
-	let currentTaxonData: Awaited<ReturnType<typeof getTaxonData>> = data.animaliaTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
 	let gameStarted = false;
@@ -29,7 +23,6 @@
 			return { currentTaxon: $currentTaxon, steps: $numberSteps, goalTaxon: $goalTaxonId };
 		},
 		restore: async (value) => {
-			console.log('restoring...');
 			if (!value.currentTaxon || !value.goalTaxon) {
 				value = {
 					currentTaxon: 'Q729___________',
@@ -42,7 +35,6 @@
 			numberSteps.set(value.steps);
 			gameStarted = value.steps > 0;
 			goalTaxonData = await getGoalTaxonData(value.goalTaxon);
-			currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		}
 	};
 
@@ -50,13 +42,12 @@
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
 		goalTaxonData = await getRandomGoalTaxon();
-		currentTaxonData = await getTaxonData($currentTaxon, goalTaxonData.taxon.path);
 		goalTaxonId.set(goalTaxonData.taxon.id);
 		gameStarted = false;
 	};
 </script>
 
 <Header {reset} />
-{#if goalTaxonData && currentTaxonData}
-	<Game {goalTaxonData} {currentTaxonData} bind:gameStarted />
+{#if goalTaxonData}
+	<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted />
 {/if}

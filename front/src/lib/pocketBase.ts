@@ -1,4 +1,4 @@
-import PocketBase, { RecordService } from 'pocketbase';
+import PocketBase, { type RecordService } from 'pocketbase';
 import type { RankResponse, TaxonResponse, UsersResponse } from './generated/pocketBaseTypes';
 
 // Override TaxonResponse directly to forbid null path
