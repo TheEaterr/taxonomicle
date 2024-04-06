@@ -93,7 +93,7 @@
 				Number steps: {$numberSteps}
 			</div>
 			<div
-				class="relative m-2 mt-4 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral p-4"
+				class="relative m-2 mt-4 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral p-1 pt-3"
 			>
 				<div
 					class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral pl-1 pr-1 text-left font-semibold text-neutral-content"
