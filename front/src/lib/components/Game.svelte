@@ -73,8 +73,8 @@
 	</div>
 	{#if gameStarted && !isGoalReached}
 		<div class="text-center">
-			{#if $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
-				<p>
+			<p>
+				{#if $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
 					Parent:
 					<TaxonButton
 						scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
@@ -83,11 +83,10 @@
 						id={$currentTaxonQuery.data.taxon.parent}
 						update={updateCurrentTaxon}
 					/>
-				</p>
-			{/if}
-			<p>Overflow: {$currentTaxonQuery.data.overflown}</p>
-			<p>Number steps: {$numberSteps}</p>
-			<div class="mt-5 flex h-min flex-wrap justify-center gap-5">
+				{/if}
+				Number steps: {$numberSteps}
+			</p>
+			<div class="m-6 flex h-min max-w-full flex-wrap justify-center gap-5">
 				{#each $currentTaxonQuery.data.children.items as child}
 					<TaxonButton
 						scientific={child.scientific}

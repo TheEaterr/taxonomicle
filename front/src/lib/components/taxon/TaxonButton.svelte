@@ -22,7 +22,7 @@
 <div class="join">
 	<button
 		on:click={() => update(id)}
-		class="group join-item bg-{rank} border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit text-lg text-absolute hover:text-absolute-content"
+		class="group join-item bg-{rank} border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
 	>
 		<div class="z-10 mb-3 leading-5">
 			<span class="italic">{scientific}</span>
@@ -43,7 +43,7 @@
 			id="description-tooltip-{id}"
 		>
 			<button
-				class="btn-neutral-special btn btn-circle join-item relative right-[-1px] rounded-full !border-l-0"
+				class="btn-neutral-special btn btn-circle join-item relative right-[-1px] h-full rounded-full !border-l-0"
 				on:mouseover={() => toggleTooltip(true)}
 				on:focus={() => toggleTooltip(true)}
 				on:focusout={() => toggleTooltip(false)}

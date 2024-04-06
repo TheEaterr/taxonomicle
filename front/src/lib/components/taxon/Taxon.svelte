@@ -7,7 +7,9 @@
 	export let isGoal: boolean;
 </script>
 
-<div class="card m-5 min-w-[90vw] bg-base-200 shadow-md min-[550px]:min-w-[500px] lg:max-w-[983px]">
+<div
+	class="card m-[5vw] min-w-[90vw] bg-base-200 shadow-md min-[550px]:min-w-[500px] sm:m-5 lg:max-w-[983px]"
+>
 	<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
 		<div class="glass flex w-full flex-col items-center">
 			<img src={data.taxon.image_link} alt={data.taxon.scientific} class="max-h-96 w-auto" />
