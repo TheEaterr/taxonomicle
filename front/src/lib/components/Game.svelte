@@ -73,13 +73,18 @@
 	</div>
 	{#if gameStarted && !isGoalReached}
 		<div class="text-center">
-			<p>
-				Parent: <button
-					on:click={() =>
-						updateCurrentTaxon($currentTaxonQuery.data ? $currentTaxonQuery.data.taxon.parent : '')}
-					class="btn bg-kingdom text-kingdom-content">{$currentTaxonQuery.data.taxon.parent}</button
-				>
-			</p>
+			{#if $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
+				<p>
+					Parent:
+					<TaxonButton
+						scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
+						vernacular={$currentTaxonQuery.data.taxon.expand.parent.vernacular}
+						rank={$currentTaxonQuery.data.taxon.expand.parent.expand?.rank.name ?? ''}
+						id={$currentTaxonQuery.data.taxon.parent}
+						update={updateCurrentTaxon}
+					/>
+				</p>
+			{/if}
 			<p>Overflow: {$currentTaxonQuery.data.overflown}</p>
 			<p>Number steps: {$numberSteps}</p>
 			<div class="mt-5 flex h-min flex-wrap justify-center gap-5">

@@ -10,6 +10,10 @@ type TexpandRank = {
 	rank: RankResponse;
 };
 
+type TexpandParent = {
+	parent: TaxonResponseFull<TexpandRank>;
+};
+
 // Overriden TypedPocketBase to include json type definitions
 type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'taxon'): RecordService<TaxonResponseFull>;
@@ -66,7 +70,9 @@ export const getTaxonData = async (id: string, path: string[]) => {
 	const taxonId = id;
 	const taxon = await pb
 		.collection('taxon')
-		.getOne<TaxonResponseFull<TexpandRank>>(taxonId, { expand: 'rank' });
+		.getOne<
+			TaxonResponseFull<TexpandRank & TexpandParent>
+		>(taxonId, { expand: 'rank,parent,parent.rank' });
 	// We have to make a seperate query for the random sort
 	const children = await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(1, 20, {
 		filter: `parent = "${taxonId}"`,

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { getGoalTaxon } from '$lib/pocketBase';
+	import IUCNSVG from './IUCNSVG.svelte';
+	import { IconExternalLink } from '@tabler/icons-svelte';
 
 	export let data: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let isGoal: boolean;
@@ -33,6 +35,20 @@
 						{data.taxon.expand?.rank.name}
 					</span>
 				{/if}
+				{#if data.taxon.iucn && data.taxon.iucn !== 'DD'}
+					<div class="flex items-center">
+						<div>
+							<div class="font-neutral-content badge badge-neutral mt-5 font-bold">IUCN</div>
+							<div class="text-sm">
+								<a class="link" href="https://www.iucn.org"
+									>Learn more <IconExternalLink size={15} class="mb-1 inline" /></a
+								>
+							</div>
+						</div>
+						<IUCNSVG iucn={data.taxon.iucn} />
+					</div>
+				{/if}
+
 				<div>
 					{data.descriptions[data.taxon.site_link].long}
 				</div>

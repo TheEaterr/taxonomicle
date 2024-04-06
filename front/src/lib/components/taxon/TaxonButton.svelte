@@ -6,7 +6,7 @@
 	export let rank: string;
 	export let id: string;
 	export let update: (newId: string) => Promise<void>;
-	export let description: { short: string; long: string } | undefined;
+	export let description: { short: string; long: string } | undefined = undefined;
 
 	const toggleTooltip = (value: boolean) => {
 		const tooltip = document.getElementById('description-tooltip-' + id);
@@ -36,21 +36,23 @@
 			{rank}
 		</div>
 	</button>
-	<div
-		class="tooltip tooltip-top before:z-20 before:max-w-52 before:translate-x-[-80%] before:text-absolute-content"
-		data-tip={description ? description.short : 'No description available.'}
-		id="description-tooltip-{id}"
-	>
-		<button
-			class="btn-neutral-special btn btn-circle join-item relative right-[-1px] rounded-full !border-l-0"
-			on:mouseover={() => toggleTooltip(true)}
-			on:focus={() => toggleTooltip(true)}
-			on:focusout={() => toggleTooltip(false)}
-			on:mouseleave={() => toggleTooltip(false)}
+	{#if description}
+		<div
+			class="tooltip tooltip-top before:z-20 before:max-w-52 before:translate-x-[-80%] before:text-absolute-content"
+			data-tip={description ? description.short : 'No description available.'}
+			id="description-tooltip-{id}"
 		>
-			<IconQuestionMark stroke={3} size={30} />
-		</button>
-	</div>
+			<button
+				class="btn-neutral-special btn btn-circle join-item relative right-[-1px] rounded-full !border-l-0"
+				on:mouseover={() => toggleTooltip(true)}
+				on:focus={() => toggleTooltip(true)}
+				on:focusout={() => toggleTooltip(false)}
+				on:mouseleave={() => toggleTooltip(false)}
+			>
+				<IconQuestionMark stroke={3} size={30} />
+			</button>
+		</div>
+	{/if}
 </div>
 
 <style>
