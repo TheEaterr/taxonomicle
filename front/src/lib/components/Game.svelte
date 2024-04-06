@@ -15,6 +15,7 @@
 
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
+	const gameWon = getContext<Writable<boolean>>('gameWon');
 
 	const currentTaxonQuery = createQuery(
 		// This typecast is a bit of a hack because having variable initialData
@@ -42,6 +43,7 @@
 	$: isGoalReached =
 		$currentTaxonQuery.data !== undefined &&
 		$currentTaxonQuery.data.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
+	$: if (isGoalReached) gameWon.set(true);
 </script>
 
 {#if $currentTaxonQuery.isLoading}
@@ -91,7 +93,7 @@
 						<div
 							class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
 						>
-							Return to parent
+							Go to parent
 						</div>
 						<TaxonButton
 							scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
@@ -137,7 +139,7 @@
 					{/each}
 				</div>
 			{:else}
-				Goal reached!
+				<h2 class="small-title mb-3 text-center text-3xl font-bold text-primary">Goal reached!</h2>
 			{/if}
 		</div>
 	{/if}

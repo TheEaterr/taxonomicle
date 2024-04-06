@@ -12,6 +12,7 @@
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const goalTaxonId = getContext<Writable<string>>('goalTaxon');
+	const gameWon = getContext<Writable<boolean>>('gameWon');
 
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
 	currentTaxon.set('Q729___________');
@@ -19,14 +20,14 @@
 	goalTaxonId.set(data.goalTaxon.taxon.id);
 	let gameStarted = false;
 
-	export const snapshot: Snapshot<GameContext> = {
+	export const snapshot: Snapshot<GameContext | undefined> = {
 		capture: () => {
-			return { currentTaxon: $currentTaxon, steps: $numberSteps, goalTaxon: $goalTaxonId };
+			if (!$gameWon) {
+				return { currentTaxon: $currentTaxon, steps: $numberSteps, goalTaxon: $goalTaxonId };
+			}
 		},
 		restore: async (value) => {
-			console.log('restoring');
-			console.log(value);
-			if (!value.currentTaxon || !value.goalTaxon) {
+			if (!value || !value.currentTaxon || !value.goalTaxon) {
 				value = {
 					currentTaxon: 'Q729___________',
 					steps: 0,
