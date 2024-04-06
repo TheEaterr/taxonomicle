@@ -29,12 +29,13 @@
 					steps: 0,
 					goalTaxon: ''
 				};
+			} else {
+				goalTaxonData = await getGoalTaxonData(value.goalTaxon);
 			}
 			currentTaxon.set(value.currentTaxon);
 			goalTaxonId.set(value.goalTaxon);
 			numberSteps.set(value.steps);
 			gameStarted = value.steps > 0;
-			goalTaxonData = await getGoalTaxonData(value.goalTaxon);
 		}
 	};
 

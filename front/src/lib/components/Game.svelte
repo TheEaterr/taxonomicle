@@ -73,20 +73,33 @@
 	</div>
 	{#if gameStarted && !isGoalReached}
 		<div class="text-center">
-			<p>
+			<div>
 				{#if $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
-					Parent:
-					<TaxonButton
-						scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
-						vernacular={$currentTaxonQuery.data.taxon.expand.parent.vernacular}
-						rank={$currentTaxonQuery.data.taxon.expand.parent.expand?.rank.name ?? ''}
-						id={$currentTaxonQuery.data.taxon.parent}
-						update={updateCurrentTaxon}
-					/>
+					<div class="relative inline-block h-fit rounded-lg border-2 border-neutral p-1 pt-3">
+						<div
+							class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral pl-1 pr-1 text-left font-semibold text-neutral-content"
+						>
+							Parent
+						</div>
+						<TaxonButton
+							scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
+							vernacular={$currentTaxonQuery.data.taxon.expand.parent.vernacular}
+							rank={$currentTaxonQuery.data.taxon.expand.parent.expand?.rank.name ?? ''}
+							id={$currentTaxonQuery.data.taxon.parent}
+							update={updateCurrentTaxon}
+						/>
+					</div>
 				{/if}
 				Number steps: {$numberSteps}
-			</p>
-			<div class="m-6 flex h-min max-w-full flex-wrap justify-center gap-5">
+			</div>
+			<div
+				class="relative m-2 mt-4 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral p-4"
+			>
+				<div
+					class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral pl-1 pr-1 text-left font-semibold text-neutral-content"
+				>
+					Choose a child
+				</div>
 				{#each $currentTaxonQuery.data.children.items as child}
 					<TaxonButton
 						scientific={child.scientific}
