@@ -7,6 +7,7 @@
 	import { goto } from '$app/navigation';
 	import Taxon from './taxon/Taxon.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
+	import { IconTrophy, IconAlertTriangle } from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
@@ -71,9 +72,18 @@
 			</div>
 		{/if}
 	</div>
-	{#if gameStarted && !isGoalReached}
-		<div class="text-center">
-			<div>
+	{#if gameStarted}
+		<div class="flex flex-col justify-center gap-5">
+			<div class="flex flex-wrap items-center justify-center gap-5">
+				<div class="stats bg-base-200 shadow">
+					<div class="stat">
+						<div class="stat-figure text-primary">
+							<IconTrophy size={30} />
+						</div>
+						<div class="stat-title font-semibold text-absolute">Steps taken</div>
+						<div class="small-title stat-value text-primary">{$numberSteps}</div>
+					</div>
+				</div>
 				{#if $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
 					<div
 						class="relative inline-block h-fit rounded-lg border-2 border-neutral-content p-1 pt-3"
@@ -81,7 +91,7 @@
 						<div
 							class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
 						>
-							Parent
+							Return to parent
 						</div>
 						<TaxonButton
 							scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
@@ -92,38 +102,44 @@
 						/>
 					</div>
 				{/if}
-				Number steps: {$numberSteps}
 			</div>
-			<div
-				class="relative m-2 mt-4 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
-			>
+			{#if !isGoalReached}
+				{#if $currentTaxonQuery.data.overflown}
+					<div class="text-center">
+						<span role="alert" class="alert inline-grid w-auto shadow">
+							<IconAlertTriangle size={30} color="oklch(var(--wa))" />
+							<span
+								>To make the game playable, only a partial view of this taxon's children is shown
+								here.
+								<br />
+								Don't worry we haven't forgottent to put the correct one !</span
+							>
+						</span>
+					</div>
+				{/if}
 				<div
-					class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
+					class="relative m-2 mt-4 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
 				>
-					Choose a child
+					<div
+						class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
+					>
+						Choose a child
+					</div>
+					{#each $currentTaxonQuery.data.children.items as child}
+						<TaxonButton
+							scientific={child.scientific}
+							vernacular={child.vernacular}
+							rank={child.expand?.rank.name ?? ''}
+							id={child.id}
+							update={updateCurrentTaxon}
+							description={$currentTaxonQuery.data.descriptions[child.site_link]}
+						/>
+					{/each}
 				</div>
-				{#each $currentTaxonQuery.data.children.items as child}
-					<TaxonButton
-						scientific={child.scientific}
-						vernacular={child.vernacular}
-						rank={child.expand?.rank.name ?? ''}
-						id={child.id}
-						update={updateCurrentTaxon}
-						description={$currentTaxonQuery.data.descriptions[child.site_link]}
-					/>
-				{/each}
-			</div>
+			{:else}
+				Goal reached!
+			{/if}
 		</div>
-	{:else if isGoalReached}
-		<p>
-			Parent: <button
-				on:click={() =>
-					updateCurrentTaxon($currentTaxonQuery.data ? $currentTaxonQuery.data.taxon.parent : '')}
-				class="btn">{$currentTaxonQuery.data.taxon.parent}</button
-			>
-		</p>
-		<p>Number steps: {$numberSteps}</p>
-		<p>Goal reached!</p>
 	{/if}
 {/if}
 

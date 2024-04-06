@@ -16,6 +16,7 @@
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
+	goalTaxonId.set(data.goalTaxon.taxon.id);
 	let gameStarted = false;
 
 	export const snapshot: Snapshot<GameContext> = {
@@ -23,6 +24,8 @@
 			return { currentTaxon: $currentTaxon, steps: $numberSteps, goalTaxon: $goalTaxonId };
 		},
 		restore: async (value) => {
+			console.log('restoring');
+			console.log(value);
 			if (!value.currentTaxon || !value.goalTaxon) {
 				value = {
 					currentTaxon: 'Q729___________',

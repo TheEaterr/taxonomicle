@@ -54,9 +54,12 @@ const getDescriptions = async (
 		});
 	}
 	const descriptions: Record<string, { short: string; long: string }> = {};
+	const descriptionPlaceholder = 'No description available.';
 	Object.keys(pages).forEach((key) => {
 		const page = pages[key];
-		descriptions[page.title] = reduceDescription(page.extract);
+		descriptions[page.title] = page.extract
+			? reduceDescription(page.extract)
+			: { short: descriptionPlaceholder, long: descriptionPlaceholder };
 	});
 	titles.forEach((title) => {
 		if (!descriptions[title] && redirects[title]) {
@@ -66,6 +69,9 @@ const getDescriptions = async (
 	return descriptions;
 };
 
+// Wikipedia API has a limit of 20 titles per request
+const MAX_CHILDREN = 19;
+
 export const getTaxonData = async (id: string, path: string[]) => {
 	const taxonId = id;
 	const taxon = await pb
@@ -74,13 +80,15 @@ export const getTaxonData = async (id: string, path: string[]) => {
 			TaxonResponseFull<TexpandRank & TexpandParent>
 		>(taxonId, { expand: 'rank,parent,parent.rank' });
 	// We have to make a seperate query for the random sort
-	const children = await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(1, 20, {
-		filter: `parent = "${taxonId}"`,
-		expand: 'rank',
-		sort: 'rank.order,@random'
-	});
-	const overflown = children.totalItems > 20;
-	if (children.items.length == 20) {
+	const children = await pb
+		.collection('taxon')
+		.getList<TaxonResponseFull<TexpandRank>>(1, MAX_CHILDREN, {
+			filter: `parent = "${taxonId}"`,
+			expand: 'rank',
+			sort: 'rank.order,@random'
+		});
+	const overflown = children.totalItems > MAX_CHILDREN;
+	if (children.items.length == MAX_CHILDREN) {
 		const indexOnPath = path.indexOf(taxonId);
 		if (indexOnPath !== -1 && indexOnPath < path.length - 1) {
 			const nextTaxon = path[indexOnPath + 1];
