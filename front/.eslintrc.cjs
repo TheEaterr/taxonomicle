@@ -40,6 +40,18 @@ module.exports = {
 		],
 		'@tanstack/query/exhaustive-deps': 'error',
 		'@tanstack/query/no-rest-destructuring': 'warn',
-		'@tanstack/query/stable-query-client': 'error'
+		'@tanstack/query/stable-query-client': 'error',
+		'@typescript-eslint/no-unused-vars': [
+			'error',
+			{
+				args: 'all',
+				argsIgnorePattern: '^_',
+				caughtErrors: 'all',
+				caughtErrorsIgnorePattern: '^_',
+				destructuredArrayIgnorePattern: '^_',
+				varsIgnorePattern: '^_',
+				ignoreRestSiblings: true
+			}
+		]
 	}
 };

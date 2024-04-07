@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import Taxon from './taxon/Taxon.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
-	import { IconTrophy, IconAlertTriangle } from '@tabler/icons-svelte';
+	import { IconTrophy, IconAlertTriangle, IconExclamationCircle } from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
@@ -46,103 +46,114 @@
 	$: if (isGoalReached) gameWon.set(true);
 </script>
 
-{#if $currentTaxonQuery.isLoading}
-	<p>Loading...</p>
-{:else if $currentTaxonQuery.isError}
-	<p>Error: {$currentTaxonQuery.error.message}</p>
-{:else if $currentTaxonQuery.isSuccess}
-	<div class="flex flex-wrap justify-center gap-5 text-center">
-		<div>
-			<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
-			<GoalTaxon data={goalTaxonData} />
-			{#if !gameStarted}
-				<div class="m-3">
-					<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm mr-5"
-						>How to play</button
-					>
-					<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
-						>Start</button
-					>
-				</div>
-			{/if}
-		</div>
-
-		{#if gameStarted && !isGoalReached}
-			<div>
-				<h2 class="small-title mb-3 text-3xl font-bold text-secondary">Current Taxon</h2>
-				<Taxon data={$currentTaxonQuery.data} isGoal={false} />
+<div class="flex flex-wrap justify-center gap-5 text-center">
+	<div>
+		<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
+		<GoalTaxon data={goalTaxonData} />
+		{#if !gameStarted}
+			<div class="m-3">
+				<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm mr-5"
+					>How to play</button
+				>
+				<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
+					>Start</button
+				>
 			</div>
 		{/if}
 	</div>
-	{#if gameStarted}
-		<div class="flex flex-col justify-center gap-5">
-			<div class="flex flex-wrap items-center justify-center gap-5">
-				<div class="stats bg-base-200 shadow">
-					<div class="stat">
-						<div class="stat-figure text-primary">
-							<IconTrophy size={30} />
-						</div>
-						<div class="stat-title font-semibold text-absolute">Steps taken</div>
-						<div class="small-title stat-value text-primary">{$numberSteps}</div>
+
+	{#if gameStarted && !isGoalReached}
+		<div>
+			<h2 class="small-title mb-3 text-3xl font-bold text-secondary">Current Taxon</h2>
+			<Taxon data={$currentTaxonQuery.data} isGoal={false} />
+		</div>
+	{/if}
+</div>
+{#if gameStarted}
+	<div class="flex flex-col justify-center gap-5">
+		<div class="m-2 flex flex-wrap items-center justify-center gap-5">
+			<div class="stats bg-base-200 shadow">
+				<div class="stat">
+					<div class="stat-figure text-primary">
+						<IconTrophy size={30} />
 					</div>
+					<div class="stat-title font-semibold text-absolute">Steps taken</div>
+					<div class="small-title stat-value text-primary">{$numberSteps}</div>
 				</div>
-				{#if $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
-					<div
-						class="relative inline-block h-fit rounded-lg border-2 border-neutral-content p-1 pt-3"
-					>
-						<div
-							class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
-						>
-							Go to parent
-						</div>
-						<TaxonButton
-							scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
-							vernacular={$currentTaxonQuery.data.taxon.expand.parent.vernacular}
-							rank={$currentTaxonQuery.data.taxon.expand.parent.expand?.rank.name ?? ''}
-							id={$currentTaxonQuery.data.taxon.parent}
-							update={updateCurrentTaxon}
-						/>
-					</div>
-				{/if}
 			</div>
-			{#if !isGoalReached}
-				{#if $currentTaxonQuery.data.overflown}
-					<div class="text-center">
-						<span role="alert" class="alert inline-grid w-auto shadow">
-							<IconAlertTriangle size={30} color="oklch(var(--wa))" />
-							<span
-								>To make the game playable, only a partial view of this taxon's children is shown
-								here.
-								<br />
-								Don't worry we haven't forgottent to put the correct one !</span
-							>
-						</span>
-					</div>
-				{/if}
+			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
 				<div
-					class="relative m-2 mt-4 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
+					class="relative inline-block h-fit rounded-lg border-2 border-neutral-content p-1 pt-3"
+				>
+					<div
+						class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
+					>
+						Parent
+					</div>
+					<TaxonButton
+						scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}
+						vernacular={$currentTaxonQuery.data.taxon.expand.parent.vernacular}
+						rank={$currentTaxonQuery.data.taxon.expand.parent.expand?.rank.name ?? ''}
+						id={$currentTaxonQuery.data.taxon.parent}
+						update={updateCurrentTaxon}
+					/>
+				</div>
+			{/if}
+		</div>
+		{#if !isGoalReached}
+			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.overflown}
+				<div class="text-center">
+					<span role="alert" class="alert inline-grid w-auto shadow">
+						<IconAlertTriangle size={30} color="oklch(var(--wa))" />
+						<span
+							>To make the game playable, only a partial view of this taxon's children is shown
+							here.
+							<br />
+							Don't worry we haven't forgottent to put the correct one !</span
+						>
+					</span>
+				</div>
+			{/if}
+			{#if !$currentTaxonQuery.isError}
+				<div
+					class="relative m-2 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
 				>
 					<div
 						class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
 					>
 						Choose a child
 					</div>
-					{#each $currentTaxonQuery.data.children.items as child}
-						<TaxonButton
-							scientific={child.scientific}
-							vernacular={child.vernacular}
-							rank={child.expand?.rank.name ?? ''}
-							id={child.id}
-							update={updateCurrentTaxon}
-							description={$currentTaxonQuery.data.descriptions[child.site_link]}
-						/>
-					{/each}
+					{#if $currentTaxonQuery.isSuccess}
+						{#each $currentTaxonQuery.data.children.items as child}
+							<TaxonButton
+								scientific={child.scientific}
+								vernacular={child.vernacular}
+								rank={child.expand?.rank.name ?? ''}
+								id={child.id}
+								update={updateCurrentTaxon}
+								description={$currentTaxonQuery.data.descriptions[child.site_link]}
+							/>
+						{/each}
+					{:else}
+						<span class="loading loading-dots loading-lg text-neutral-content"></span>
+					{/if}
 				</div>
 			{:else}
-				<h2 class="small-title mb-3 text-center text-3xl font-bold text-primary">Goal reached!</h2>
+				<div class="mb-5 text-center">
+					<span role="alert" class="alert alert-error inline-grid w-auto shadow">
+						<IconExclamationCircle size={30} class="stroke-current" />
+						<span
+							>Something went wrong while fetching this taxon's data. Please try to refresh the page
+							(you will not lose your progress). <br /> If this problem persists, please
+							<a href="/about" class="link">contact me</a>.</span
+						>
+					</span>
+				</div>
 			{/if}
-		</div>
-	{/if}
+		{:else}
+			<h2 class="small-title mb-3 text-center text-3xl font-bold text-primary">Goal reached!</h2>
+		{/if}
+	</div>
 {/if}
 
 <style>
