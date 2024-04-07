@@ -7,7 +7,12 @@
 	import { goto } from '$app/navigation';
 	import Taxon from './taxon/Taxon.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
-	import { IconTrophy, IconAlertTriangle, IconExclamationCircle } from '@tabler/icons-svelte';
+	import {
+		IconTrophy,
+		IconAlertTriangle,
+		IconExclamationCircle,
+		IconInfoCircle
+	} from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
@@ -58,6 +63,22 @@
 				<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
 					>Start</button
 				>
+			</div>
+			<div class="m-4 text-center">
+				<span role="alert" class="alert inline-grid max-w-screen-lg shadow">
+					<IconInfoCircle size={30} color="oklch(var(--in))" />
+					<span>
+						<h3 class="text-lg font-bold">Disclaimer</h3>
+						<span class="inline-block text-justify">
+							All the data shown here comes from the Wikimedia Foundation. In particular, we give <span
+								class="font-bold">no scientific guarantee</span
+							>
+							of its accuracy. It was heavily processed to give an enjoyable gaming experience and only
+							a partial view is shown. For more details about how taxonomicle's data was made, please
+							visit the <a href="/about" class="link">about page</a>.
+						</span>
+					</span>
+				</span>
 			</div>
 		{/if}
 	</div>
