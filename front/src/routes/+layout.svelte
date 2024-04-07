@@ -19,7 +19,10 @@
 
 <QueryClientProvider client={queryClient}>
 	{#if $navigating}
-		Loading...
+		<!-- TODO: make pretty loading icon after making branding items -->
+		<div class="flex h-screen w-screen items-center justify-center">
+			<span class="loading loading-spinner w-20 text-neutral"></span>
+		</div>
 	{:else}
 		<slot />
 	{/if}
