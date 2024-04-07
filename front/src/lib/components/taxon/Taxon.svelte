@@ -56,7 +56,7 @@
 						</div>
 					{/if}
 
-					<div>
+					<div class="text-justify">
 						{data.descriptions[data.taxon.site_link].long}
 					</div>
 				{:else}

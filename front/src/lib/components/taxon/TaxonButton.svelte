@@ -38,7 +38,7 @@
 	</button>
 	{#if description}
 		<div
-			class="tooltip tooltip-top before:z-20 before:max-w-52 before:translate-x-[-80%] before:text-absolute-content"
+			class="tooltip tooltip-top before:z-20 before:max-w-52 before:translate-x-[-80%] before:text-justify before:text-absolute-content"
 			data-tip={description ? description.short : 'No description available.'}
 			id="description-tooltip-{id}"
 		>
