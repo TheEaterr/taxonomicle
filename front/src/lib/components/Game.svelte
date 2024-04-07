@@ -74,8 +74,8 @@
 								class="font-bold">no scientific guarantee</span
 							>
 							of its accuracy. It was heavily processed to give an enjoyable gaming experience and only
-							a partial view is shown. For more details about how taxonomicle's data was made, please
-							visit the <a href="/about" class="link">about page</a>.
+							a partial view is shown. For more details about how taxonomicle was made, please visit
+							the <a href="/about" class="link">about page</a>.
 						</span>
 					</span>
 				</span>
