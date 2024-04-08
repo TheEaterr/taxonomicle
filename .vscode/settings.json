@@ -1,6 +1,9 @@
 {
   "eslint.workingDirectories": ["front/"],
   "eslint.validate": ["javascript", "svelte", "typescript"],
+  "svelte.plugin.svelte.compilerWarnings": {
+    "css-unused-selector": "ignore",
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   }

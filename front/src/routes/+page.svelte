@@ -18,7 +18,7 @@
 					>
 					<button
 						on:click={() => goto('/game/endless')}
-						class="btn-secondary-special btn ml-5 text-lg sm:btn-lg">Endless</button
+						class="btn-secondary-special main-btn btn ml-5">Endless</button
 					>
 				</div>
 				<div>
@@ -34,7 +34,11 @@
 	</div>
 </main>
 
-<style>
+<style lang="postcss">
+	.main-btn {
+		@apply text-lg sm:btn-lg;
+	}
+
 	.title {
 		-webkit-text-stroke: 2px oklch(var(--nc));
 	}

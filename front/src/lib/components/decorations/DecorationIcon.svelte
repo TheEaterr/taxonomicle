@@ -36,5 +36,5 @@
 	<p>Unknown decoration</p>
 {/if}
 
-<style>
+<style lang="postcss">
 </style>

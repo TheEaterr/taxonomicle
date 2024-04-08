@@ -81,7 +81,7 @@
 	{/each}
 </div>
 
-<style>
+<style lang="postcss">
 	.cross-background {
 		background-color: oklch(var(--nc));
 		-webkit-mask-image: url('/src/lib/assets/background.svg');

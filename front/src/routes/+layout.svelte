@@ -31,7 +31,7 @@
 	{/if}
 </QueryClientProvider>
 
-<style>
+<style lang="postcss">
 	@keyframes fade-in {
 		0% {
 			opacity: 0;

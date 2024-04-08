@@ -179,7 +179,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	.small-title {
 		-webkit-text-stroke: 1px oklch(var(--nc));
 	}
