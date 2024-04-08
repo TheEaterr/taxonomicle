@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { getGoalTaxon } from '$lib/pocketBase';
 	import IUCNSVG from './IUCNSVG.svelte';
-	import { IconExternalLink } from '@tabler/icons-svelte';
+	import { IconExternalLink, IconPhotoCancel, IconAlertTriangle } from '@tabler/icons-svelte';
 
 	export let data: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
 	export let isGoal: boolean;
@@ -11,11 +11,23 @@
 	class="card m-[5vw] min-w-[90vw] bg-base-200 shadow-md min-[550px]:min-w-[500px] sm:m-5 lg:max-w-[983px]"
 >
 	{#if data}
-		<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
-			<div class="glass flex w-full flex-col items-center">
-				<img src={data.taxon.image_link} alt={data.taxon.scientific} class="max-h-96 w-auto" />
+		{#if data.taxon.image_link}
+			<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
+				<div class="glass flex w-full flex-col items-center">
+					<img src={data.taxon.image_link} alt={data.taxon.scientific} class="max-h-96 w-auto" />
+				</div>
+			</figure>
+		{:else}
+			<div
+				class="skeleton flex h-96 w-full flex-col items-center justify-center gap-5 rounded-b-none"
+			>
+				<IconPhotoCancel size={96} color={'oklch(var(--n))'} class="mt-16" />
+				<span role="alert" class="alert m-2 inline-grid w-auto shadow">
+					<IconAlertTriangle size={30} color="oklch(var(--wa))" />
+					<span> No image available for this taxon </span>
+				</span>
 			</div>
-		</figure>
+		{/if}
 	{:else}
 		<div class="skeleton h-96 w-full rounded-b-none"></div>
 	{/if}
