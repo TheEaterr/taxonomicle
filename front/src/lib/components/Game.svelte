@@ -67,7 +67,7 @@
 				>
 			</div>
 			<div class="m-4 text-center">
-				<span role="alert" class="alert inline-grid max-w-screen-lg shadow">
+				<span role="alert" class="alert max-w-screen-lg">
 					<IconInfoCircle size={30} color="oklch(var(--in))" />
 					<span>
 						<h3 class="text-lg font-bold">Disclaimer</h3>
@@ -126,7 +126,7 @@
 		{#if !isGoalReached}
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.overflown}
 				<div class="text-center">
-					<span role="alert" class="alert inline-grid w-auto shadow">
+					<span role="alert" class="alert">
 						<IconAlertTriangle size={30} color="oklch(var(--wa))" />
 						<span
 							>To make the game playable, only a partial view of this taxon's children is shown
@@ -163,7 +163,7 @@
 				</div>
 			{:else}
 				<div class="mb-5 text-center">
-					<span role="alert" class="alert alert-error inline-grid w-auto shadow">
+					<span role="alert" class="alert alert-error">
 						<IconExclamationCircle size={30} class="stroke-current" />
 						<span
 							>Something went wrong while fetching this taxon's data. Please try to refresh the page

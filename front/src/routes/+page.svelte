@@ -12,9 +12,8 @@
 			<div class="max-w-md">
 				<h1 class="title text-5xl font-bold text-primary sm:text-6xl lg:text-7xl">Taxonomicle</h1>
 				<div class="m-3 mt-5">
-					<button
-						on:click={() => goto('/game/daily')}
-						class="btn-primary-special btn text-lg sm:btn-lg">Daily</button
+					<button on:click={() => goto('/game/daily')} class="btn-primary-special main-btn btn"
+						>Daily</button
 					>
 					<button
 						on:click={() => goto('/game/endless')}

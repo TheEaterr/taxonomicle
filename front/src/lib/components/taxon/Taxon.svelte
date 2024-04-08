@@ -23,7 +23,7 @@
 					class="skeleton flex h-96 w-full flex-col items-center justify-center gap-5 rounded-b-none"
 				>
 					<IconPhotoCancel size={96} color={'oklch(var(--n))'} class="mt-16" />
-					<span role="alert" class="alert m-2 inline-grid w-auto shadow">
+					<span role="alert" class="alert m-2">
 						<IconAlertTriangle size={30} color="oklch(var(--wa))" />
 						<span> No image available for this taxon </span>
 					</span>
