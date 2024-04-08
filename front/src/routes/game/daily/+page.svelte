@@ -4,4 +4,4 @@
 	export let data;
 </script>
 
-<FixedTaxonPage goalTaxonData={data.goalTaxon} animaliaTaxon={data.animaliaTaxon} />
+<FixedTaxonPage goalTaxonData={data.goalTaxon} animaliaTaxon={data.animaliaTaxon} isDaily={true} />

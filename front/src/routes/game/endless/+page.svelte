@@ -58,4 +58,4 @@
 </script>
 
 <Header {reset} />
-<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted />
+<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted isDaily={false} />

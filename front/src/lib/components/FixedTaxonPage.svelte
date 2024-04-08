@@ -13,6 +13,7 @@
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
+	export let isDaily: boolean;
 
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
@@ -47,4 +48,4 @@
 </script>
 
 <Header {reset} />
-<Game {goalTaxonData} {animaliaTaxon} bind:gameStarted />
+<Game {goalTaxonData} {animaliaTaxon} bind:gameStarted {isDaily} />

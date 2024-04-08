@@ -10,12 +10,14 @@
 		IconTrophy,
 		IconAlertTriangle,
 		IconExclamationCircle,
-		IconInfoCircle
+		IconInfoCircle,
+		IconShare
 	} from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
 	export let gameStarted: boolean;
+	export let isDaily: boolean;
 
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
@@ -43,6 +45,32 @@
 	const updateCurrentTaxon = async (newId: string) => {
 		currentTaxon.set(newId);
 		numberSteps.update((n) => n + 1);
+	};
+
+	const shareToClipboard = async () => {
+		if (goalTaxonData === undefined) return;
+		if (isDaily) {
+			await navigator.clipboard.writeText(
+				`I was able to reach the daily taxon ${goalTaxonData.taxon.scientific} in ${$numberSteps} steps 🏆 on Taxonomicle 🐻!\nTry it yourself at https://taxonomicle.com/game/daily 🎯 before it expires ⏰!`
+			);
+		} else {
+			await navigator.clipboard.writeText(
+				`I was able to reach the taxon ${goalTaxonData.taxon.scientific} in ${$numberSteps} steps 🏆 on Taxonomicle 🐻!\nTry it yourself at https://taxonomicle.com/game/custom/${goalTaxonData.taxon.id} 🎯!`
+			);
+		}
+		toggleTooltip(true);
+	};
+
+	const toggleTooltip = (value: boolean) => {
+		const tooltip = document.getElementById('description-tooltip-share');
+		if (!tooltip) return;
+		// add important modifier so it isn't overriden by the removal of the
+		// hover
+		if (value) {
+			tooltip.classList.add('!tooltip-open');
+		} else {
+			tooltip.classList.remove('!tooltip-open');
+		}
 	};
 
 	let isGoalReached = false;
@@ -95,7 +123,7 @@
 {#if gameStarted}
 	<div class="flex flex-col justify-center gap-5">
 		<div class="m-2 flex flex-wrap items-center justify-center gap-5">
-			<div class="stats bg-base-200 shadow">
+			<div class="stats stats-vertical bg-base-200 shadow lg:stats-horizontal">
 				<div class="stat">
 					<div class="stat-figure text-primary">
 						<IconTrophy size={30} />
@@ -103,6 +131,27 @@
 					<div class="stat-title font-semibold text-absolute">Steps taken</div>
 					<div class="small-title stat-value text-primary">{$numberSteps}</div>
 				</div>
+				{#if isGoalReached}
+					<div class="stat">
+						<div></div>
+						<div
+							class="tooltip tooltip-bottom before:z-20"
+							data-tip={'Copied to clipboard!'}
+							id="description-tooltip-share"
+						>
+							<div class="stat-value">
+								<button
+									on:click={shareToClipboard}
+									on:focusout={() => toggleTooltip(false)}
+									class="btn-secondary-special btn text-lg"><IconShare />Share your score</button
+								>
+							</div>
+						</div>
+						<div class="stat-desc mt-1 w-fit text-wrap">
+							Invite your friends to try the same taxon!
+						</div>
+					</div>
+				{/if}
 			</div>
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
 				<div
@@ -180,6 +229,15 @@
 {/if}
 
 <style lang="postcss">
+	/* deactivating the tooltip on hover */
+	.tooltip:hover:before {
+		opacity: 0;
+	}
+
+	.tooltip:hover:after {
+		opacity: 0;
+	}
+
 	.small-title {
 		-webkit-text-stroke: 1px oklch(var(--nc));
 	}
