@@ -42,6 +42,7 @@
 		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
 		gameStarted = false;
+		gameWon.set(false);
 	};
 </script>
 

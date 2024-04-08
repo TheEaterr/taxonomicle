@@ -3,7 +3,6 @@
 	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { derived, type Readable, type Writable } from 'svelte/store';
-	import GoalTaxon from '$lib/components/taxon/GoalTaxon.svelte';
 	import { goto } from '$app/navigation';
 	import Taxon from './taxon/Taxon.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -14,7 +13,7 @@
 		IconInfoCircle
 	} from '@tabler/icons-svelte';
 
-	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
+	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
 	export let gameStarted: boolean;
 
@@ -28,8 +27,10 @@
 		// and thus enable to chose the correct overload. We can simply use the
 		// typecast to force the correct overload (for undefined initial data).
 		derived(currentTaxon, ($currentTaxon) => ({
-			queryKey: ['taxonData', $currentTaxon, goalTaxonData.taxon.path],
-			queryFn: () => getTaxonData($currentTaxon, goalTaxonData.taxon.path),
+			// the case where goalTaxonData should hopefully never happen
+			// but it shouldn't cause any problem if it does.
+			queryKey: ['taxonData', $currentTaxon, goalTaxonData?.taxon.path || ''],
+			queryFn: () => getTaxonData($currentTaxon, goalTaxonData?.taxon.path || []),
 			initialData: $currentTaxon == animaliaTaxon.id ? animaliaTaxon : undefined,
 			staleTime: Infinity
 		})) as Readable<{
@@ -47,6 +48,7 @@
 	let isGoalReached = false;
 	$: isGoalReached =
 		$currentTaxonQuery.data !== undefined &&
+		goalTaxonData !== undefined &&
 		$currentTaxonQuery.data.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
 	$: if (isGoalReached) gameWon.set(true);
 </script>
@@ -54,7 +56,7 @@
 <div class="flex flex-wrap justify-center gap-5 text-center">
 	<div>
 		<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
-		<GoalTaxon data={goalTaxonData} />
+		<Taxon data={goalTaxonData} isGoal={true} />
 		{#if !gameStarted}
 			<div class="m-3">
 				<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm mr-5"

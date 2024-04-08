@@ -14,7 +14,7 @@
 	const goalTaxonId = getContext<Writable<string>>('goalTaxon');
 	const gameWon = getContext<Writable<boolean>>('gameWon');
 
-	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> = data.goalTaxon;
+	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined = data.goalTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
 	goalTaxonId.set(data.goalTaxon.taxon.id);
@@ -44,15 +44,18 @@
 	};
 
 	const reset = async () => {
-		currentTaxon.set('Q729___________');
 		numberSteps.set(0);
-		goalTaxonData = await getRandomGoalTaxon();
-		goalTaxonId.set(goalTaxonData.taxon.id);
 		gameStarted = false;
+		gameWon.set(false);
+		// set to undefined before awaiting to get loading indicator
+		goalTaxonData = undefined;
+		goalTaxonData = await getRandomGoalTaxon();
+		// set after awaiting the goal taxon so the query is made
+		// with goal taxon data.
+		currentTaxon.set('Q729___________');
+		goalTaxonId.set(goalTaxonData.taxon.id);
 	};
 </script>
 
 <Header {reset} />
-{#if goalTaxonData}
-	<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted />
-{/if}
+<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted />
