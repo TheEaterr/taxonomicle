@@ -1,22 +1,64 @@
 <script lang="ts">
 	import type { getGoalTaxon } from '$lib/pocketBase';
+	import { onMount } from 'svelte';
 	import IUCNSVG from './IUCNSVG.svelte';
 	import { IconExternalLink, IconPhotoCancel, IconAlertTriangle } from '@tabler/icons-svelte';
 
 	export let data: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
 	export let isGoal: boolean;
+
+	let imageLoaded = false;
+	let img: HTMLImageElement;
+	let imageContainer: HTMLDivElement;
+
+	onMount(() => {
+		img = new Image();
+		img.onload = () => {
+			imageLoaded = true;
+		};
+		img.classList.add('max-h-96', 'w-auto');
+	});
+
+	// Here we are doing a bit of wizardy so the window doesn't scroll back up
+	// while all the data is loaded but the image.
+	$: {
+		if (img) {
+			// data being undefined means
+			// query is in loading state
+			if (!data) {
+				img.src = '';
+				img.alt = '';
+				imageLoaded = false;
+			}
+		}
+	}
+
+	$: {
+		if (img) {
+			if (data?.taxon.image_link) {
+				img.src = data?.taxon.image_link;
+				img.alt = data?.taxon.scientific;
+			}
+		}
+		// we have to readd the image since after passing throuh a loading
+		// state the container was removed from the DOM
+		if (imageContainer) {
+			// removing all children shouldn't be necessary
+			// but just in case
+			imageContainer.innerHTML = '';
+			imageContainer.appendChild(img);
+		}
+	}
 </script>
 
 <div class="m-[5vw] min-[400px]:m-5">
 	<div
 		class="card !ml-auto !mr-auto min-w-[90vw] bg-base-200 shadow-md min-[550px]:min-w-[500px] lg:max-w-[983px]"
 	>
-		{#if data}
+		{#if data && imageLoaded}
 			{#if data.taxon.image_link}
 				<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
-					<div class="glass flex w-full flex-col items-center">
-						<img src={data.taxon.image_link} alt={data.taxon.scientific} class="max-h-96 w-auto" />
-					</div>
+					<div class="glass flex w-full flex-col items-center" bind:this={imageContainer}></div>
 				</figure>
 			{:else}
 				<div
