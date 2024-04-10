@@ -1,9 +1,13 @@
 <script lang="ts">
 	import FixedTaxonPage from '$lib/components/FixedTaxonPage.svelte';
 	import { IconInfoCircle } from '@tabler/icons-svelte';
-	import { onMount } from 'svelte';
+	import { onMount, getContext } from 'svelte';
+	import { type Snapshot } from '@sveltejs/kit';
+	import type { GameContext } from '$lib/gameContext';
 
 	export let data;
+
+	export const snapshot = getContext<Snapshot<GameContext | undefined>>('fixedSnapshot');
 
 	onMount(() => {
 		const tutorialModal: HTMLDialogElement | null = document.getElementById(

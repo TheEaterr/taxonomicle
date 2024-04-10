@@ -20,7 +20,6 @@
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
-	export let gameStarted: boolean;
 	export let isDaily: boolean;
 	export let isTutorial: boolean = false;
 
@@ -28,6 +27,9 @@
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
 	const gameWon = getContext<Writable<boolean>>('gameWon');
 	gameWon.set(false);
+
+	let gameStarted = $numberSteps > 0;
+	$: gameStarted = $numberSteps > 0;
 
 	const currentTaxonQuery = createQuery(
 		// This typecast is a bit of a hack because having variable initialData

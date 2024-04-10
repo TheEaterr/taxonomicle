@@ -18,7 +18,6 @@
 	currentTaxon.set('Q729___________');
 	numberSteps.set(0);
 	goalTaxonId.set(data.goalTaxon.taxon.id);
-	let gameStarted = false;
 
 	export const snapshot: Snapshot<GameContext | undefined> = {
 		capture: () => {
@@ -39,13 +38,11 @@
 			currentTaxon.set(value.currentTaxon);
 			goalTaxonId.set(value.goalTaxon);
 			numberSteps.set(value.steps);
-			gameStarted = value.steps > 0;
 		}
 	};
 
 	const reset = async () => {
 		numberSteps.set(0);
-		gameStarted = false;
 		gameWon.set(false);
 		// set to undefined before awaiting to get loading indicator
 		goalTaxonData = undefined;
@@ -58,4 +55,4 @@
 </script>
 
 <Header {reset} />
-<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} bind:gameStarted isDaily={false} />
+<Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} isDaily={false} />

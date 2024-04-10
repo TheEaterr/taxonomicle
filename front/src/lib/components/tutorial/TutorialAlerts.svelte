@@ -70,7 +70,7 @@
 		be able to find the correct children!
 	</TutorialAlert>
 {:else if currentTaxonId === path[8]}
-	<TutorialAlert>Ez</TutorialAlert>
+	<TutorialAlert>Now the rest is easy, especially this one.</TutorialAlert>
 {:else if currentTaxonId === path[9]}
 	<TutorialAlert
 		>And here is the final tip, the scientific name of a species is always two latin words. The
