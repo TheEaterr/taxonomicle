@@ -60,17 +60,17 @@
 				<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
 					<div class="glass flex w-full flex-col items-center" bind:this={imageContainer}></div>
 				</figure>
-			{:else}
-				<div
-					class="skeleton flex h-96 w-full flex-col items-center justify-center gap-5 rounded-b-none"
-				>
-					<IconPhotoCancel size={96} color={'oklch(var(--n))'} class="mt-16" />
-					<span role="alert" class="alert m-2">
-						<IconAlertTriangle size={30} color="oklch(var(--wa))" />
-						<span> No image available for this taxon </span>
-					</span>
-				</div>
 			{/if}
+		{:else if data && !data.taxon.image_link}
+			<div
+				class="skeleton flex h-96 w-full flex-col items-center justify-center gap-5 rounded-b-none"
+			>
+				<IconPhotoCancel size={96} color={'oklch(var(--n))'} class="mt-16" />
+				<span role="alert" class="alert m-2">
+					<IconAlertTriangle size={30} color="oklch(var(--wa))" />
+					<span> No image available for this taxon </span>
+				</span>
+			</div>
 		{:else}
 			<div class="skeleton h-96 w-full rounded-b-none"></div>
 		{/if}
