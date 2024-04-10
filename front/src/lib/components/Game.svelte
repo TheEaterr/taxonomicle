@@ -11,7 +11,9 @@
 		IconAlertTriangle,
 		IconExclamationCircle,
 		IconInfoCircle,
-		IconShare
+		IconShare,
+		IconBrandWikipedia,
+		IconExternalLink
 	} from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
@@ -143,14 +145,32 @@
 								<button
 									on:click={shareToClipboard}
 									on:focusout={() => toggleTooltip(false)}
-									class="btn-secondary-special btn text-lg"><IconShare />Share your score</button
+									class="btn-secondary-special btn h-fit text-lg"
+									><IconShare />Share your score</button
 								>
 							</div>
 						</div>
-						<div class="stat-desc mt-1 w-fit text-wrap">
-							Invite your friends to try the same taxon!
-						</div>
+						<div class="goal-stat-desc stat-desc">Invite your friends to try the same taxon!</div>
 					</div>
+					{#if goalTaxonData}
+						<div class="stat">
+							<div class="stat-figure text-neutral">
+								<IconBrandWikipedia size={30} />
+							</div>
+							<div class="stat-title font-semibold text-absolute">Wikipedia</div>
+							<div class="stat-value text-2xl font-bold text-neutral">
+								<a
+									href={`https://en.wikipedia.org/wiki/${goalTaxonData.taxon.site_link}`}
+									target="_blank"
+									rel="noopener"
+									class="link">Learn more<IconExternalLink class="mb-2 inline" /></a
+								>
+							</div>
+							<div class="goal-stat-desc stat-desc">
+								Visit this taxon's wikipedia page to learn more!
+							</div>
+						</div>
+					{/if}
 				{/if}
 			</div>
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
@@ -231,6 +251,10 @@
 {/if}
 
 <style lang="postcss">
+	.goal-stat-desc {
+		@apply mt-1 w-fit text-wrap;
+	}
+
 	/* deactivating the tooltip on hover */
 	.tooltip:hover:before {
 		opacity: 0;
