@@ -55,12 +55,10 @@
 	<div
 		class="card !ml-auto !mr-auto min-w-[90vw] bg-base-200 shadow-md min-[550px]:min-w-[500px] lg:max-w-[983px]"
 	>
-		{#if data && imageLoaded}
-			{#if data.taxon.image_link}
-				<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
-					<div class="glass flex w-full flex-col items-center" bind:this={imageContainer}></div>
-				</figure>
-			{/if}
+		{#if data && imageLoaded && data.taxon.image_link}
+			<figure class="m-0 max-h-96" style="background-image: url('{data.taxon.image_link}')">
+				<div class="glass flex w-full flex-col items-center" bind:this={imageContainer}></div>
+			</figure>
 		{:else if data && !data.taxon.image_link}
 			<div
 				class="skeleton flex h-96 w-full flex-col items-center justify-center gap-5 rounded-b-none"
