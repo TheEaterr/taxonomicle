@@ -24,6 +24,7 @@
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
 	const gameWon = getContext<Writable<boolean>>('gameWon');
+	gameWon.set(false);
 
 	const currentTaxonQuery = createQuery(
 		// This typecast is a bit of a hack because having variable initialData

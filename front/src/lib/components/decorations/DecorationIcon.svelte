@@ -12,26 +12,24 @@
 	import { DecorationPossibilities } from '$lib/components/decorations/decorationPossibilities';
 
 	export let decoration: DecorationPossibilities;
-
-	const color = 'oklch(var(--nc))';
 </script>
 
 {#if decoration === DecorationPossibilities.BUTTERFLY}
-	<IconButterfly {color} />
+	<IconButterfly />
 {:else if decoration === DecorationPossibilities.CAT}
-	<IconCat {color} />
+	<IconCat />
 {:else if decoration === DecorationPossibilities.FISH}
-	<IconFish {color} />
+	<IconFish />
 {:else if decoration === DecorationPossibilities.FEATHER}
-	<IconFeather {color} />
+	<IconFeather />
 {:else if decoration === DecorationPossibilities.SPIDER}
-	<IconSpider {color} />
+	<IconSpider />
 {:else if decoration === DecorationPossibilities.DOG}
-	<IconDog {color} />
+	<IconDog />
 {:else if decoration === DecorationPossibilities.BAT}
-	<IconBat {color} />
+	<IconBat />
 {:else if decoration === DecorationPossibilities.BUG}
-	<IconBug {color} />
+	<IconBug />
 {:else}
 	<p>Unknown decoration</p>
 {/if}

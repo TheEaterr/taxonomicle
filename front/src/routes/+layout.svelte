@@ -5,6 +5,8 @@
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import { navigating } from '$app/stores';
+	import { writable } from 'svelte/store';
+	import { setContext } from 'svelte';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -13,6 +15,10 @@
 			}
 		}
 	});
+
+	// put this in global layout to pass to background
+	const gameWon = writable<boolean>(false);
+	setContext('gameWon', gameWon);
 </script>
 
 <DecoratedBackground />

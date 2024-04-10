@@ -4,6 +4,8 @@
 		DecorationPossibilities,
 		getRandomDecoration
 	} from '$lib/components/decorations/decorationPossibilities';
+	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
 
 	let decorations: ({ x: number; y: number; icon: DecorationPossibilities }[] | undefined)[][] = [];
 
@@ -15,6 +17,8 @@
 			animationDuration / 2
 		);
 	};
+
+	const gameWon = getContext<Writable<boolean>>('gameWon');
 
 	let w: number;
 	let h: number;
@@ -61,18 +65,22 @@
 		{#each row as cell}
 			{#if cell}
 				<div
-					class="animate-appear absolute size-[20px] bg-cover"
+					class="{$gameWon
+						? 'animate-appear-rgb'
+						: 'animate-appear'} absolute size-[20px] bg-cover text-neutral-content"
 					style="left: {cell[0].x}px; top: {cell[0].y}px; animation-delay: {wrapValue(
 						cell[0].x + cell[0].y
-					)}ms; animation-duration: 5s;"
+					)}ms; animation-duration: {$gameWon ? 2 : 5}s;"
 				>
 					<DecorationIcon decoration={cell[0].icon} />
 				</div>
 				<div
-					class="animate-appear-reverse absolute size-[20px] bg-cover opacity-0"
+					class="{$gameWon
+						? 'animate-appear-reverse-rgb'
+						: 'animate-appear-reverse'} absolute size-[20px] bg-cover text-neutral-content opacity-0"
 					style="left: {cell[1].x}px; top: {cell[1].y}px; animation-delay: {wrapValue(
 						cell[0].x + cell[0].y
-					)}ms; animation-duration: 5s;"
+					)}ms; animation-duration: {$gameWon ? 2 : 5}s;"
 				>
 					<DecorationIcon decoration={cell[1].icon} />
 				</div>
@@ -116,10 +124,41 @@
 		}
 	}
 
+	@keyframes rgb {
+		0% {
+			color: red;
+		}
+		25% {
+			color: yellow;
+		}
+		50% {
+			color: blue;
+		}
+		75% {
+			color: green;
+		}
+		100% {
+			color: red;
+		}
+	}
+
 	.animate-appear {
 		animation: appear 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 	}
+
+	.animate-appear-rgb {
+		animation:
+			appear 2s cubic-bezier(0.4, 0, 0.6, 1) infinite,
+			rgb 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	}
+
 	.animate-appear-reverse {
 		animation: appear-reverse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	}
+
+	.animate-appear-reverse-rgb {
+		animation:
+			appear-reverse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite,
+			rgb 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 	}
 </style>
