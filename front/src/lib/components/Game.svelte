@@ -186,7 +186,7 @@
 					</span>
 				</div>
 			{/if}
-			{#if !$currentTaxonQuery.isError}
+			{#if !$currentTaxonQuery.isError && (!$currentTaxonQuery.isSuccess || $currentTaxonQuery.data.children.items.length > 0)}
 				<div
 					class="relative m-2 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
 				>
@@ -210,6 +210,8 @@
 						<span class="loading loading-dots loading-lg text-neutral-content"></span>
 					{/if}
 				</div>
+			{:else if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.children.items.length == 0}
+				<h2 class="small-title mb-3 text-center text-3xl font-bold text-error">Wrong species!</h2>
 			{:else}
 				<div class="mb-5 text-center">
 					<span role="alert" class="alert alert-error">
