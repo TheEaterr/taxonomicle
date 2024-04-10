@@ -21,7 +21,7 @@
 					>
 				</div>
 				<div>
-					<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm"
+					<button on:click={() => goto('/game/tutorial')} class="btn-neutral-special btn btn-sm"
 						>How to play</button
 					>
 					<button on:click={() => goto('/about')} class="btn-neutral-special btn btn-sm ml-1"

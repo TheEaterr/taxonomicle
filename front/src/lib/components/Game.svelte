@@ -1,5 +1,7 @@
 <script lang="ts">
 	import TaxonButton from '$lib/components/taxon/TaxonButton.svelte';
+	import TutorialAlerts from '$lib/components/tutorial/TutorialAlerts.svelte';
+	import BeforeGameAlert from '$lib/components/tutorial/BeforeGameAlert.svelte';
 	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { derived, type Readable, type Writable } from 'svelte/store';
@@ -20,6 +22,7 @@
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
 	export let gameStarted: boolean;
 	export let isDaily: boolean;
+	export let isTutorial: boolean = false;
 
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const currentTaxon = getContext<Writable<string>>('currentTaxon');
@@ -89,10 +92,16 @@
 		<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
 		<Taxon data={goalTaxonData} isGoal={true} />
 		{#if !gameStarted}
+			{#if isTutorial}
+				<BeforeGameAlert />
+			{/if}
 			<div class="m-3">
-				<button on:click={() => goto('/tutorial')} class="btn-neutral-special btn btn-sm mr-5"
-					>How to play</button
-				>
+				{#if !isTutorial}
+					<button
+						on:click={() => goto('/game/tutorial')}
+						class="btn-neutral-special btn btn-sm mr-5">How to play</button
+					>
+				{/if}
 				<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
 					>Start</button
 				>
@@ -193,6 +202,12 @@
 				</div>
 			{/if}
 		</div>
+		{#if isTutorial && $currentTaxonQuery.isSuccess && goalTaxonData !== undefined}
+			<TutorialAlerts
+				currentTaxonId={$currentTaxonQuery.data.id}
+				path={goalTaxonData?.taxon.path}
+			/>
+		{/if}
 		{#if !isGoalReached}
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.overflown}
 				<div class="text-center">
@@ -263,9 +278,5 @@
 
 	.tooltip:hover:after {
 		opacity: 0;
-	}
-
-	.small-title {
-		-webkit-text-stroke: 1px oklch(var(--nc));
 	}
 </style>

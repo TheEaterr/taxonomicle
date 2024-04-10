@@ -85,7 +85,7 @@ module.exports = {
 					neutral: '#4b5563',
 					'neutral-content': '#bbbbcc',
 					'base-100': '#ffffff',
-					info: '#3b82f6',
+					info: '#4c93ff',
 					success: '#84cc16',
 					warning: '#facc15',
 					error: '#ef4444',
