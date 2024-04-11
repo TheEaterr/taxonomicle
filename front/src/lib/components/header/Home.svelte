@@ -15,12 +15,14 @@
 	};
 </script>
 
-<button
-	bind:this={button}
-	on:click={() => {
-		animate();
-		goto('/');
-	}}
->
-	<IconHome class="swap-on h-10 w-10" />
-</button>
+<div class="tooltip tooltip-bottom" data-tip="Go to Home">
+	<button
+		bind:this={button}
+		on:click={() => {
+			animate();
+			goto('/');
+		}}
+	>
+		<IconHome class="swap-on h-10 w-10" />
+	</button>
+</div>

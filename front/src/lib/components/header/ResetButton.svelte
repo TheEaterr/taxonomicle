@@ -13,12 +13,14 @@
 	};
 </script>
 
-<button
-	bind:this={button}
-	on:click={() => {
-		animate();
-		reset();
-	}}
->
-	<IconRotate class="swap-on h-10 w-10" />
-</button>
+<div class="tooltip tooltip-bottom" data-tip="Reset game">
+	<button
+		bind:this={button}
+		on:click={() => {
+			animate();
+			reset();
+		}}
+	>
+		<IconRotate class="swap-on h-10 w-10" />
+	</button>
+</div>
