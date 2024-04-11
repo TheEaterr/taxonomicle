@@ -263,7 +263,18 @@
 				</div>
 			{/if}
 		{:else}
-			<h2 class="small-title mb-3 text-center text-3xl font-bold text-primary">Goal reached!</h2>
+			<h2 class="small-title text-center text-3xl font-bold text-primary">Goal reached!</h2>
+			{#if isTutorial}
+				<button
+					on:click={() => goto('/game/daily')}
+					class="btn-primary-special btn m-auto mb-3 w-fit text-lg">Play the Daily</button
+				>
+			{:else}
+				<button
+					on:click={() => goto('/game/endless')}
+					class="btn-primary-special btn m-auto mb-3 w-fit text-lg">Play again</button
+				>
+			{/if}
 		{/if}
 	</div>
 {/if}
