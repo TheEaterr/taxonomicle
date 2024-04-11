@@ -5,7 +5,7 @@
 </script>
 
 <div class="text-center">
-	<span role="alert" class="alert {isWarning ? 'alert-warning' : 'alert-info'} max-w-screen-lg">
+	<span role="alert" class="alert {isWarning ? 'alert-warning' : 'alert-info'} m-4 max-w-screen-lg">
 		{#if isWarning}
 			<IconAlertTriangle size={30} color="oklch(var(--wac))" />
 		{:else}

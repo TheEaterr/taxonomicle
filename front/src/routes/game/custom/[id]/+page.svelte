@@ -9,4 +9,4 @@
 	export const snapshot = getContext<Snapshot<GameContext | undefined>>('fixedSnapshot');
 </script>
 
-<FixedTaxonPage goalTaxonData={data.goalTaxon} animaliaTaxon={data.animaliaTaxon} isDaily={true} />
+<FixedTaxonPage goalTaxonData={data.goalTaxon} animaliaTaxon={data.animaliaTaxon} isDaily={false} />

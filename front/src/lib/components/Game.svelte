@@ -226,7 +226,7 @@
 			{/if}
 			{#if !$currentTaxonQuery.isError && (!$currentTaxonQuery.isSuccess || $currentTaxonQuery.data.children.items.length > 0)}
 				<div
-					class="relative m-2 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
+					class="relative m-2 ml-3 mr-3 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
 				>
 					<div
 						class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"

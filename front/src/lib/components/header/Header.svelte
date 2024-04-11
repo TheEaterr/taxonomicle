@@ -33,4 +33,4 @@
 		<IconMoon class="swap-off h-10 w-10" stroke={2} />
 	</label>
 </div>
-<div class="mb-[72px] w-full"></div>
+<div class="mb-[72px] w-full sm:m-2"></div>

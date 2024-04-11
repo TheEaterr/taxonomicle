@@ -39,7 +39,13 @@
 		<br />
 	</TutorialAlert>
 {:else if currentTaxonId === path[3]}
-	<TutorialAlert>You got this one.<br /></TutorialAlert>
+	<TutorialAlert
+		>You got this one so here is another tip.
+		<br />
+		Taxon names are all in latin which can make them hard to understand, but it can also render them
+		self-explanatory. For example, insects are all contained in the subphylum hexopoda, which means 6
+		limbs! There is also the super class myriapoda that contains millipedes and centipedes.</TutorialAlert
+	>
 {:else if currentTaxonId === path[4]}
 	<TutorialAlert
 		>You probably never heard of those two names but reading the descriptions will make quick work
@@ -70,7 +76,11 @@
 		be able to find the correct children!
 	</TutorialAlert>
 {:else if currentTaxonId === path[8]}
-	<TutorialAlert>Now the rest is easy, especially this one.</TutorialAlert>
+	<TutorialAlert
+		>Now the rest is easy, especially this one.<br />Here is another tip for you. Some taxons are a
+		lot harder to find than others. For example, amphibians tend to be quite straightforward, while
+		there are multiple orders and even subclasses of snails that all look the same!
+	</TutorialAlert>
 {:else if currentTaxonId === path[9]}
 	<TutorialAlert
 		>And here is the final tip, the scientific name of a species is always two latin words. The
