@@ -15,7 +15,7 @@
 	export let isTutorial: boolean = false;
 
 	currentTaxon.set('Q729___________');
-	numberSteps.set(0);
+	numberSteps.set(-1);
 </script>
 
 <Header {reset} />

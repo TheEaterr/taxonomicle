@@ -6,7 +6,7 @@
 	import { writable, type Writable } from 'svelte/store';
 
 	const currentTaxon = writable<string>('');
-	const numberSteps = writable<number>(0);
+	const numberSteps = writable<number>(-1);
 	const goalTaxon = writable<string>('');
 	const gameStarted = writable<boolean>(false);
 	const gameWon = getContext<Writable<boolean>>('gameWon');
@@ -31,7 +31,7 @@
 			if (!value || !value.currentTaxon) {
 				value = {
 					currentTaxon: 'Q729___________',
-					steps: 0,
+					steps: -1,
 					goalTaxon: ''
 				};
 			}
@@ -42,7 +42,7 @@
 
 	const reset = async () => {
 		currentTaxon.set('Q729___________');
-		numberSteps.set(0);
+		numberSteps.set(-1);
 		gameWon.set(false);
 	};
 

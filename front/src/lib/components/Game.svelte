@@ -28,8 +28,8 @@
 	const gameWon = getContext<Writable<boolean>>('gameWon');
 	gameWon.set(false);
 
-	let gameStarted = $numberSteps > 0;
-	$: gameStarted = $numberSteps > 0;
+	let gameStarted = $numberSteps >= 0;
+	$: gameStarted = $numberSteps >= 0;
 
 	const currentTaxonQuery = createQuery(
 		// This typecast is a bit of a hack because having variable initialData
@@ -104,8 +104,9 @@
 						class="btn-neutral-special btn btn-sm mr-5">How to play</button
 					>
 				{/if}
-				<button on:click={() => (gameStarted = true)} class="btn-primary-special btn text-lg"
-					>Start</button
+				<button
+					on:click={() => numberSteps.update((n) => n + 1)}
+					class="btn-primary-special btn text-lg">Start</button
 				>
 			</div>
 			<div class="m-4 text-center">

@@ -16,7 +16,7 @@
 
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined = data.goalTaxon;
 	currentTaxon.set('Q729___________');
-	numberSteps.set(0);
+	numberSteps.set(-1);
 	goalTaxonId.set(data.goalTaxon.taxon.id);
 
 	export const snapshot: Snapshot<GameContext | undefined> = {
@@ -29,7 +29,7 @@
 			if (!value || !value.currentTaxon || !value.goalTaxon) {
 				value = {
 					currentTaxon: 'Q729___________',
-					steps: 0,
+					steps: -1,
 					goalTaxon: ''
 				};
 			} else {
@@ -42,7 +42,7 @@
 	};
 
 	const reset = async () => {
-		numberSteps.set(0);
+		numberSteps.set(-1);
 		gameWon.set(false);
 		// set to undefined before awaiting to get loading indicator
 		goalTaxonData = undefined;
