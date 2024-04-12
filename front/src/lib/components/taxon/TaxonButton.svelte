@@ -22,7 +22,7 @@
 <div class="join">
 	<button
 		on:click={() => update(id)}
-		class="group join-item bg-{rank} border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
+		class="group join-item bg-{rank} min-w-36 border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
 	>
 		<div class="z-10 mb-3 leading-5">
 			<span class="italic">{scientific}</span>
