@@ -213,7 +213,7 @@
 		{/if}
 		{#if !isGoalReached}
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.overflown}
-				<div class="text-center">
+				<div class="ml-4 mr-4 text-center">
 					<span role="alert" class="alert">
 						<IconAlertTriangle size={30} color="oklch(var(--wa))" />
 						<span
