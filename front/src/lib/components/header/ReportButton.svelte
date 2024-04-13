@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { IconAlertTriangle, IconExternalLink, IconX } from '@tabler/icons-svelte';
+	import { createMutation } from '@tanstack/svelte-query';
+	import { createReport } from '$lib/pocketBase';
 
 	let button: HTMLButtonElement;
 	const animate = () => {
@@ -19,18 +21,25 @@
 
 	export let currentTaxonId: string;
 	export let goalTaxonId: string;
+	let useGoalTaxon = false;
+	let description = '';
 
-	let selectedTaxonId: string = currentTaxonId;
+	const reportMutation = createMutation({
+		mutationFn: ({ taxonId, description }: { taxonId: string; description: string }) =>
+			createReport(taxonId, description),
+		onSuccess: () => {
+			const reportModal: HTMLDialogElement | null = document.getElementById(
+				'report-modal'
+			) as HTMLDialogElement | null;
+			if (reportModal) reportModal.close();
+		}
+	});
 
 	const showModal = () => {
 		const reportModal: HTMLDialogElement | null = document.getElementById(
 			'report-modal'
 		) as HTMLDialogElement | null;
 		if (reportModal) reportModal.showModal();
-	};
-
-	const toggleSelectedTaxon = (event: Event) => {
-		selectedTaxonId = (event.target as HTMLInputElement)?.checked ? currentTaxonId : goalTaxonId;
 	};
 </script>
 
@@ -67,15 +76,23 @@
 				Taxonomicle is a game where you try to find a species by descending the tree of life.
 			</p>
 			<hr class="h-[1px] rounded bg-neutral" />
-			<input
-				type="checkbox"
-				class="toggle"
-				checked
-				on:click={(event) => toggleSelectedTaxon(event)}
-			/>
-			<button class="btn-primary-special btn text-lg" on:click={() => console.log(selectedTaxonId)}
-				>Submit</button
+			<form
+				on:submit={(e) => {
+					e.preventDefault();
+					$reportMutation.mutate({
+						taxonId: useGoalTaxon ? goalTaxonId : currentTaxonId,
+						description
+					});
+				}}
 			>
+				<input type="checkbox" class="toggle" bind:checked={useGoalTaxon} />
+				<textarea
+					class="textarea required:border-red-500"
+					placeholder="Description"
+					bind:value={description}
+					required
+				></textarea>
+			</form>
 			<div class="modal-action">
 				<form method="dialog">
 					<!-- if there is a button in form, it will close the modal -->
