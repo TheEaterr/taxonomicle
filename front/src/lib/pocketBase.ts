@@ -1,5 +1,10 @@
 import PocketBase, { type RecordService } from 'pocketbase';
-import type { RankResponse, TaxonResponse, UsersResponse } from './generated/pocketBaseTypes';
+import type {
+	RankResponse,
+	ReportResponse,
+	TaxonResponse,
+	UsersResponse
+} from './generated/pocketBaseTypes';
 
 // Override TaxonResponse directly to forbid null path
 type TaxonResponseFull<Texpand = unknown> = TaxonResponse<unknown, Texpand> & {
@@ -18,6 +23,8 @@ type TexpandParent = {
 type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'taxon'): RecordService<TaxonResponseFull>;
 	collection(idOrName: 'users'): RecordService<UsersResponse>;
+	collection(idOrName: 'rank'): RecordService<RankResponse>;
+	collection(idOrName: 'report'): RecordService<ReportResponse>;
 };
 
 const API_URL =
@@ -227,6 +234,16 @@ export const getGoalTaxonData = async (id: string) => {
 		taxon,
 		descriptions
 	};
+};
+
+export const createReport = async (taxonId: string, description: string) => {
+	const data = {
+		taxon: taxonId,
+		description
+	};
+
+	const record = await pb.collection('report').create(data);
+	return record;
 };
 
 export default pb;

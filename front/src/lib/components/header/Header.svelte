@@ -2,6 +2,7 @@
 	import Return from '$lib/components/header/Return.svelte';
 	import ResetButton from '$lib/components/header/ResetButton.svelte';
 	import Home from '$lib/components/header/Home.svelte';
+	import ReportButton from '$lib/components/header/ReportButton.svelte';
 	import { onMount } from 'svelte';
 	import { themeChange } from 'theme-change';
 	import { IconSun, IconMoon } from '@tabler/icons-svelte';
@@ -13,6 +14,8 @@
 	});
 
 	export let reset: (() => void) | undefined = undefined;
+	export let currentTaxonId: string | undefined = undefined;
+	export let goalTaxonId: string | undefined = undefined;
 	export let onlyTheme: boolean = false;
 </script>
 
@@ -20,6 +23,9 @@
 	<div class="fixed left-0 top-0 z-10 m-2 h-[56px] rounded-xl bg-base-200 bg-opacity-80 p-2">
 		<Return />
 		<Home />
+		{#if currentTaxonId !== undefined && goalTaxonId !== undefined}
+			<ReportButton {currentTaxonId} {goalTaxonId} />
+		{/if}
 		{#if reset}
 			<ResetButton {reset} />
 		{/if}

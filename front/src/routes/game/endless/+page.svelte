@@ -54,5 +54,5 @@
 	};
 </script>
 
-<Header {reset} />
+<Header {reset} currentTaxonId={$currentTaxon} goalTaxonId={$goalTaxonId} />
 <Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} isDaily={false} />

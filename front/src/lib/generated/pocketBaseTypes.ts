@@ -7,6 +7,7 @@ import type { RecordService } from 'pocketbase'
 
 export enum Collections {
 	Rank = "rank",
+	Report = "report",
 	Taxon = "taxon",
 	Users = "users",
 }
@@ -40,6 +41,11 @@ export type RankRecord = {
 	order: number
 }
 
+export type ReportRecord = {
+	description: string
+	taxon: RecordIdString
+}
+
 export enum TaxonIucnOptions {
 	"EX" = "EX",
 	"EW" = "EW",
@@ -69,6 +75,7 @@ export type UsersRecord = {
 
 // Response types include system fields and match responses from the PocketBase API
 export type RankResponse<Texpand = unknown> = Required<RankRecord> & BaseSystemFields<Texpand>
+export type ReportResponse<Texpand = unknown> = Required<ReportRecord> & BaseSystemFields<Texpand>
 export type TaxonResponse<Tpath = unknown, Texpand = unknown> = Required<TaxonRecord<Tpath>> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
@@ -76,12 +83,14 @@ export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSyste
 
 export type CollectionRecords = {
 	rank: RankRecord
+	report: ReportRecord
 	taxon: TaxonRecord
 	users: UsersRecord
 }
 
 export type CollectionResponses = {
 	rank: RankResponse
+	report: ReportResponse
 	taxon: TaxonResponse
 	users: UsersResponse
 }
@@ -91,6 +100,7 @@ export type CollectionResponses = {
 
 export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'rank'): RecordService<RankResponse>
+	collection(idOrName: 'report'): RecordService<ReportResponse>
 	collection(idOrName: 'taxon'): RecordService<TaxonResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }
