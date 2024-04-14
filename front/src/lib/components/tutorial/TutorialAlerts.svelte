@@ -65,7 +65,9 @@
 		I will let you in on a little secret. You will find that Taxonomicle's data isn't perfect, and sometimes
 		it isn't coherent with what is said in the description. Taxonomy is very hard and is always changing
 		as biologists try to improve the classification. Some choices cause wide debates between scientists!
-		To play Taxonomicle, you need to stay flexible and not hesitate to make mistakes.
+		To play Taxonomicle, you need to stay flexible and not hesitate to make mistakes. If you find any
+		mistake, do not hesitate to report it using the button at the top left of your window, to make Taxonomicle
+		better for everyone!
 	</TutorialAlert>
 {:else if currentTaxonId === path[7]}
 	<TutorialAlert
