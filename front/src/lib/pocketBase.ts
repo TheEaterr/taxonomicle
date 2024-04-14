@@ -5,6 +5,7 @@ import type {
 	TaxonResponse,
 	UsersResponse
 } from './generated/pocketBaseTypes';
+import { getDescriptions } from './descriptions';
 
 // Override TaxonResponse directly to forbid null path
 type TaxonResponseFull<Texpand = unknown> = TaxonResponse<unknown, Texpand> & {
@@ -30,51 +31,6 @@ type TypedPocketBase = PocketBase & {
 const API_URL =
 	process.env.NODE_ENV === 'production' ? 'https://taxonomicle.maoune.fr' : 'http://127.0.0.1:8090';
 const pb = new PocketBase(API_URL) as TypedPocketBase;
-
-const reduceDescription = (description: string) => {
-	const shortThreshold = 200;
-	const longThreshold = 700;
-	const longDescription =
-		description.length > longThreshold ? description.slice(0, longThreshold) + '...' : description;
-	const shortDescription =
-		description.length > shortThreshold
-			? description.slice(0, shortThreshold) + '...'
-			: description;
-	return {
-		short: shortDescription,
-		long: longDescription
-	};
-};
-
-const wikiAPIEndpoint = 'https://en.wikipedia.org/w/api.php';
-const wikiParams = 'format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=';
-const getDescriptions = async (
-	titles: string[]
-): Promise<Record<string, { short: string; long: string }>> => {
-	const response = await fetch(wikiAPIEndpoint + '?' + wikiParams + titles.join('|') + '&origin=*');
-	const responseJson = await response.json();
-	const pages = responseJson.query.pages;
-	const redirects: Record<string, string> = {};
-	if (responseJson.query.redirects) {
-		responseJson.query.redirects.forEach((element: { to: string; from: string }) => {
-			redirects[element.from] = element.to;
-		});
-	}
-	const descriptions: Record<string, { short: string; long: string }> = {};
-	const descriptionPlaceholder = 'No description available.';
-	Object.keys(pages).forEach((key) => {
-		const page = pages[key];
-		descriptions[page.title] = page.extract
-			? reduceDescription(page.extract)
-			: { short: descriptionPlaceholder, long: descriptionPlaceholder };
-	});
-	titles.forEach((title) => {
-		if (!descriptions[title] && redirects[title]) {
-			descriptions[title] = descriptions[redirects[title]];
-		}
-	});
-	return descriptions;
-};
 
 // Wikipedia API has a limit of 20 titles per request
 const MAX_CHILDREN = 19;
