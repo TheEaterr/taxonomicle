@@ -31,6 +31,7 @@
 	let gameStarted = $numberSteps >= 0;
 	$: gameStarted = $numberSteps >= 0;
 
+	// we use tanstack queries to allow caching of the result
 	const currentTaxonQuery = createQuery(
 		// This typecast is a bit of a hack because having variable initialData
 		// make typescript unable to infer the type of the derived function call
@@ -119,7 +120,7 @@
 								class="font-bold">no scientific guarantee</span
 							>
 							of its accuracy. It was heavily processed to give an enjoyable gaming experience and only
-							a partial view is shown. For more details about how taxonomicle was made, please visit
+							a partial view is shown. For more details about how Taxonomicle was made, please visit
 							the <a href="/about" class="link">about page</a>.
 						</span>
 					</span>
