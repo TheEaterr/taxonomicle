@@ -256,9 +256,9 @@
 					<span role="alert" class="alert alert-error">
 						<IconExclamationCircle size={30} class="stroke-current" />
 						<span
-							>Something went wrong while fetching this taxon's data. Please try to refresh the page
-							(you will not lose your progress). <br /> If this problem persists, please
-							<a href="/about" class="link">contact me</a>.</span
+							>Something went wrong while fetching this taxon's data. Please check your network
+							connection or try to refresh the page (you will not lose your progress). <br /> If this
+							problem persists, please report the issue using the button at the top left of your window.</span
 						>
 					</span>
 				</div>
