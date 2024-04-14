@@ -14,5 +14,7 @@ COPY ./migrations /pb/pb_migrations
 
 EXPOSE 8080
 
+ENV TAXONOMICLE_ENV=production
+
 # start PocketBase
 CMD ["/pb/taxonomicle", "serve", "--http=0.0.0.0:8080"]
