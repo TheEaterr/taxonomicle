@@ -50,6 +50,16 @@
 		) as HTMLDialogElement | null;
 		if (reportModal) reportModal.showModal();
 	};
+
+	const showSuccessToast = () => {
+		const successToast: HTMLElement | null = document.getElementById('success-report-toast');
+		if (successToast) {
+			successToast.classList.remove('hidden');
+			setTimeout(() => {
+				successToast.classList.add('hidden');
+			}, 3000);
+		}
+	};
 </script>
 
 <div class="tooltip tooltip-bottom" data-tip="Report a data problem">
@@ -62,6 +72,14 @@
 	>
 		<IconAlertTriangle class="swap-on h-10 w-10" />
 	</button>
+</div>
+
+<div class="toast toast-center toast-top z-20 hidden" id="success-report-toast">
+	<div
+		class="alert alert-success border-[3px] border-success-content font-semibold text-success-content"
+	>
+		<span>Report sent successfully, thank you for contributing to make Taxonomicle better!</span>
+	</div>
 </div>
 
 <dialog id="report-modal" class="modal">
@@ -91,6 +109,7 @@
 						taxonId: selectedTaxon === 'goal' ? goalTaxonId : currentTaxonId,
 						description
 					});
+					showSuccessToast();
 				}}
 			>
 				<div class="m-4">
