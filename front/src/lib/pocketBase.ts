@@ -6,7 +6,7 @@ import type {
 	UsersResponse
 } from './generated/pocketBaseTypes';
 
-const TAXON_DESCRIPTION_FIELDS = '';
+const TAXON_DESCRIPTION_FIELDS = '*,description:excerpt(700,true)';
 
 export const reduceDescription = (description: string) => {
 	const shortThreshold = 250;
