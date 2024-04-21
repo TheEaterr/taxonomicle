@@ -2,7 +2,7 @@
 	import TaxonButton from '$lib/components/taxon/TaxonButton.svelte';
 	import TutorialAlerts from '$lib/components/tutorial/TutorialAlerts.svelte';
 	import BeforeGameAlert from '$lib/components/tutorial/BeforeGameAlert.svelte';
-	import { getGoalTaxon, getTaxonData, reduceDescription } from '$lib/pocketBase';
+	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { derived, type Readable, type Writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
@@ -240,7 +240,7 @@
 								rank={child.expand?.rank.name ?? ''}
 								id={child.id}
 								update={updateCurrentTaxon}
-								description={reduceDescription(child.description)}
+								description={child.description}
 							/>
 						{/each}
 					{:else}

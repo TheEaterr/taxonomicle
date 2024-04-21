@@ -7,15 +7,7 @@ import type {
 } from './generated/pocketBaseTypes';
 
 const TAXON_DESCRIPTION_FIELDS = '*,description:excerpt(700,true)';
-
-export const reduceDescription = (description: string) => {
-	const shortThreshold = 250;
-	const shortDescription =
-		description.length > shortThreshold
-			? description.slice(0, shortThreshold) + '...'
-			: description;
-	return shortDescription;
-};
+const TAXON_SHORT_DESCRIPTION_FIELDS = '*,description:excerpt(250,true)';
 
 // Override TaxonResponse directly to forbid null path
 type TaxonResponseFull<Texpand = unknown> = TaxonResponse<unknown, Texpand> & {
@@ -59,7 +51,7 @@ export const getTaxonData = async (id: string, path: string[]) => {
 			filter: `parent = "${taxonId}"`,
 			expand: 'rank',
 			sort: 'rank.order,@random',
-			fields: TAXON_DESCRIPTION_FIELDS
+			fields: TAXON_SHORT_DESCRIPTION_FIELDS
 		});
 	const overflown = children.totalItems > MAX_CHILDREN;
 	if (children.items.length == MAX_CHILDREN) {
