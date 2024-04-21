@@ -59,23 +59,22 @@
 		to pick a taxon of the highest rank!
 	</TutorialAlert>
 {:else if currentTaxonId === path[6]}
-	<TutorialAlert
-		>Great job, this one will not give you any trouble.
+	<TutorialAlert>
+		This is the hardest choice of this game.
+		<br />
+		I will give you a tip: the goal is actually a Holostei! By reading the description, this should be
+		enough to find the right answer. Great job, this one will not give you any trouble.
+	</TutorialAlert>
+{:else if currentTaxonId === path[7]}
+	<TutorialAlert>
+		Great job, with what you know now, this one will not give you any trouble.
 		<br />
 		I will let you in on a little secret. You will find that Taxonomicle's data isn't perfect, and sometimes
 		it isn't coherent with what is said in the description. Taxonomy is very hard and is always changing
 		as biologists try to improve the classification. Some choices cause wide debates between scientists!
 		To play Taxonomicle, you need to stay flexible and not hesitate to make mistakes. If you find any
-		mistake, do not hesitate to report it using the button at the top left of your window, to make Taxonomicle
-		better for everyone!
-	</TutorialAlert>
-{:else if currentTaxonId === path[7]}
-	<TutorialAlert
-		>This is the hardest choice of this game.
-		<br />
-		Read carefully the description of the goal taxon. Often, the name of a taxon is also the name of
-		one of its children, using a different latin suffix depending on its rank. Using this tip, you should
-		be able to find the correct children!
+		problem in the data, do not hesitate to report it using the button at the top left of your window,
+		to make Taxonomicle better for everyone!
 	</TutorialAlert>
 {:else if currentTaxonId === path[8]}
 	<TutorialAlert
@@ -85,16 +84,21 @@
 	</TutorialAlert>
 {:else if currentTaxonId === path[9]}
 	<TutorialAlert
+		>Another easy one...<br />You can also see that often, the name of a taxon is simply the name of
+		one of its children, using a different latin suffix depending on its rank!
+	</TutorialAlert>
+{:else if currentTaxonId === path[10]}
+	<TutorialAlert
 		>And here is the final tip, the scientific name of a species is always two latin words. The
 		first one is its genus, and the last one its name in the genus.
 	</TutorialAlert>
-{:else if currentTaxonId === path[10]}
+{:else if currentTaxonId === path[11]}
 	<TutorialAlert
 		>Congratulations! Now to try the game for real, click on the button below. It will take you to
 		the daily mode, where a random species is generated each day, the same for everyone. You can
 		also try endless mode, where you can play as much as you want.
 	</TutorialAlert>
-{:else}
+{:else if !path.includes(currentTaxonId)}
 	<TutorialAlert isWarning>
 		Uh-oh! I'm afraid you deviated from the right path 😿.
 		<br />
