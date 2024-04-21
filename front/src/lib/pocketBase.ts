@@ -142,7 +142,7 @@ export const getGoalTaxon = async () => {
 			expand: 'rank',
 			filter: parentFilter,
 			skipTotal: true,
-			fields: TAXON_DESCRIPTION_FIELDS
+			fields: 'id'
 		})
 	).items[0];
 	const availableTaxons = await pb
@@ -150,7 +150,7 @@ export const getGoalTaxon = async () => {
 		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
 			expand: 'rank',
 			filter: getTaxonFilter(parent.id),
-			fields: TAXON_DESCRIPTION_FIELDS
+			fields: 'id'
 		});
 	const totalAvailableTaxon = availableTaxons.totalItems;
 	const randomTaxonIndex = Math.floor(hash[1] % totalAvailableTaxon);
@@ -172,9 +172,8 @@ export const getRandomGoalTaxon = async () => {
 		expand: 'rank,parent,parent.rank',
 		filter: parentFilter,
 		sort: '@random',
-		fields: TAXON_DESCRIPTION_FIELDS
+		fields: 'id'
 	});
-	console.log(parent);
 	const taxon = await pb.collection('taxon').getFirstListItem<TaxonResponseFull<TexpandRank>>('', {
 		expand: 'rank',
 		filter: getTaxonFilter(parent.id),
