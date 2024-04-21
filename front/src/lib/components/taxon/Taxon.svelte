@@ -110,7 +110,7 @@
 						{/if}
 
 						<div class="text-justify">
-							{data.descriptions[data.taxon.site_link].long}
+							<!-- {data.descriptions[data.taxon.site_link].long} -->
 						</div>
 					{:else}
 						<div class="skeleton mb-4 h-6 w-60"></div>

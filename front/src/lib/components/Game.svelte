@@ -243,7 +243,6 @@
 								rank={child.expand?.rank.name ?? ''}
 								id={child.id}
 								update={updateCurrentTaxon}
-								description={$currentTaxonQuery.data.descriptions[child.site_link]}
 							/>
 						{/each}
 					{:else}

@@ -5,7 +5,20 @@ import type {
 	TaxonResponse,
 	UsersResponse
 } from './generated/pocketBaseTypes';
-import { getDescriptions } from './descriptions';
+
+const TAXON_DESCRIPTION_FIELDS = '';
+
+const reduceDescription = (description: string) => {
+	const shortThreshold = 200;
+	const shortDescription =
+		description.length > shortThreshold
+			? description.slice(0, shortThreshold) + '...'
+			: description;
+	return {
+		short: shortDescription,
+		long: description
+	};
+};
 
 // Override TaxonResponse directly to forbid null path
 type TaxonResponseFull<Texpand = unknown> = TaxonResponse<unknown, Texpand> & {
@@ -41,14 +54,15 @@ export const getTaxonData = async (id: string, path: string[]) => {
 		.collection('taxon')
 		.getOne<
 			TaxonResponseFull<TexpandRank & TexpandParent>
-		>(taxonId, { expand: 'rank,parent,parent.rank' });
+		>(taxonId, { expand: 'rank,parent,parent.rank', fields: TAXON_DESCRIPTION_FIELDS });
 	// We have to make a seperate query for the random sort
 	const children = await pb
 		.collection('taxon')
 		.getList<TaxonResponseFull<TexpandRank>>(1, MAX_CHILDREN, {
 			filter: `parent = "${taxonId}"`,
 			expand: 'rank',
-			sort: 'rank.order,@random'
+			sort: 'rank.order,@random',
+			fields: TAXON_DESCRIPTION_FIELDS
 		});
 	const overflown = children.totalItems > MAX_CHILDREN;
 	if (children.items.length == MAX_CHILDREN) {
@@ -59,7 +73,8 @@ export const getTaxonData = async (id: string, path: string[]) => {
 				children.items.pop();
 				children.items.push(
 					await pb.collection('taxon').getOne<TaxonResponseFull<TexpandRank>>(nextTaxon, {
-						expand: 'rank'
+						expand: 'rank',
+						fields: TAXON_DESCRIPTION_FIELDS
 					})
 				);
 			}
@@ -77,7 +92,7 @@ export const getTaxonData = async (id: string, path: string[]) => {
 	children.items.forEach((child) => {
 		site_links.push(child.site_link);
 	});
-	const descriptions = await getDescriptions(site_links);
+	const descriptions = reduceDescription(taxon.description);
 
 	return {
 		id,
@@ -126,7 +141,8 @@ export const getGoalTaxon = async () => {
 		.collection('taxon')
 		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
 			expand: 'rank',
-			filter: parentFilter
+			filter: parentFilter,
+			fields: TAXON_DESCRIPTION_FIELDS
 		});
 	const totalAvailableParents = availableParents.totalItems;
 	const randomParentIndex = Math.floor(hash[0] % totalAvailableParents);
@@ -134,14 +150,16 @@ export const getGoalTaxon = async () => {
 		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomParentIndex, 1, {
 			expand: 'rank',
 			filter: parentFilter,
-			skipTotal: true
+			skipTotal: true,
+			fields: TAXON_DESCRIPTION_FIELDS
 		})
 	).items[0];
 	const availableTaxons = await pb
 		.collection('taxon')
 		.getList<TaxonResponseFull<TexpandRank>>(1, 1, {
 			expand: 'rank',
-			filter: getTaxonFilter(parent.id)
+			filter: getTaxonFilter(parent.id),
+			fields: TAXON_DESCRIPTION_FIELDS
 		});
 	const totalAvailableTaxon = availableTaxons.totalItems;
 	const randomTaxonIndex = Math.floor(hash[1] % totalAvailableTaxon);
@@ -149,10 +167,11 @@ export const getGoalTaxon = async () => {
 		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomTaxonIndex, 1, {
 			expand: 'rank',
 			filter: getTaxonFilter(parent.id),
-			skipTotal: true
+			skipTotal: true,
+			fields: TAXON_DESCRIPTION_FIELDS
 		})
 	).items[0];
-	const descriptions = await getDescriptions([taxon.site_link]);
+	const descriptions = reduceDescription(taxon.description);
 
 	return {
 		taxon,
@@ -165,14 +184,17 @@ export const getRandomGoalTaxon = async () => {
 	const parent = await pb.collection('taxon').getFirstListItem('', {
 		expand: 'rank,parent,parent.rank',
 		filter: parentFilter,
-		sort: '@random'
+		sort: '@random',
+		fields: TAXON_DESCRIPTION_FIELDS
 	});
+	console.log(parent);
 	const taxon = await pb.collection('taxon').getFirstListItem<TaxonResponseFull<TexpandRank>>('', {
 		expand: 'rank',
 		filter: getTaxonFilter(parent.id),
-		sort: '@random'
+		sort: '@random',
+		fields: TAXON_DESCRIPTION_FIELDS
 	});
-	const descriptions = await getDescriptions([taxon.site_link]);
+	const descriptions = reduceDescription(taxon.description);
 
 	return {
 		taxon,
@@ -182,9 +204,10 @@ export const getRandomGoalTaxon = async () => {
 
 export const getGoalTaxonData = async (id: string) => {
 	const taxon = await pb.collection('taxon').getOne<TaxonResponseFull<TexpandRank>>(id, {
-		expand: 'rank'
+		expand: 'rank',
+		fields: TAXON_DESCRIPTION_FIELDS
 	});
-	const descriptions = await getDescriptions([taxon.site_link]);
+	const descriptions = reduceDescription(taxon.description);
 
 	return {
 		taxon,

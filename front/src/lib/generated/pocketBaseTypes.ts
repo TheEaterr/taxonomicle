@@ -57,6 +57,7 @@ export enum TaxonIucnOptions {
 	"DD" = "DD",
 }
 export type TaxonRecord<Tpath = unknown> = {
+	description?: string
 	image_link?: string
 	image_path?: boolean
 	iucn?: TaxonIucnOptions
