@@ -2,7 +2,7 @@
 	import TaxonButton from '$lib/components/taxon/TaxonButton.svelte';
 	import TutorialAlerts from '$lib/components/tutorial/TutorialAlerts.svelte';
 	import BeforeGameAlert from '$lib/components/tutorial/BeforeGameAlert.svelte';
-	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
+	import { getGoalTaxon, getTaxonData, reduceDescription } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { derived, type Readable, type Writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
@@ -40,8 +40,8 @@
 		derived(currentTaxon, ($currentTaxon) => ({
 			// the case where goalTaxonData should hopefully never happen
 			// but it shouldn't cause any problem if it does.
-			queryKey: ['taxonData', $currentTaxon, goalTaxonData?.taxon.path || ''],
-			queryFn: () => getTaxonData($currentTaxon, goalTaxonData?.taxon.path || []),
+			queryKey: ['taxonData', $currentTaxon, goalTaxonData?.path || ''],
+			queryFn: () => getTaxonData($currentTaxon, goalTaxonData?.path || []),
 			initialData: $currentTaxon == animaliaTaxon.id ? animaliaTaxon : undefined,
 			staleTime: Infinity
 		})) as Readable<{
@@ -60,11 +60,11 @@
 		if (goalTaxonData === undefined) return;
 		if (isDaily) {
 			await navigator.clipboard.writeText(
-				`I was able to reach the daily taxon ${goalTaxonData.taxon.scientific} in ${$numberSteps} steps 🏆 on Taxonomicle 🐻!\nTry it yourself at https://taxonomicle.com/game/daily 🎯 before it expires ⏰!`
+				`I was able to reach the daily taxon ${goalTaxonData.scientific} in ${$numberSteps} steps 🏆 on Taxonomicle 🐻!\nTry it yourself at https://taxonomicle.com/game/daily 🎯 before it expires ⏰!`
 			);
 		} else {
 			await navigator.clipboard.writeText(
-				`I was able to reach the taxon ${goalTaxonData.taxon.scientific} in ${$numberSteps} steps 🏆 on Taxonomicle 🐻!\nTry it yourself at https://taxonomicle.com/game/custom/${goalTaxonData.taxon.id} 🎯!`
+				`I was able to reach the taxon ${goalTaxonData.scientific} in ${$numberSteps} steps 🏆 on Taxonomicle 🐻!\nTry it yourself at https://taxonomicle.com/game/custom/${goalTaxonData.id} 🎯!`
 			);
 		}
 		toggleTooltip(true);
@@ -86,7 +86,7 @@
 	$: isGoalReached =
 		$currentTaxonQuery.data !== undefined &&
 		goalTaxonData !== undefined &&
-		$currentTaxonQuery.data.id === goalTaxonData.taxon.path[goalTaxonData.taxon.path.length - 1];
+		$currentTaxonQuery.data.id === goalTaxonData.path[goalTaxonData.path.length - 1];
 	$: if (isGoalReached) gameWon.set(true);
 </script>
 
@@ -132,7 +132,7 @@
 	{#if gameStarted && !isGoalReached}
 		<div>
 			<h2 class="small-title mb-3 text-3xl font-bold text-secondary">Current Taxon</h2>
-			<Taxon data={$currentTaxonQuery.data} isGoal={false} />
+			<Taxon data={$currentTaxonQuery.data?.taxon} isGoal={false} />
 		</div>
 	{/if}
 </div>
@@ -174,7 +174,7 @@
 							<div class="stat-title font-semibold text-absolute">Wikipedia</div>
 							<div class="stat-value text-2xl font-bold text-neutral">
 								<a
-									href={`https://en.wikipedia.org/wiki/${goalTaxonData.taxon.site_link}`}
+									href={`https://en.wikipedia.org/wiki/${goalTaxonData.site_link}`}
 									target="_blank"
 									rel="noopener"
 									class="link">Learn more<IconExternalLink class="mb-2 inline" /></a
@@ -207,10 +207,7 @@
 			{/if}
 		</div>
 		{#if isTutorial && $currentTaxonQuery.isSuccess && goalTaxonData !== undefined}
-			<TutorialAlerts
-				currentTaxonId={$currentTaxonQuery.data.id}
-				path={goalTaxonData?.taxon.path}
-			/>
+			<TutorialAlerts currentTaxonId={$currentTaxonQuery.data.id} path={goalTaxonData?.path} />
 		{/if}
 		{#if !isGoalReached}
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.overflown}
@@ -221,7 +218,7 @@
 							>To make the game playable, only a partial view of this taxon's children is shown
 							here.
 							<br />
-							Don't worry we haven't forgottent to put the correct one !</span
+							Don't worry we didn't forget to put the correct one !</span
 						>
 					</span>
 				</div>
@@ -243,6 +240,7 @@
 								rank={child.expand?.rank.name ?? ''}
 								id={child.id}
 								update={updateCurrentTaxon}
+								description={reduceDescription(child.description)}
 							/>
 						{/each}
 					{:else}

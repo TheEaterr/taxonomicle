@@ -8,16 +8,13 @@ import type {
 
 const TAXON_DESCRIPTION_FIELDS = '';
 
-const reduceDescription = (description: string) => {
-	const shortThreshold = 200;
+export const reduceDescription = (description: string) => {
+	const shortThreshold = 250;
 	const shortDescription =
 		description.length > shortThreshold
 			? description.slice(0, shortThreshold) + '...'
 			: description;
-	return {
-		short: shortDescription,
-		long: description
-	};
+	return shortDescription;
 };
 
 // Override TaxonResponse directly to forbid null path
@@ -88,17 +85,11 @@ export const getTaxonData = async (id: string, path: string[]) => {
 		}
 		return a.scientific.localeCompare(b.scientific);
 	});
-	const site_links = [taxon.site_link];
-	children.items.forEach((child) => {
-		site_links.push(child.site_link);
-	});
-	const descriptions = reduceDescription(taxon.description);
 
 	return {
 		id,
 		taxon,
 		children,
-		descriptions,
 		overflown
 	};
 };
@@ -171,12 +162,8 @@ export const getGoalTaxon = async () => {
 			fields: TAXON_DESCRIPTION_FIELDS
 		})
 	).items[0];
-	const descriptions = reduceDescription(taxon.description);
 
-	return {
-		taxon,
-		descriptions
-	};
+	return taxon;
 };
 
 export const getRandomGoalTaxon = async () => {
@@ -194,12 +181,8 @@ export const getRandomGoalTaxon = async () => {
 		sort: '@random',
 		fields: TAXON_DESCRIPTION_FIELDS
 	});
-	const descriptions = reduceDescription(taxon.description);
 
-	return {
-		taxon,
-		descriptions
-	};
+	return taxon;
 };
 
 export const getGoalTaxonData = async (id: string) => {
@@ -207,12 +190,8 @@ export const getGoalTaxonData = async (id: string) => {
 		expand: 'rank',
 		fields: TAXON_DESCRIPTION_FIELDS
 	});
-	const descriptions = reduceDescription(taxon.description);
 
-	return {
-		taxon,
-		descriptions
-	};
+	return taxon;
 };
 
 export const createReport = async (taxonId: string, description: string) => {

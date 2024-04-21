@@ -18,5 +18,5 @@
 	numberSteps.set(-1);
 </script>
 
-<Header {reset} currentTaxonId={$currentTaxon} goalTaxonId={goalTaxonData.taxon.id} />
+<Header {reset} currentTaxonId={$currentTaxon} goalTaxonId={goalTaxonData.id} />
 <Game {goalTaxonData} {animaliaTaxon} {isDaily} {isTutorial} />

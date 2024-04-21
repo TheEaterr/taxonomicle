@@ -17,7 +17,7 @@
 	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined = data.goalTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(-1);
-	goalTaxonId.set(data.goalTaxon.taxon.id);
+	goalTaxonId.set(data.goalTaxon.id);
 
 	export const snapshot: Snapshot<GameContext | undefined> = {
 		capture: () => {
