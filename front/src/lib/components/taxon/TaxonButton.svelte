@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { IconQuestionMark } from '@tabler/icons-svelte';
+	import { IconQuestionMark, IconEye } from '@tabler/icons-svelte';
 
 	export let scientific: string;
 	export let vernacular: string | undefined;
@@ -7,6 +7,7 @@
 	export let id: string;
 	export let update: (newId: string) => Promise<void>;
 	export let description: string | undefined = undefined;
+	export let visited: boolean = false;
 
 	const toggleTooltip = (value: boolean) => {
 		const tooltip = document.getElementById('description-tooltip-' + id);
@@ -22,19 +23,26 @@
 <div class="join">
 	<button
 		on:click={() => update(id)}
-		class="group join-item bg-{rank} min-w-36 border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
+		class="{visited
+			? 'grayscale-[75%]'
+			: ''} group join-item bg-{rank} min-w-36 border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
 	>
-		<div class="z-10 mb-3 leading-5">
+		<div class="mb-3 leading-5">
 			<span class="italic">{scientific}</span>
 			{#if vernacular}
 				<span class="mb-1 text-base opacity-80">({vernacular})</span>
 			{/if}
 		</div>
 		<div
-			class="absolute bottom-[-3px] right-2 z-0 text-sm text-{rank}-content group-hover:text-{rank} group-hover:bg-{rank}-content bg-{rank} rounded"
+			class="absolute bottom-[-3px] right-2 text-sm text-{rank}-content group-hover:text-{rank} group-hover:bg-{rank}-content bg-{rank} rounded"
 		>
 			{rank}
 		</div>
+		{#if visited}
+			<div class="absolute right-[2px] top-[-11px] rounded-lg bg-neutral-content text-neutral">
+				<IconEye size={20} />
+			</div>
+		{/if}
 	</button>
 	{#if description}
 		<div

@@ -30,6 +30,12 @@
 
 	let gameStarted = $numberSteps >= 0;
 	$: gameStarted = $numberSteps >= 0;
+	const visited = new Set<string>();
+	$: {
+		if (!gameStarted) {
+			visited.clear();
+		}
+	}
 
 	// we use tanstack queries to allow caching of the result
 	const currentTaxonQuery = createQuery(
@@ -52,6 +58,7 @@
 	);
 
 	const updateCurrentTaxon = async (newId: string) => {
+		visited.add(newId);
 		currentTaxon.set(newId);
 		numberSteps.update((n) => n + 1);
 	};
@@ -241,6 +248,7 @@
 								id={child.id}
 								update={updateCurrentTaxon}
 								description={child.description}
+								visited={visited.has(child.id)}
 							/>
 						{/each}
 					{:else}
