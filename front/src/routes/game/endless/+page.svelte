@@ -50,7 +50,7 @@
 		// set after awaiting the goal taxon so the query is made
 		// with goal taxon data.
 		currentTaxon.set('Q729___________');
-		goalTaxonId.set(goalTaxonData.taxon.id);
+		goalTaxonId.set(goalTaxonData.id);
 	};
 </script>
 
