@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getGoalTaxon, getGoalTaxonData, getRandomGoalTaxon } from '$lib/pocketBase';
+	import { getDailyGoalTaxon, getGoalTaxonData, getRandomGoalTaxon } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import type { Snapshot } from './$types';
 	import { type Writable } from 'svelte/store';
@@ -14,7 +14,7 @@
 	const goalTaxonId = getContext<Writable<string>>('goalTaxon');
 	const gameWon = getContext<Writable<boolean>>('gameWon');
 
-	let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined = data.goalTaxon;
+	let goalTaxonData: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined = data.goalTaxon;
 	currentTaxon.set('Q729___________');
 	numberSteps.set(-1);
 	goalTaxonId.set(data.goalTaxon.id);

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { getGoalTaxon } from '$lib/pocketBase';
+	import type { getDailyGoalTaxon } from '$lib/pocketBase';
 	import { onMount } from 'svelte';
 	import IUCNSVG from './IUCNSVG.svelte';
 	import { IconExternalLink, IconPhotoCancel, IconAlertTriangle } from '@tabler/icons-svelte';
 
-	export let data: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
+	export let data: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined;
 	export let isGoal: boolean;
 
 	let imageLoaded = false;

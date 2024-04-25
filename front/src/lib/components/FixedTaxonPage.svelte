@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
+	import { getDailyGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { type Writable } from 'svelte/store';
 	import Game from '$lib/components/Game.svelte';
@@ -9,7 +9,7 @@
 	const numberSteps = getContext<Writable<number>>('numberSteps');
 	const reset = getContext<() => void>('fixedReset');
 
-	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>>;
+	export let goalTaxonData: Awaited<ReturnType<typeof getDailyGoalTaxon>>;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
 	export let isDaily: boolean = false;
 	export let isTutorial: boolean = false;

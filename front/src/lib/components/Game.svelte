@@ -2,7 +2,7 @@
 	import TaxonButton from '$lib/components/taxon/TaxonButton.svelte';
 	import TutorialAlerts from '$lib/components/tutorial/TutorialAlerts.svelte';
 	import BeforeGameAlert from '$lib/components/tutorial/BeforeGameAlert.svelte';
-	import { getGoalTaxon, getTaxonData } from '$lib/pocketBase';
+	import { getDailyGoalTaxon, getTaxonData } from '$lib/pocketBase';
 	import { getContext } from 'svelte';
 	import { derived, type Readable, type Writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
@@ -18,7 +18,7 @@
 		IconExternalLink
 	} from '@tabler/icons-svelte';
 
-	export let goalTaxonData: Awaited<ReturnType<typeof getGoalTaxon>> | undefined;
+	export let goalTaxonData: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined;
 	export let animaliaTaxon: Awaited<ReturnType<typeof getTaxonData>>;
 	export let isDaily: boolean;
 	export let isTutorial: boolean = false;

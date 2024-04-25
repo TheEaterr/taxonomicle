@@ -1,4 +1,4 @@
-import PocketBase, { type RecordService } from 'pocketbase';
+import PocketBase, { type ListResult, type RecordService } from 'pocketbase';
 import type {
 	RankResponse,
 	ReportResponse,
@@ -18,8 +18,8 @@ type TexpandRank = {
 	rank: RankResponse;
 };
 
-type TexpandParent = {
-	parent: TaxonResponseFull<TexpandRank>;
+type TexpandParent<Texpand = unknown> = {
+	parent: TaxonResponseFull<TexpandRank & Texpand>;
 };
 
 // Overriden TypedPocketBase to include json type definitions
@@ -34,41 +34,57 @@ const API_URL =
 	process.env.NODE_ENV === 'production' ? 'https://taxonomicle.maoune.fr' : 'http://127.0.0.1:8090';
 const pb = new PocketBase(API_URL) as TypedPocketBase;
 
-// Wikipedia API has a limit of 20 titles per request
-const MAX_CHILDREN = 19;
+const MAX_CHILDREN = 20;
 
 export const getTaxonData = async (id: string, path: string[]) => {
 	const taxonId = id;
-	const taxon = await pb
+	const taxonPromise = pb
 		.collection('taxon')
 		.getOne<
 			TaxonResponseFull<TexpandRank & TexpandParent>
 		>(taxonId, { expand: 'rank,parent,parent.rank', fields: TAXON_DESCRIPTION_FIELDS });
-	// We have to make a seperate query for the random sort
-	const children = await pb
-		.collection('taxon')
-		.getList<TaxonResponseFull<TexpandRank>>(1, MAX_CHILDREN, {
-			filter: `parent = "${taxonId}"`,
-			expand: 'rank',
-			sort: 'rank.order,@random',
-			fields: TAXON_SHORT_DESCRIPTION_FIELDS
-		});
-	const overflown = children.totalItems > MAX_CHILDREN;
-	if (children.items.length == MAX_CHILDREN) {
-		const indexOnPath = path.indexOf(taxonId);
-		if (indexOnPath !== -1 && indexOnPath < path.length - 1) {
-			const nextTaxon = path[indexOnPath + 1];
-			if (children.items.findIndex((child) => child.id === nextTaxon) === -1) {
-				children.items.pop();
-				children.items.push(
-					await pb.collection('taxon').getOne<TaxonResponseFull<TexpandRank>>(nextTaxon, {
-						expand: 'rank',
-						fields: TAXON_DESCRIPTION_FIELDS
-					})
-				);
-			}
-		}
+	const taxonIndex = path.indexOf(id);
+	let children: ListResult<TaxonResponseFull<TexpandRank>>;
+	let taxon: Awaited<typeof taxonPromise>;
+	if (taxonIndex >= 0 && taxonIndex < path.length - 1) {
+		// We do a seperate query for the children to guarantee it to be in the final result
+		const childPromise = pb
+			.collection('taxon')
+			.getOne<TaxonResponseFull<TexpandRank>>(path[taxonIndex + 1], {
+				expand: 'rank',
+				fields: TAXON_SHORT_DESCRIPTION_FIELDS
+			});
+		const childrenPromise = pb
+			.collection('taxon')
+			.getList<TaxonResponseFull<TexpandRank>>(1, MAX_CHILDREN - 1, {
+				filter: `parent = "${taxonId}" && id != "${path[taxonIndex + 1]}"`,
+				expand: 'rank',
+				sort: 'rank.order,@random',
+				fields: TAXON_SHORT_DESCRIPTION_FIELDS
+			});
+		const [_taxon, child, otherChildren] = await Promise.all([
+			taxonPromise,
+			childPromise,
+			childrenPromise
+		]);
+		taxon = _taxon;
+		otherChildren.items.push(child);
+		otherChildren.totalItems += 1;
+		children = otherChildren;
+	} else {
+		const childrenPromise = pb
+			.collection('taxon')
+			.getList<TaxonResponseFull<TexpandRank>>(1, MAX_CHILDREN, {
+				filter: `parent = "${taxonId}"`,
+				expand: 'rank',
+				sort: 'rank.order,@random',
+				fields: TAXON_SHORT_DESCRIPTION_FIELDS
+			});
+		[taxon, children] = await Promise.all([taxonPromise, childrenPromise]);
 	}
+
+	const overflown = children.totalItems > MAX_CHILDREN;
+	// sorting children by order and alphabetically
 	children.items = children.items.sort((a, b) => {
 		const a_order = a.expand?.rank.order;
 		const b_order = b.expand?.rank.order;
@@ -113,7 +129,7 @@ const parentFilter = `rank.order > ${rankThreshold}  && parent.rank.order <= ${r
 const getTaxonFilter = (parent: string) =>
 	`rank.name = "species" && image_path=true && path ~ "${parent}"`;
 
-export const getGoalTaxon = async () => {
+export const getDailyGoalTaxon = async () => {
 	const currentDate = new Date();
 	// Hash the date
 	const hash = cyrb128(
