@@ -74,9 +74,9 @@
 	</button>
 </div>
 
-<div class="toast toast-center toast-top z-20 hidden" id="success-report-toast">
+<div class="toast toast-center toast-top z-20 hidden w-max max-w-full" id="success-report-toast">
 	<div
-		class="alert alert-success border-[3px] border-success-content font-semibold text-success-content"
+		class="alert max-w-full text-wrap border-[3px] border-primary-content bg-primary text-center font-semibold text-primary-content"
 	>
 		<span>Report sent successfully, thank you for contributing to make Taxonomicle better!</span>
 	</div>
