@@ -23,6 +23,7 @@
 <div class="join">
 	<button
 		on:click={() => update(id)}
+		type="button"
 		class="{visited
 			? 'grayscale-[75%]'
 			: ''} group join-item bg-{rank} min-w-36 border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
@@ -51,6 +52,7 @@
 			id="description-tooltip-{id}"
 		>
 			<button
+				type="button"
 				class="btn-neutral-special btn btn-circle join-item relative right-[-1px] h-full rounded-full !border-l-0"
 				on:mouseover={() => toggleTooltip(true)}
 				on:focus={() => toggleTooltip(true)}
