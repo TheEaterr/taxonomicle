@@ -123,7 +123,6 @@ export const getDailyGoalTaxon = async () => {
 	initialDate.setHours(0, 0, 0);
 	currentDate.setHours(0, 0, 0);
 	const diffDays = Math.round(Math.abs((currentDate.getTime() - initialDate.getTime()) / oneDay));
-	console.log('diffDays', diffDays);
 	// Hash the date
 	const hash = cyrb128(
 		(currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear()).toString()
