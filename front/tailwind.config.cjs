@@ -27,8 +27,8 @@ const taxons = [
 ];
 
 const colors = taxons.reduce((acc, taxon) => {
-	acc[taxon] = `hsl(var(--${taxon}) / <alpha-value>)`;
-	acc[`${taxon}-content`] = `hsl(var(--${taxon}-content) / <alpha-value>)`;
+	acc[taxon] = `hsla(var(--${taxon}), <alpha-value>)`;
+	acc[`${taxon}-content`] = `hsla(var(--${taxon}-content), <alpha-value>)`;
 	return acc;
 }, {});
 
