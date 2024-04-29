@@ -15,7 +15,8 @@
 		IconInfoCircle,
 		IconShare,
 		IconBrandWikipedia,
-		IconExternalLink
+		IconExternalLink,
+		IconDog
 	} from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined;
@@ -192,6 +193,22 @@
 							</div>
 						</div>
 					{/if}
+				{:else}
+					<div class="stat">
+						<div class="stat-figure text-secondary">
+							<IconDog size={30} />
+						</div>
+						<div class="stat-title font-semibold text-absolute">Current taxon</div>
+						<div class="stat-value text-lg font-semibold text-secondary">
+							{#if $currentTaxonQuery.isSuccess}
+								{$currentTaxonQuery.data.taxon.scientific}
+							{:else}
+								<div class="text-center">
+									<span class="loading loading-dots text-neutral-content"></span>
+								</div>
+							{/if}
+						</div>
+					</div>
 				{/if}
 			</div>
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
@@ -201,7 +218,7 @@
 					<div
 						class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
 					>
-						Parent
+						Return to parent
 					</div>
 					<TaxonButton
 						scientific={$currentTaxonQuery.data.taxon.expand.parent.scientific}

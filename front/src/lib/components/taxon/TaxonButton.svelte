@@ -26,7 +26,7 @@
 		type="button"
 		class="{visited
 			? 'grayscale-[75%]'
-			: ''} group join-item bg-{rank} min-w-36 border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
+			: ''} group join-item bg-{rank} min-w-40 border-{rank}-content btn hover:bg-{rank}-content hover:border-{rank} relative h-fit flex-shrink text-wrap text-lg text-absolute hover:text-absolute-content"
 	>
 		<div class="mb-3 leading-5">
 			<span class="italic">{scientific}</span>
