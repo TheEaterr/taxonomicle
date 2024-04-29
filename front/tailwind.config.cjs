@@ -65,8 +65,8 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				absolute: 'rgb(var(--absolute) / <alpha-value>)',
-				'absolute-content': 'rgba(var(--absolute-content), <alpha-value>)',
+				absolute: 'hsla(var(--absolute), <alpha-value>)',
+				'absolute-content': 'hsla(var(--absolute-content), <alpha-value>)',
 				...colors
 			}
 		}
@@ -90,8 +90,8 @@ module.exports = {
 					'success-content': '#114040',
 					warning: '#facc15',
 					error: '#ef4444',
-					'--absolute': '#1a1a1a',
-					'--absolute-content': '#e6e6e6',
+					'--absolute': '0deg, 0%, 10%',
+					'--absolute-content': '0deg, 0%, 90%',
 					...daisyColorsLight
 				},
 				dark: {
@@ -110,8 +110,8 @@ module.exports = {
 					'success-content': '#114040',
 					warning: '#facc15',
 					error: '#ef4444',
-					'--absolute': '#e6e6e6',
-					'--absolute-content': '#1a1a1a',
+					'--absolute': '0deg, 0%, 90%',
+					'--absolute-content': '0deg, 0%, 10%',
 					...daisyColorsDark
 				}
 			}
