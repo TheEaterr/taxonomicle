@@ -66,7 +66,7 @@ module.exports = {
 		extend: {
 			colors: {
 				absolute: 'rgb(var(--absolute) / <alpha-value>)',
-				'absolute-content': 'hsla(var(--absolute-content), <alpha-value>)',
+				'absolute-content': 'rgba(var(--absolute-content), <alpha-value>)',
 				...colors
 			}
 		}
