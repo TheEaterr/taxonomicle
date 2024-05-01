@@ -15,8 +15,7 @@
 		IconInfoCircle,
 		IconShare,
 		IconBrandWikipedia,
-		IconExternalLink,
-		IconDog
+		IconExternalLink
 	} from '@tabler/icons-svelte';
 
 	export let goalTaxonData: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined;
@@ -37,6 +36,20 @@
 			visited.clear();
 		}
 	}
+
+	let currentTaxonContainer: HTMLDivElement;
+	let currentTaxonCard: HTMLDivElement;
+
+	const animate = () => {
+		currentTaxonCard.animate(
+			[{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }],
+			{
+				duration: 500,
+				iterations: 1,
+				easing: 'ease-out'
+			}
+		);
+	};
 
 	// we use tanstack queries to allow caching of the result
 	const currentTaxonQuery = createQuery(
@@ -138,9 +151,11 @@
 	</div>
 
 	{#if gameStarted && !isGoalReached}
-		<div>
+		<div bind:this={currentTaxonContainer}>
 			<h2 class="small-title mb-3 text-3xl font-bold text-secondary">Current Taxon</h2>
-			<Taxon data={$currentTaxonQuery.data?.taxon} isGoal={false} />
+			<div bind:this={currentTaxonCard}>
+				<Taxon data={$currentTaxonQuery.data?.taxon} isGoal={false} />
+			</div>
 		</div>
 	{/if}
 </div>
@@ -193,22 +208,6 @@
 							</div>
 						</div>
 					{/if}
-				{:else}
-					<div class="stat">
-						<div class="stat-figure text-secondary">
-							<IconDog size={30} />
-						</div>
-						<div class="stat-title font-semibold text-absolute">Current taxon</div>
-						<div class="stat-value text-lg font-semibold text-secondary">
-							{#if $currentTaxonQuery.isSuccess}
-								{$currentTaxonQuery.data.taxon.scientific}
-							{:else}
-								<div class="text-center">
-									<span class="loading loading-dots text-neutral-content"></span>
-								</div>
-							{/if}
-						</div>
-					</div>
 				{/if}
 			</div>
 			{#if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.taxon.expand?.parent !== undefined}
@@ -229,6 +228,29 @@
 					/>
 				</div>
 			{/if}
+			<div
+				class="relative inline-block h-fit min-w-44 rounded-lg border-2 border-neutral-content p-1 pt-3 text-center"
+			>
+				<div
+					class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"
+				>
+					Currently on
+				</div>
+				{#if $currentTaxonQuery.isSuccess}
+					<TaxonButton
+						scientific={$currentTaxonQuery.data.taxon.scientific}
+						vernacular={$currentTaxonQuery.data.taxon.vernacular}
+						rank={$currentTaxonQuery.data.taxon.expand?.rank.name ?? ''}
+						id={$currentTaxonQuery.data.taxon.id}
+						update={() => {
+							currentTaxonContainer?.scrollIntoView({ behavior: 'smooth' });
+							animate();
+						}}
+					/>
+				{:else}
+					<span class="loading loading-dots text-neutral-content"></span>
+				{/if}
+			</div>
 		</div>
 		{#if isTutorial && $currentTaxonQuery.isSuccess && goalTaxonData !== undefined}
 			<TutorialAlerts currentTaxonId={$currentTaxonQuery.data.id} path={goalTaxonData?.path} />
@@ -249,7 +271,7 @@
 			{/if}
 			{#if !$currentTaxonQuery.isError && (!$currentTaxonQuery.isSuccess || $currentTaxonQuery.data.children.items.length > 0)}
 				<div
-					class="relative m-2 ml-3 mr-3 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
+					class="relative mb-2 ml-3 mr-3 flex h-min max-w-full flex-wrap justify-center gap-5 rounded-lg border-2 border-neutral-content p-1 pt-3"
 				>
 					<div
 						class="absolute left-3 right-6 top-[-15px] w-fit rounded-lg bg-neutral-content pl-1 pr-1 text-left font-semibold text-neutral"

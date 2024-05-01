@@ -5,7 +5,7 @@
 	export let vernacular: string | undefined;
 	export let rank: string;
 	export let id: string;
-	export let update: (newId: string) => Promise<void>;
+	export let update: (newId: string) => void;
 	export let description: string | undefined = undefined;
 	export let visited: boolean = false;
 
