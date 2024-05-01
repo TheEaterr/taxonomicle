@@ -30,7 +30,7 @@
 
 	let gameStarted = $numberSteps >= 0;
 	$: gameStarted = $numberSteps >= 0;
-	const visited = new Set<string>();
+	let visited = new Set<string>();
 	$: {
 		if (!gameStarted) {
 			visited.clear();
@@ -101,6 +101,16 @@
 		} else {
 			tooltip.classList.remove('!tooltip-open');
 		}
+	};
+
+	const toggleVisited = (newId: string) => {
+		if (visited.has(newId)) {
+			visited.delete(newId);
+		} else {
+			visited.add(newId);
+		}
+		// reassigning the set to trigger a reactivity update
+		visited = visited;
 	};
 
 	let isGoalReached = false;
@@ -288,6 +298,7 @@
 								update={updateCurrentTaxon}
 								description={child.description}
 								visited={visited.has(child.id)}
+								{toggleVisited}
 							/>
 						{/each}
 					{:else}

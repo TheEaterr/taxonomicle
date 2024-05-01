@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { IconQuestionMark, IconEye } from '@tabler/icons-svelte';
+	import { IconQuestionMark, IconEye, IconEyeOff } from '@tabler/icons-svelte';
 
 	export let scientific: string;
 	export let vernacular: string | undefined;
 	export let rank: string;
 	export let id: string;
 	export let update: (newId: string) => void;
+	export let toggleVisited: ((newId: string) => void) | undefined = undefined;
 	export let description: string | undefined = undefined;
-	export let visited: boolean = false;
+	export let visited = false;
 
 	const toggleTooltip = (value: boolean) => {
 		const tooltip = document.getElementById('description-tooltip-' + id);
@@ -20,7 +21,7 @@
 	};
 </script>
 
-<div class="join">
+<div class="join relative">
 	<button
 		on:click={() => update(id)}
 		type="button"
@@ -39,12 +40,25 @@
 		>
 			{rank}
 		</div>
-		{#if visited}
-			<div class="absolute right-[2px] top-[-11px] rounded-lg bg-neutral-content text-neutral">
-				<IconEye size={20} />
-			</div>
-		{/if}
 	</button>
+	{#if toggleVisited}
+		<div
+			class="tooltip tooltip-top absolute right-[54px] top-[-11px] z-10"
+			data-tip={visited ? 'Mark as unseen' : 'Mark as seen'}
+		>
+			<button
+				type="button"
+				class="btn-neutral-special btn btn-circle btn-xs rounded-xl border-none"
+				on:click={() => toggleVisited(id)}
+			>
+				{#if visited}
+					<IconEye size={20} />
+				{:else}
+					<IconEyeOff size={20} />
+				{/if}
+			</button>
+		</div>
+	{/if}
 	{#if description}
 		<div
 			class="tooltip tooltip-top before:z-20 before:max-w-52 before:translate-x-[-80%] before:text-justify before:text-absolute-content"
