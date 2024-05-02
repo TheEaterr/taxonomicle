@@ -36,9 +36,6 @@ const config = {
 		csp: {
 			directives: {
 				'script-src': ['self']
-			},
-			reportOnly: {
-				'script-src': ['self']
 			}
 		}
 	}
