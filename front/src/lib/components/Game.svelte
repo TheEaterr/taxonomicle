@@ -1,5 +1,6 @@
 <script lang="ts">
 	import TaxonButton from '$lib/components/taxon/TaxonButton.svelte';
+	import LoadingLogo from '$lib/components/LoadingLogo.svelte';
 	import TutorialAlerts from '$lib/components/tutorial/TutorialAlerts.svelte';
 	import BeforeGameAlert from '$lib/components/tutorial/BeforeGameAlert.svelte';
 	import { getDailyGoalTaxon, getTaxonData } from '$lib/pocketBase';
@@ -302,7 +303,9 @@
 							/>
 						{/each}
 					{:else}
-						<span class="loading loading-dots loading-lg text-neutral-content"></span>
+						<span class="w-28">
+							<LoadingLogo />
+						</span>
 					{/if}
 				</div>
 			{:else if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.children.items.length == 0}
