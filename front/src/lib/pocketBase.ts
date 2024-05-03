@@ -34,7 +34,7 @@ type TypedPocketBase = PocketBase & {
 };
 
 const API_URL =
-	process.env.NODE_ENV === 'production' ? 'https://taxonomicle.maoune.fr' : 'http://127.0.0.1:8090';
+	process.env.NODE_ENV === 'production' ? 'https://taxonomicle.com' : 'http://127.0.0.1:8090';
 const pb = new PocketBase(API_URL) as TypedPocketBase;
 
 const MAX_CHILDREN = 20;
