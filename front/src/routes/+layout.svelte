@@ -7,6 +7,7 @@
 	import { navigating } from '$app/stores';
 	import { writable } from 'svelte/store';
 	import { setContext } from 'svelte';
+	import LoadingLogo from '$lib/components/LoadingLogo.svelte';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -25,9 +26,10 @@
 
 <QueryClientProvider client={queryClient}>
 	{#if $navigating}
-		<!-- TODO: make pretty loading icon after making branding items -->
 		<div class="flex h-screen w-screen items-center justify-center">
-			<span class="animate-suspense loading loading-spinner w-20 text-neutral opacity-0"></span>
+			<span class="animate-suspense w-40 text-neutral opacity-0">
+				<LoadingLogo />
+			</span>
 		</div>
 	{:else}
 		<slot />
