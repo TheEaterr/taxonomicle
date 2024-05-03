@@ -22,9 +22,9 @@
 	<TutorialAlert>
 		Now here comes the first difficulty...
 		<br />
-		Although you can see 5 options, in most cases you only need to choose between Deuterostomia and Protostomia.
-		The first one contains mostly vertebrates and starfishes, while the second one includes arthropods,
-		molluscs, annelids and more.
+		Although you can see 5 options, in most cases you only need to choose between Protostomia and Deuterostomia.
+		The first one includes arthropods, molluscs, annelids and others while the second one contains mostly
+		vertebrates and starfishes.
 		<br />
 		<div class="text-sm text-gray-700">
 			The other categories contain various forms of weird lifeforms, like jellyfishes for example!
@@ -37,6 +37,9 @@
 		You can read a small description of the various childs by hovering (or clicking on mobile) on the
 		question mark next to each button. Read the three descriptions and deduce the right answer!
 		<br />
+		<div class="text-sm text-gray-700">
+			Hint: Hemichordates only contains acorn worms and weird colonial animals.
+		</div>
 	</TutorialAlert>
 {:else if currentTaxonId === path[3]}
 	<TutorialAlert
@@ -57,13 +60,14 @@
 		becomes hard. Here is a small tip: children are displayed in the order of their rank (a class
 		will be displayed before an order for example). When you are at a loss, it is often a good idea
 		to pick a taxon of the highest rank!
+		<div class="text-sm text-gray-700">Also fishes don't have four limbs.</div>
 	</TutorialAlert>
 {:else if currentTaxonId === path[6]}
 	<TutorialAlert>
 		This is the hardest choice of this game.
 		<br />
 		I will give you a tip: the goal is actually a Holostei! By reading the description, this should be
-		enough to find the right answer. Great job, this one will not give you any trouble.
+		enough to find the right answer.
 	</TutorialAlert>
 {:else if currentTaxonId === path[7]}
 	<TutorialAlert>
