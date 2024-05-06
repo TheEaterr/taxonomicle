@@ -1,67 +1,40 @@
 <script lang="ts">
 	import type { getDailyGoalTaxon } from '$lib/pocketBase';
-	import { onMount } from 'svelte';
 	import IUCNSVG from './IUCNSVG.svelte';
 	import { IconExternalLink, IconPhotoCancel, IconAlertTriangle } from '@tabler/icons-svelte';
 
 	export let data: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined;
 	export let isGoal: boolean;
 
-	let imageLoaded = false;
-	let img: HTMLImageElement;
-	let imageContainer: HTMLDivElement;
+	let imgContainer: HTMLDivElement;
+	let imgPlaceholder: HTMLDivElement;
 
 	const getImageLink = (imageLink: string): string => {
 		return `https://www.mediawiki.org/w/index.php?title=Special:Redirect/file/${imageLink}&width=983&height=384`;
 	};
-
-	onMount(() => {
-		img = new Image();
-		img.onload = () => {
-			imageLoaded = true;
-		};
-		img.classList.add('max-h-96', 'w-auto');
-	});
-
-	// Here we are doing a bit of wizardy so the window doesn't scroll back up
-	// while all the data is loaded but the image.
-	$: {
-		if (img) {
-			// data being undefined means
-			// query is in loading state
-			if (!data) {
-				img.src = '';
-				img.alt = '';
-				imageLoaded = false;
-			}
-		}
-	}
-
-	$: {
-		if (img) {
-			if (data?.image_link) {
-				img.src = getImageLink(data?.image_link);
-				img.alt = data?.scientific;
-			}
-		}
-		// we have to readd the image since after passing throuh a loading
-		// state the container was removed from the DOM
-		if (imageContainer) {
-			// removing all children shouldn't be necessary
-			// but just in case
-			imageContainer.innerHTML = '';
-			imageContainer.appendChild(img);
-		}
-	}
 </script>
 
 <div class="m-[5vw] min-[400px]:m-5">
 	<div
 		class="card !ml-auto !mr-auto min-w-[90vw] bg-base-200 shadow-md min-[550px]:min-w-[500px] lg:max-w-[983px]"
 	>
-		{#if data && imageLoaded && data.image_link}
+		{#if data && data.image_link}
 			<figure class="m-0 max-h-96" style="background-image: url('{getImageLink(data.image_link)}')">
-				<div class="glass flex w-full flex-col items-center" bind:this={imageContainer}></div>
+				<div class="glass flex h-96 w-full flex-col items-center" bind:this={imgContainer}>
+					<img
+						class="max-h-96 w-auto"
+						src={getImageLink(data.image_link)}
+						alt={data.scientific}
+						on:load={() => {
+							imgContainer?.classList.remove('h-96');
+							imgPlaceholder?.classList.remove('h-96');
+						}}
+					/>
+					<div
+						class="skeleton absolute -z-10 h-96 w-full rounded-b-none"
+						bind:this={imgPlaceholder}
+					></div>
+				</div>
 			</figure>
 		{:else if data && !data.image_link}
 			<div
@@ -119,7 +92,7 @@
 					{:else}
 						<div class="skeleton mb-4 h-6 w-60"></div>
 						<div class="skeleton mb-4 h-6 w-60"></div>
-						{#each Array(16) as _}
+						{#each Array(12) as _}
 							<div class="skeleton mb-3 h-4 w-full"></div>
 						{/each}
 					{/if}

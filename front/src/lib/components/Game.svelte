@@ -4,7 +4,7 @@
 	import TutorialAlerts from '$lib/components/tutorial/TutorialAlerts.svelte';
 	import BeforeGameAlert from '$lib/components/tutorial/BeforeGameAlert.svelte';
 	import { getDailyGoalTaxon, getTaxonData } from '$lib/pocketBase';
-	import { getContext } from 'svelte';
+	import { afterUpdate, getContext } from 'svelte';
 	import { derived, type Readable, type Writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import Taxon from './taxon/Taxon.svelte';
@@ -40,6 +40,8 @@
 
 	let currentTaxonContainer: HTMLDivElement;
 	let currentTaxonCard: HTMLDivElement;
+	let gameplayDiv: HTMLDivElement;
+	let shouldScroll = false;
 
 	const animate = () => {
 		currentTaxonCard.animate(
@@ -76,7 +78,17 @@
 		visited.add(newId);
 		currentTaxon.set(newId);
 		numberSteps.update((n) => n + 1);
+		shouldScroll = true;
 	};
+
+	afterUpdate(async () => {
+		if ($currentTaxonQuery.isSuccess && shouldScroll) {
+			gameplayDiv?.scrollIntoView({
+				behavior: 'smooth'
+			});
+			shouldScroll = false;
+		}
+	});
 
 	const shareToClipboard = async () => {
 		if (goalTaxonData === undefined) return;
@@ -171,7 +183,7 @@
 	{/if}
 </div>
 {#if gameStarted}
-	<div class="flex flex-col justify-center gap-5">
+	<div class="flex flex-col justify-center gap-5" bind:this={gameplayDiv}>
 		<div class="m-2 flex flex-wrap items-center justify-center gap-5">
 			<div class="stats stats-vertical bg-base-200 shadow lg:stats-horizontal">
 				<div class="stat">
