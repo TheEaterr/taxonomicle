@@ -40,11 +40,13 @@
 
 	let currentTaxonContainer: HTMLDivElement;
 	let currentTaxonCard: HTMLDivElement;
+	let goalTaxonContainer: HTMLDivElement;
+	let goalTaxonCard: HTMLDivElement;
 	let gameplayDiv: HTMLDivElement;
 	let shouldScroll = false;
 
-	const animate = () => {
-		currentTaxonCard.animate(
+	const animate = (card?: HTMLDivElement) => {
+		card?.animate(
 			[{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }],
 			{
 				duration: 500,
@@ -135,9 +137,11 @@
 </script>
 
 <div class="flex flex-wrap justify-center gap-5 text-center">
-	<div>
+	<div bind:this={goalTaxonContainer}>
 		<h2 class="small-title mb-3 text-3xl font-bold text-primary">Goal Taxon</h2>
-		<Taxon data={goalTaxonData} isGoal={true} />
+		<div bind:this={goalTaxonCard}>
+			<Taxon data={goalTaxonData} isGoal={true} />
+		</div>
 		{#if !gameStarted}
 			{#if isTutorial}
 				<BeforeGameAlert />
@@ -184,7 +188,7 @@
 </div>
 {#if gameStarted}
 	<div class="flex flex-col justify-center gap-5" bind:this={gameplayDiv}>
-		<div class="m-2 flex flex-wrap items-center justify-center gap-5">
+		<div class="m-auto flex max-w-screen-md flex-wrap items-center justify-center gap-5">
 			<div class="stats stats-vertical bg-base-200 shadow lg:stats-horizontal">
 				<div class="stat">
 					<div class="stat-figure text-primary">
@@ -266,8 +270,13 @@
 						rank={$currentTaxonQuery.data.taxon.expand?.rank.name ?? ''}
 						id={$currentTaxonQuery.data.taxon.id}
 						update={() => {
-							currentTaxonContainer?.scrollIntoView({ behavior: 'smooth' });
-							animate();
+							if (currentTaxonContainer) {
+								currentTaxonContainer?.scrollIntoView({ behavior: 'smooth' });
+								animate(currentTaxonCard);
+							} else {
+								goalTaxonContainer?.scrollIntoView({ behavior: 'smooth' });
+								animate(goalTaxonCard);
+							}
 						}}
 					/>
 				{:else}
