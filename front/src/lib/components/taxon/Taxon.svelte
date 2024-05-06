@@ -6,12 +6,14 @@
 	export let data: Awaited<ReturnType<typeof getDailyGoalTaxon>> | undefined;
 	export let isGoal: boolean;
 
-	let imgContainer: HTMLDivElement;
 	let imgPlaceholder: HTMLDivElement;
 
 	const getImageLink = (imageLink: string): string => {
 		return `https://www.mediawiki.org/w/index.php?title=Special:Redirect/file/${imageLink}&width=983&height=384`;
 	};
+
+	// We lazy-load the image so we have to force the image to be of a fixed height to prevent layout shift.
+	// https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/loading#preventing_element_shift_during_image_lazy_loads
 </script>
 
 <div class="m-[5vw] min-[400px]:m-5">
@@ -20,18 +22,17 @@
 	>
 		{#if data && data.image_link}
 			<figure class="m-0 max-h-96" style="background-image: url('{getImageLink(data.image_link)}')">
-				<div class="glass flex h-96 w-full flex-col items-center" bind:this={imgContainer}>
+				<div class="glass flex h-96 w-full flex-col items-center">
 					<img
-						class="max-h-96 w-auto"
+						class="h-96 w-auto object-contain"
 						src={getImageLink(data.image_link)}
 						alt={data.scientific}
 						on:load={() => {
-							imgContainer?.classList.remove('h-96');
 							imgPlaceholder?.classList.remove('h-96');
 						}}
 					/>
 					<div
-						class="skeleton absolute -z-10 h-96 w-full rounded-b-none"
+						class="skeleton absolute z-10 h-96 w-full rounded-b-none"
 						bind:this={imgPlaceholder}
 					></div>
 				</div>

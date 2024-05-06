@@ -85,9 +85,7 @@
 
 	afterUpdate(async () => {
 		if ($currentTaxonQuery.isSuccess && shouldScroll) {
-			gameplayDiv?.scrollIntoView({
-				behavior: 'smooth'
-			});
+			gameplayDiv?.scrollIntoView();
 			shouldScroll = false;
 		}
 	});
