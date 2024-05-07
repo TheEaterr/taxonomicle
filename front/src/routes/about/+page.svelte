@@ -3,6 +3,14 @@
 	import { IconInfoCircle, IconExternalLink } from '@tabler/icons-svelte';
 </script>
 
+<svelte:head>
+	<title>About - Taxonomicle</title>
+	<meta
+		name="description"
+		content="Learn how Taxonomicle, a daily game where you have to find a species in the tree of life, was made."
+	/>
+</svelte:head>
+
 <Header reset={undefined} />
 
 <div class="w-full text-center">

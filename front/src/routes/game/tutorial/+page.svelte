@@ -9,15 +9,26 @@
 
 	export const snapshot = getContext<Snapshot<GameContext | undefined>>('fixedSnapshot');
 
+	let tutorialModal: HTMLDialogElement | null;
 	onMount(() => {
-		const tutorialModal: HTMLDialogElement | null = document.getElementById(
-			'tutorial-modal'
-		) as HTMLDialogElement | null;
-		if (tutorialModal) tutorialModal.showModal();
+		tutorialModal?.showModal();
 	});
 </script>
 
-<dialog id="tutorial-modal" class="modal">
+<svelte:head>
+	<title>{data.goalTaxon.scientific} - Tutorial - Taxonomicle</title>
+	<meta
+		name="description"
+		content="Learn how to play Taxonomicle, a daily game where you have to find a species in the tree of life."
+	/>
+</svelte:head>
+
+<FixedTaxonPage
+	goalTaxonData={data.goalTaxon}
+	animaliaTaxon={data.animaliaTaxon}
+	isTutorial={true}
+/>
+<dialog id="tutorial-modal" class="modal" bind:this={tutorialModal}>
 	<div class="modal-box w-11/12 max-w-5xl bg-base-200">
 		<h3 class="small-title text-3xl font-bold text-primary">Welcome to Taxonomicle!</h3>
 		<hr class="h-[1px] rounded bg-neutral" />
@@ -53,19 +64,19 @@
 			</p>
 			<hr class="h-[1px] rounded bg-neutral" />
 			<div class="modal-action">
-				<form method="dialog">
-					<!-- if there is a button in form, it will close the modal -->
-					<button class="btn-neutral-special btn text-lg">Understood</button>
-				</form>
+				<a
+					class="btn-neutral-special btn text-lg"
+					on:click={() => {
+						tutorialModal?.close();
+					}}
+					href={null}
+				>
+					Understood
+				</a>
 			</div>
 		</div>
 	</div>
 </dialog>
-<FixedTaxonPage
-	goalTaxonData={data.goalTaxon}
-	animaliaTaxon={data.animaliaTaxon}
-	isTutorial={true}
-/>
 
 <style>
 </style>

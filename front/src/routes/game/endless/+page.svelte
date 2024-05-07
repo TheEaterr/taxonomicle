@@ -54,5 +54,13 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{data.goalTaxon.scientific} - Endless - Taxonomicle</title>
+	<meta
+		name="description"
+		content="Try and find a random species in the tree of life. Learn some taxonomy facts along the way."
+	/>
+</svelte:head>
+
 <Header {reset} currentTaxonId={$currentTaxon} goalTaxonId={$goalTaxonId} />
 <Game {goalTaxonData} animaliaTaxon={data.animaliaTaxon} isDaily={false} />

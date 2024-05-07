@@ -4,6 +4,14 @@
 	import { IconExclamationCircle, IconExternalLink } from '@tabler/icons-svelte';
 </script>
 
+<svelte:head>
+	<title>Taxonomicle - Error {$page.status}</title>
+	<meta
+		name="description"
+		content="Taxonomicle is game where you have to find a species in the tree of life and learn some taxonomy facts along the way. A new species is available each day but you can also play in endless mode and share the challenge with a friend!"
+	/>
+</svelte:head>
+
 <main class="fixed top-0 flex min-h-screen w-screen content-center items-center justify-center">
 	<div class="hero h-fit w-fit">
 		<div class="hero-overlay bg-base-100"></div>
