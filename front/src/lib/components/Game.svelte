@@ -166,8 +166,9 @@
 								class="font-bold">no scientific guarantee</span
 							>
 							of its accuracy. It was heavily processed to give an enjoyable gaming experience and only
-							a partial view is shown. For more details about how Taxonomicle was made, please visit
-							the <a href="/about" class="link">about page</a>.
+							a partial view is shown. If you encounter any problem with the data, please report it using
+							the button at the top left or your screen. For more details about how Taxonomicle was made,
+							please visit the <a href="/about" class="link">about page</a>.
 						</span>
 					</span>
 				</span>
@@ -330,7 +331,7 @@
 			{:else if $currentTaxonQuery.isSuccess && $currentTaxonQuery.data.children.items.length == 0}
 				<h2 class="small-title mb-3 text-center text-3xl font-bold text-error">Wrong species!</h2>
 			{:else}
-				<div class="mb-5 text-center">
+				<div class="m-4 text-center">
 					<span role="alert" class="alert alert-error">
 						<IconExclamationCircle size={30} class="stroke-current" />
 						<span
