@@ -124,13 +124,10 @@ export const getDailyGoalTaxon = async () => {
 	currentDate.setHours(0, 0, 0);
 	const diffDays = Math.round(Math.abs((currentDate.getTime() - initialDate.getTime()) / oneDay));
 	// Hash the date
-	const hash = cyrb128(
-		(currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear()).toString()
-	);
-	// 10000 is the magic number we use for probabilistic query of a single record
-	const randomParentIndex = (2999 * diffDays) % 10000;
+	const hash = cyrb128(diffDays.toString());
+	const randomParentIndex = 1000 + Math.floor(hash[0] % 5000);
 	const parent = await getRandomParent(randomParentIndex);
-	const randomTaxonIndex = Math.floor(hash[0] % parent.count);
+	const randomTaxonIndex = Math.floor(hash[1] % parent.count);
 	const taxon = (
 		await pb.collection('taxon').getList<TaxonResponseFull<TexpandRank>>(randomTaxonIndex, 1, {
 			expand: 'rank',
